@@ -1,0 +1,2791 @@
+{
+  "BurgerKing": {
+    "id": "BurgerKing",
+    "title": "Burger King",
+    "description": "Avcılar 3S Firuze Konakları",
+    "serviceFee": 0,
+    "categories": ["burger", "tavuk"],
+    "minimumOrderAmount": 250,
+    "freeDelivery": true,
+    "deliveryTime": "30 dk",
+    "image": "/images/restaurants/burger-king-logo.png",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Avcılar 3S Firuze Konakları"
+      },
+      {
+        "addressId": "work",
+        "branchName": "Maslak Büyükdere Cad."
+      }
+    ],
+    "products": [
+      {
+        "name": "Whopper Menü",
+        "description": "Whopper burger, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 250,
+        "categories": ["burger"],
+        "sections": ["Popüler Ürünler", "Tıkla Gelsin Özel Menüler"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Whopper içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Susamlı Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Dana Köftesi (Izgara)",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Turşu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ketçap",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mayonez",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Köfte",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 45
+              },
+              {
+                "name": "Cheddar Peyniri",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 15
+              },
+              {
+                "name": "Bacon",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chicken Royale Menü",
+        "description": "Çıtır tavuk burger, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 260,
+        "categories": ["burger", "tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Chicken Royale içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Çıtır Tavuk Göğsü",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Burger Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mayonez",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Tavuk",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 40
+              },
+              {
+                "name": "Cheddar Peyniri",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 15
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Big King Menü",
+        "description": "Çift kat köfteli Big King, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 270,
+        "categories": ["burger"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Big King içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Susamlı Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Çift Kat Dana Köftesi",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Cheddar Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Turşu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Big King Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Köfte",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 45
+              },
+              {
+                "name": "Bacon",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "King Nuggets Menü (9'lu)",
+        "description": "9 parça tavuk nugget, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 200,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Sos Seçimi",
+            "description": "Nugget sosunuzu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Barbekü Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Acı Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ranch Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Menü içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Tavuk Nugget (9 adet)",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Patates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "İçecek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Soğan Halkası",
+        "description": "Çıtır kaplamalı soğan halkası",
+        "image": "",
+        "url": "",
+        "price": 90,
+        "categories": ["burger"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "İçerik",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Çıtır Hamur Kaplama",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ketçap",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Gazlı İçecek",
+        "description": "Soğuk gazlı içecek",
+        "image": "",
+        "url": "",
+        "price": 40,
+        "categories": ["burger", "tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "İçecek boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "300 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 10
+              },
+              {
+                "name": "Büyük",
+                "description": "500 ml",
+                "image": "",
+                "url": "",
+                "price": 20
+              },
+              {
+                "name": "King Size",
+                "description": "700 ml",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "10:00",
+    "closingHour": "23:00"
+  },
+  "Popeyes": {
+    "id": "Popeyes",
+    "title": "Popeyes",
+    "description": "3S Firuze Konakları",
+    "serviceFee": 0,
+    "categories": ["tavuk", "burger"],
+    "minimumOrderAmount": 250,
+    "freeDelivery": true,
+    "deliveryTime": "30 dk",
+    "image": "/images/restaurants/popeyes-logo.png",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "3S Firuze Konakları"
+      },
+      {
+        "addressId": "work",
+        "branchName": "Maslak Büyükdere Cad."
+      }
+    ],
+    "products": [
+      {
+        "name": "8'li Tavuk Menü",
+        "description": "8 parça çıtır tavuk, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 320,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Menü içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Çıtır Tavuk Parçaları (8 adet)",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Baharat Karışımı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Patates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "İçecek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Popeyes Chicken Sandwich Menü",
+        "description": "Çıtır tavuk sandviç, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 230,
+        "categories": ["tavuk", "burger"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Çıtır Tavuk Göğsü",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Brioche Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Turşu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mayonez",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Tavuk",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 40
+              },
+              {
+                "name": "Cheddar Peyniri",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 15
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Wicked Tavuk Menü",
+        "description": "Acılı çıtır tavuk, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 300,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Menü içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Acılı Çıtır Tavuk (8 parça)",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Cajun Baharatı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Patates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "İçecek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Acı Sos",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Tavuk Kanat Menü (6'lı)",
+        "description": "6 parça baharatlı kanat, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 210,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Sos Seçimi",
+            "description": "Kanat sosunuzu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "BBQ Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ranch Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Acı Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Menü içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Tavuk Kanadı (6 adet)",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Cajun Baharatı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Patates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "İçecek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Gazlı İçecek",
+        "description": "Soğuk gazlı içecek",
+        "image": "",
+        "url": "",
+        "price": 40,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "İçecek boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "300 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 10
+              },
+              {
+                "name": "Büyük",
+                "description": "500 ml",
+                "image": "",
+                "url": "",
+                "price": 20
+              },
+              {
+                "name": "King Size",
+                "description": "700 ml",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "10:00",
+    "closingHour": "23:00"
+  },
+  "AmasyaEtUrunleri": {
+    "id": "AmasyaEtUrunleri",
+    "title": "Amasya Et Ürünleri",
+    "description": "Pelican Mall AVM",
+    "serviceFee": 15,
+    "categories": ["et"],
+    "minimumOrderAmount": 100,
+    "freeDelivery": false,
+    "deliveryTime": "30 dk",
+    "image": "/images/restaurants/amasya-et-urunleri.png",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Pelican Mall AVM"
+      }
+    ],
+    "products": [
+      {
+        "name": "Kuşbaşılı Pide",
+        "description": "Kuşbaşı etli özel pide",
+        "image": "",
+        "url": "",
+        "price": 180,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Pide içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pide Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kuşbaşı Dana Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Maydanoz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kaşar Peyniri",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 25
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Adana Kebap",
+        "description": "El yapımı acılı Adana kebap, salata ve lavaş ile",
+        "image": "",
+        "url": "",
+        "price": 220,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Kebap içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Dana Kıyma",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kırmızı Biber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Baharat Karışımı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Lavaş Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan Salatası",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Biber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "İskender",
+        "description": "Yoğurtlu ve tereyağlı döner iskender",
+        "image": "",
+        "url": "",
+        "price": 240,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "İskender içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Döner Dana Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Pide Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Yoğurt",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lahmacun",
+        "description": "İnce hamur üzerine kıymalı harç",
+        "image": "",
+        "url": "",
+        "price": 150,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Adet Seçimi",
+            "description": "Lahmacun adedini seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "3'lü",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "5'li",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 60
+              },
+              {
+                "name": "8'li",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 120
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Lahmacun içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "İnce Hamur",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kıyma Harcı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Biber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Maydanoz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "09:00",
+    "closingHour": "22:00"
+  },
+  "DonerciUsta": {
+    "id": "DonerciUsta",
+    "title": "Dönerci Usta",
+    "description": "Avcılar Merkez",
+    "serviceFee": 5,
+    "categories": ["et"],
+    "minimumOrderAmount": 120,
+    "freeDelivery": false,
+    "deliveryTime": "35 dk",
+    "image": "",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Avcılar Merkez"
+      }
+    ],
+    "products": [
+      {
+        "name": "Dürüm Döner",
+        "description": "Dana döner eti, lavaş içinde",
+        "image": "",
+        "url": "",
+        "price": 130,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Dürüm içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Dana Döner Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Lavaş",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Özel Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 40
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Porsiyon Döner (Pilav Üstü)",
+        "description": "Dana döner eti, pilav üzerinde",
+        "image": "",
+        "url": "",
+        "price": 160,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Porsiyon içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Dana Döner Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Pirinç Pilavı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 40
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "10:00",
+    "closingHour": "23:00"
+  },
+  "SutKahvaltiEvi": {
+    "id": "SutKahvaltiEvi",
+    "title": "Süt Kahvaltı Evi",
+    "description": "Firuze Konakları",
+    "serviceFee": 10,
+    "categories": ["sut"],
+    "minimumOrderAmount": 150,
+    "freeDelivery": true,
+    "deliveryTime": "25 dk",
+    "image": "/images/restaurants/sut-kahvalti-evi.png",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Firuze Konakları"
+      }
+    ],
+    "products": [
+      {
+        "name": "Serpme Kahvaltı Tabağı (2 Kişilik)",
+        "description": "Zengin içerikli serpme kahvaltı tabağı",
+        "image": "",
+        "url": "",
+        "price": 380,
+        "categories": ["sut"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Tabak içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Beyaz Peynir",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kaşar Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Zeytin",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Bal",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kaymak",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Salatalık",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Haşlanmış Yumurta",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Reçel",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekmek Sepeti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Kaymak",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Süzme Yoğurt Kasesi",
+        "description": "Ev yapımı süzme yoğurt",
+        "image": "",
+        "url": "",
+        "price": 60,
+        "categories": ["sut"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Kase içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Süzme Yoğurt",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Bal",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ceviz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ayran",
+        "description": "Ev yapımı taze ayran",
+        "image": "",
+        "url": "",
+        "price": 20,
+        "categories": ["sut"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Ayran boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "200 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Büyük",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 15
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "İçerik",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Yoğurt",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Su",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tuz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "07:00",
+    "closingHour": "16:00"
+  },
+  "Sbarro": {
+    "id": "Sbarro",
+    "title": "Sbarro",
+    "description": "Pelican Mall AVM",
+    "serviceFee": 10,
+    "categories": ["pizza"],
+    "minimumOrderAmount": 150,
+    "freeDelivery": true,
+    "deliveryTime": "35 dk",
+    "image": "",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Pelican Mall AVM"
+      }
+    ],
+    "products": [
+      {
+        "name": "Pepperoni Pizza (Dilim)",
+        "description": "Bol pepperonili dilim pizza",
+        "image": "",
+        "url": "",
+        "price": 90,
+        "categories": ["pizza"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Pizza içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pizza Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates Sosu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mozzarella Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Pepperoni",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Oregano",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Peynir",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 15
+              },
+              {
+                "name": "Ekstra Pepperoni",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Margherita Pizza (Bütün)",
+        "description": "Domates sos, mozzarella ve fesleğen",
+        "image": "",
+        "url": "",
+        "price": 220,
+        "categories": ["pizza"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Pizza boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Orta",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Büyük",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 60
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Pizza içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pizza Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates Sosu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mozzarella Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Fesleğen",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Zeytinyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Penne Alfredo",
+        "description": "Kremalı alfredo soslu makarna",
+        "image": "",
+        "url": "",
+        "price": 160,
+        "categories": ["pizza"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Makarna içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Penne Makarna",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Krema Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Parmesan Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Karabiber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Gazlı İçecek",
+        "description": "Soğuk gazlı içecek",
+        "image": "",
+        "url": "",
+        "price": 40,
+        "categories": ["pizza"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "İçecek boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "300 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 10
+              },
+              {
+                "name": "Büyük",
+                "description": "500 ml",
+                "image": "",
+                "url": "",
+                "price": 20
+              },
+              {
+                "name": "King Size",
+                "description": "700 ml",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "10:00",
+    "closingHour": "22:00"
+  },
+  "Arbys": {
+    "id": "Arbys",
+    "title": "Arby's",
+    "description": "Firuze AVM",
+    "serviceFee": 8,
+    "categories": ["et"],
+    "minimumOrderAmount": 180,
+    "freeDelivery": true,
+    "deliveryTime": "30 dk",
+    "image": "",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Firuze AVM"
+      }
+    ],
+    "products": [
+      {
+        "name": "Klasik Roast Beef Menü",
+        "description": "Dilimlenmiş rosto dana eti, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 210,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Kaiser Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Dilimlenmiş Rosto Dana Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Cheddar Peyniri Sosu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Turşu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 45
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Beef 'n Cheddar Menü",
+        "description": "Cheddar peynir soslu rosto dana sandviç, patates ve içecek",
+        "image": "",
+        "url": "",
+        "price": 230,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Menü boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "Küçük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "Orta boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 30
+              },
+              {
+                "name": "Büyük",
+                "description": "Büyük boy patates ve içecek",
+                "image": "",
+                "url": "",
+                "price": 50
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Kaiser Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Dilimlenmiş Rosto Dana Eti",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Cheddar Peyniri Sosu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kırmızı Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 45
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Curly Fries",
+        "description": "Baharatlı kıvırcık patates",
+        "image": "",
+        "url": "",
+        "price": 70,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Boy seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 15
+              },
+              {
+                "name": "Büyük",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 25
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "İçerik",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Kıvırcık Patates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Curly Fries Baharatı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Gazlı İçecek",
+        "description": "Soğuk gazlı içecek",
+        "image": "",
+        "url": "",
+        "price": 40,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "İçecek boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "300 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 10
+              },
+              {
+                "name": "Büyük",
+                "description": "500 ml",
+                "image": "",
+                "url": "",
+                "price": 20
+              },
+              {
+                "name": "King Size",
+                "description": "700 ml",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "10:00",
+    "closingHour": "23:00"
+  },
+  "Subway": {
+    "id": "Subway",
+    "title": "Subway",
+    "description": "Avcılar Sahil",
+    "serviceFee": 5,
+    "categories": ["et", "tavuk"],
+    "minimumOrderAmount": 130,
+    "freeDelivery": false,
+    "deliveryTime": "25 dk",
+    "image": "",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Avcılar Sahil"
+      }
+    ],
+    "products": [
+      {
+        "name": "Izgara Tavuk Sandviç (15 cm)",
+        "description": "Izgara tavuk göğsü ve taze sebzeler",
+        "image": "",
+        "url": "",
+        "price": 170,
+        "categories": ["tavuk"],
+        "choices": [
+          {
+            "name": "Ekmek Seçimi",
+            "description": "Ekmek türünü seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Buğday Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tam Buğday Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Peynirli Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 10
+              }
+            ]
+          },
+          {
+            "name": "Sos Seçimi",
+            "description": "Sosunuzu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Ranch Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Barbekü Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Acı Sos",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Izgara Tavuk Göğsü",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Salatalık",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mısır",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Zeytin",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Tavuk",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ton Balıklı Sandviç (15 cm)",
+        "description": "Ton balığı ve taze sebzeler",
+        "image": "",
+        "url": "",
+        "price": 180,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Ekmek Seçimi",
+            "description": "Ekmek türünü seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Buğday Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tam Buğday Ekmeği",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Peynirli Ekmek",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 10
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Ton Balığı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Salatalık",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mısır",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Zeytin",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Soğan",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Mayonez",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Roast Beef Sandviç (Footlong 30 cm)",
+        "description": "Dana rosto ve taze sebzeler",
+        "image": "",
+        "url": "",
+        "price": 240,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Sandviç içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Dana Rosto",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Marul",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Salatalık",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Turşu",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Peynir",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Et",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 45
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Gazlı İçecek",
+        "description": "Soğuk gazlı içecek",
+        "image": "",
+        "url": "",
+        "price": 35,
+        "categories": ["et", "tavuk"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "İçecek boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "300 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Orta",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 10
+              },
+              {
+                "name": "Büyük",
+                "description": "500 ml",
+                "image": "",
+                "url": "",
+                "price": 20
+              },
+              {
+                "name": "King Size",
+                "description": "700 ml",
+                "image": "",
+                "url": "",
+                "price": 35
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "08:00",
+    "closingHour": "23:30"
+  },
+  "UstaPideci": {
+    "id": "UstaPideci",
+    "title": "Usta Pideci",
+    "description": "Avcılar Meydan",
+    "serviceFee": 5,
+    "categories": ["et"],
+    "minimumOrderAmount": 140,
+    "freeDelivery": false,
+    "deliveryTime": "35 dk",
+    "image": "",
+    "url": "",
+    "locations": [
+      {
+        "addressId": "home",
+        "branchName": "Avcılar Meydan"
+      }
+    ],
+    "products": [
+      {
+        "name": "Kaşarlı Pide",
+        "description": "Bol kaşar peynirli özel pide",
+        "image": "",
+        "url": "",
+        "price": 150,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Pide içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pide Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kaşar Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tereyağı",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Yumurta",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 15
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Kıymalı Pide",
+        "description": "Dana kıymalı özel pide",
+        "image": "",
+        "url": "",
+        "price": 170,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Pide içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pide Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Dana Kıyma",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Biber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Maydanoz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Karışık Pide",
+        "description": "Kıyma, sucuk ve kaşar peynirli karışık pide",
+        "image": "",
+        "url": "",
+        "price": 190,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Malzemeler",
+            "description": "Pide içeriği",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Pide Hamuru",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Dana Kıyma",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Kaşar Peyniri",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Sucuk",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Domates",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Biber",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Ekstra Sucuk",
+                "description": "İsteğe bağlı ekstra malzeme",
+                "image": "",
+                "url": "",
+                "price": 25
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ayran",
+        "description": "Soğuk servis ayran",
+        "image": "",
+        "url": "",
+        "price": 20,
+        "categories": ["et"],
+        "choices": [
+          {
+            "name": "Boy Seçimi",
+            "description": "Ayran boyunu seçin",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Küçük",
+                "description": "200 ml",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Büyük",
+                "description": "400 ml",
+                "image": "",
+                "url": "",
+                "price": 15
+              }
+            ]
+          },
+          {
+            "name": "Malzemeler",
+            "description": "İçerik",
+            "image": "",
+            "url": "",
+            "price": 0,
+            "choices": [
+              {
+                "name": "Yoğurt",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Su",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              },
+              {
+                "name": "Tuz",
+                "description": "",
+                "image": "",
+                "url": "",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "openingHour": "11:00",
+    "closingHour": "23:00"
+  }
+}

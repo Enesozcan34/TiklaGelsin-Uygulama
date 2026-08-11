@@ -1,38 +1,34 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
-import Navbar from './Components/Navbar/Navbar';
-import Footer from './Components/Footer/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './Components/Layout/Layout';
 import LoginPage from './pages/LoginPage';
+import RestaurantsPage from './pages/RestaurantsPage';
+import RestaurantDetailPage from './pages/RestaurantDetailPage';
+import MainPage from './pages/MainPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import ProfilePage from './pages/ProfilePage';
+import TiklapayWalletPage from './pages/TiklapayWalletPage';
+import CampaignsPage from './pages/CampaignsPage';
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        
-        <Route 
-          element={
-            <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
 
-              <Navbar />
-              
-              <main className="flex-grow flex flex-col gap-6 w-[90%] mx-auto my-8">
-                <Outlet /> 
-              </main>
-              
-              <Footer />
-            </div>
-          }
-        >
+        <Route element={<Layout />}>
 
-          <Route
-            path="/"
-            element={
-              <div className="flex flex-col gap-8 w-full">
-
-              </div>
-            }
-          />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/sana-gelsin" element={<RestaurantsPage />} />
+          <Route path="/gel-al" element={<RestaurantsPage />} />
 
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+          <Route path="/sepetim" element={<CartPage />} />
+          <Route path="/odeme" element={<CheckoutPage />} />
+          <Route path="/profilim" element={<ProfilePage />} />
+          <Route path="/tiklapaycuzdanim" element={<TiklapayWalletPage />} />
+          <Route path="/kampanyalar" element={<CampaignsPage />} />
+          <Route path="/tiklagelsin-web" element={<MainPage />} />
         </Route>
 
       </Routes>
