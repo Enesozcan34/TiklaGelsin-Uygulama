@@ -88,7 +88,7 @@ const RestaurantCard = ({
             }
           : undefined
       }
-      className={`flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm ${hasDetailPage ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+      className={`flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 ${hasDetailPage ? 'cursor-pointer' : ''}`}
     >
       <div className={`relative h-32 sm:h-36 bg-gradient-to-br ${visual.gradient} flex items-center justify-center overflow-hidden`}>
         {restaurant.image ? (
@@ -160,7 +160,7 @@ const RestaurantsPage = () => {
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         <div className="flex flex-col gap-6 w-full lg:w-[320px] lg:shrink-0">
-          <div className="bg-white rounded-2xl shadow-sm p-5">
+          <div className="bg-white rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-800">Son Siparişlerim</h3>
             </div>
@@ -168,7 +168,7 @@ const RestaurantsPage = () => {
               {myOrders.length === 0 ? (
                 <p className="text-xs text-gray-400">Henüz siparişin yok.</p>
               ) : (
-                myOrders.slice(0, 5).map((order) => (
+                myOrders.slice(0, 3).map((order) => (
                   <div key={order.id} className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm text-gray-800 truncate">{order.restaurantTitle}</p>
@@ -183,7 +183,7 @@ const RestaurantsPage = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm p-5">
+          <div className="bg-white rounded-2xl p-5">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-gray-800">Biliyor muydun?</h3>
               <FaCircleQuestion className="w-4 h-4 text-gray-300" />
@@ -191,7 +191,7 @@ const RestaurantsPage = () => {
             <div />
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm p-5">
+          <div className="bg-white rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-800">Filtreler</h3>
             </div>
@@ -214,7 +214,7 @@ const RestaurantsPage = () => {
         </div>
 
         <div className="flex flex-col gap-6 w-full">
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl p-6">
             {visibleRestaurants.length > 0 ? (
               <>
                 <h3 className="text-gray-800 mb-4">Bütün Restoranlar</h3>

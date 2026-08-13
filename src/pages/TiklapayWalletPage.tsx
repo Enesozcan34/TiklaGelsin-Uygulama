@@ -51,7 +51,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
-      <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4 w-full lg:w-[340px] lg:shrink-0">
+      <div className="bg-white rounded-2xl p-5 flex flex-col gap-4 w-full lg:w-[340px] lg:shrink-0">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onClose} aria-label="Geri dön" className="text-gray-400 hover:text-gray-600 p-1 -ml-1">
             <FaChevronLeft className="w-3.5 h-3.5" />
@@ -65,7 +65,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4 w-full flex-1">
+      <div className="bg-white rounded-2xl p-5 flex flex-col gap-4 w-full flex-1">
         <h2 className="text-gray-800 text-base">Ödeme Yöntemi</h2>
 
         {selectedCard ? (
@@ -201,7 +201,7 @@ const TiklapayWalletPage = () => {
             <FaChevronRight className="text-[#E30A17] w-3.5 h-3.5 shrink-0" />
           </button>
 
-          <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+          <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h2 className="text-gray-800 text-base">Cüzdan Bakiyem</h2>
               <span className="text-xs text-gray-400">Hesap no: 1123627462</span>
@@ -224,7 +224,7 @@ const TiklapayWalletPage = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+          <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
             <button type="button" className="flex items-center justify-between gap-3 text-left">
               <span className="flex items-center gap-2 text-gray-800 text-base">
                 <FaStar className="text-[#E30A17] w-4 h-4" /> Tıkla Param
@@ -249,7 +249,7 @@ const TiklapayWalletPage = () => {
         </div>
 
         <div className="flex flex-col gap-4 w-full flex-1">
-          <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+          <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
             <h2 className="text-gray-800 text-lg">Hesap Hareketleri</h2>
 
             <div className="flex flex-col items-center justify-center gap-4 py-16">

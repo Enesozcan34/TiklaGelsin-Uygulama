@@ -50,7 +50,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50">
       {/* Kırmızı Üst Şerit */}
       <div
-        className={`bg-[#E30A17] text-white flex justify-between items-center w-[90%] max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 relative z-10 shadow-lg ${
+        className={`bg-[#E30A17] text-white flex justify-between items-center w-[90%] max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 relative z-10 ${
           isLoginPage || showBackHeader ? 'rounded-b-[16px]' : ''
         } ${(isLoginPage || showBackHeader) && !isAddressOpen ? 'overflow-hidden' : ''}`}
       >
@@ -131,7 +131,7 @@ const Navbar = () => {
             {isAddressOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setIsAddressOpen(false)} />
-                <div className="absolute top-full left-0 mt-3 w-96 max-w-[92vw] bg-white rounded-3xl shadow-2xl border border-gray-100 z-50 p-5 text-gray-700">
+                <div className="absolute top-full left-0 mt-3 w-96 max-w-[92vw] bg-white rounded-3xl border border-gray-100 z-50 p-5 text-gray-700">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-gray-900 text-base">Adres Seç</h3>
                     <button type="button" className="text-[#e61e3b] text-sm font-medium hover:underline">
@@ -326,7 +326,7 @@ const Navbar = () => {
       {isLoginPage || showBackHeader ? (
         <div className="h-8 w-[90%] max-w-[1200px] mx-auto" aria-hidden="true" />
       ) : (
-        <div className="flex justify-start gap-8 bg-white w-[90%] max-w-[1200px] mx-auto pt-10 pb-3 px-4 sm:px-8 rounded-b-[15px] relative z-0 -translate-y-6 shadow-md border-b border-l border-r border-[#E91D34]">
+        <div className="flex justify-start gap-8 bg-white w-[90%] max-w-[1200px] mx-auto pt-10 pb-3 px-4 sm:px-8 rounded-b-[15px] relative z-0 -translate-y-6 border-b border-l border-r border-[#E91D34]">
           <Link
             to="/sana-gelsin"
             className={`text-[14px] sm:text-[15px] lg:text-[17px] hover:underline whitespace-nowrap ${
@@ -363,7 +363,7 @@ const Navbar = () => {
         <div className="absolute inset-0 bg-black/40" onClick={() => setIsMenuOpen(false)} />
 
         <div
-          className={`absolute top-0 right-0 h-full w-[80%] max-w-xs bg-white flex flex-col p-6 shadow-2xl transition-transform duration-300 ${
+          className={`absolute top-0 right-0 h-full w-[80%] max-w-xs bg-white flex flex-col p-6 transition-transform duration-300 ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >

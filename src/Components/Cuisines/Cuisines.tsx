@@ -14,7 +14,7 @@ const CuisineCard = ({
   <button
     type="button"
     onClick={onClick}
-    className={`relative flex flex-col w-24 h-24 sm:w-32 sm:h-32 rounded-[20px] overflow-hidden border-[2.5px] sm:border-4 shadow-sm cursor-pointer transition-colors active:bg-gray-50 shrink-0 ${
+    className={`relative flex flex-col w-24 h-24 sm:w-32 sm:h-32 rounded-[20px] overflow-hidden border-[2.5px] sm:border-4 cursor-pointer transition-colors active:bg-gray-50 shrink-0 ${
       isActive ? 'border-[#E30A17]' : 'border-gray-200 hover:border-[#E30A17]'
     }`}
   >
@@ -44,7 +44,7 @@ const Cuisines = ({ activeCategory = null, onSelect }: CuisinesProps) => {
   };
 
   return (
-    <section className="bg-white rounded-3xl shadow-sm p-6 sm:p-8">
+    <section className="bg-white rounded-3xl p-6 sm:p-8">
       <div className="flex items-center justify-between -mt-4 -ml-4">
         <h2 className="text-[24px] text-gray-600">Mutfaklar</h2>
         <div className="flex items-center gap-2">

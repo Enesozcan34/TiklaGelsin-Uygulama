@@ -16,7 +16,7 @@ const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () =>
       checked ? 'bg-[#E30A17] justify-end' : 'bg-gray-200 justify-start'
     }`}
   >
-    <span className="w-5 h-5 rounded-full bg-white shadow" />
+    <span className="w-5 h-5 rounded-full bg-white" />
   </button>
 );
 
@@ -49,7 +49,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="relative bg-white rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 shrink-0">
           <h2 className="text-gray-800 text-lg">Ödeme Yöntemi</h2>
           <button

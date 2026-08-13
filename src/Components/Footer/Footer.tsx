@@ -14,7 +14,7 @@ const ChevronDown = () => (
 
 const Footer = () => {
   return (
-    <footer className="bg-white w-[90%] max-w-[1200px] mx-auto pt-12 pb-6 rounded-t-[16px] shadow-md mt-auto">
+    <footer className="bg-white w-[90%] max-w-[1200px] mx-auto pt-12 pb-6 rounded-t-[16px] mt-auto">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap justify-between gap-y-8">
           <div className="flex flex-wrap gap-x-12 gap-y-8">

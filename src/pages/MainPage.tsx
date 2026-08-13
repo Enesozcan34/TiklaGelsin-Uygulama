@@ -44,7 +44,7 @@ const MainPage = () => {
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* Hero */}
-      <section className="flex flex-col lg:flex-row bg-white rounded-3xl shadow-sm overflow-hidden">
+      <section className="flex flex-col lg:flex-row bg-white rounded-3xl overflow-hidden">
         <div className="flex flex-1 flex-col justify-center gap-6 p-6 sm:p-10 lg:p-14">
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl sm:text-4xl text-gray-600 leading-snug">
@@ -91,7 +91,7 @@ const MainPage = () => {
       {/* Özellikler */}
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {features.map((feature) => (
-          <div key={feature.id} className="flex flex-col items-center gap-4 bg-white rounded-3xl shadow-sm p-8 text-center">
+          <div key={feature.id} className="flex flex-col items-center gap-4 bg-white rounded-3xl p-8 text-center">
             <img src={feature.image} alt={feature.title} className="w-40 h-40 object-contain" />
             <h3 className="text-lg font-semibold text-gray-600">{feature.title}</h3>
             <p className="text-base text-gray-400">{feature.description}</p>
@@ -125,7 +125,7 @@ const MainPage = () => {
       </section>
 
       {/* Restoran Kaydı */}
-      <section className="flex flex-col md:flex-row items-center gap-8 bg-white rounded-3xl shadow-sm p-8 sm:p-10">
+      <section className="flex flex-col md:flex-row items-center gap-8 bg-white rounded-3xl p-8 sm:p-10">
         <div className="flex flex-col gap-4 flex-1">
           <h2 className="text-2xl sm:text-3xl text-gray-600">
             Restoranını Tıkla Gelsin'e kaydet, ayrıcalıklı ol!

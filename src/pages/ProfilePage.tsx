@@ -105,7 +105,7 @@ const UserInfoPanel = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-5">
+    <div className="bg-white rounded-2xl p-6 flex flex-col gap-5">
       <h2 className="text-gray-800 text-lg">Kullanıcı Bilgilerim</h2>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -243,7 +243,7 @@ const AddressFormModal = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden">
+      <div className="relative bg-white rounded-2xl w-full max-w-md flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
           <h2 className="text-gray-800 text-base">{title}</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1">
@@ -323,7 +323,7 @@ const AddressesPanel = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-5">
+    <div className="bg-white rounded-2xl p-6 flex flex-col gap-5">
       <div className="flex items-center gap-6 border-b border-gray-100">
         <button
           type="button"
@@ -435,7 +435,7 @@ const OrdersPanel = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+    <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
       <h2 className="text-gray-800 text-lg">Geçmiş Siparişlerim</h2>
 
       {orders.length === 0 ? (
@@ -533,7 +533,7 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden">
+      <div className="relative bg-white rounded-2xl w-full max-w-md flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
           <h2 className="text-gray-800 text-base">{editingCard ? 'Kartı Düzenle' : 'Kredi / Banka Kartı Ekle'}</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1">
@@ -621,7 +621,7 @@ const CardsPanel = () => {
   const [modalMode, setModalMode] = useState<CardModalMode>(null);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+    <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
       <h2 className="text-gray-800 text-lg">Kayıtlı Kartlarım</h2>
 
       {cards.length === 0 ? (
@@ -718,7 +718,7 @@ const PLACEHOLDER_COPY: Record<string, { title: string; message: string }> = {
 const PlaceholderPanel = ({ tab }: { tab: string }) => {
   const copy = PLACEHOLDER_COPY[tab] ?? { title: '', message: 'Yakında burada olacak.' };
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-2 items-center text-center py-16">
+    <div className="bg-white rounded-2xl p-6 flex flex-col gap-2 items-center text-center py-16">
       <h2 className="text-gray-800 text-lg">{copy.title}</h2>
       <p className="text-sm text-gray-400">{copy.message}</p>
     </div>
@@ -773,7 +773,7 @@ const ProfilePage = () => {
           </div>
         </button>
 
-        <div className="bg-white rounded-2xl shadow-sm p-3 flex flex-col gap-1">
+        <div className="bg-white rounded-2xl p-3 flex flex-col gap-1">
           {SIDEBAR_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;

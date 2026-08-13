@@ -20,7 +20,7 @@ const CouponPickerModal = ({ selectedCode, restaurantId, cartItems, onSelect, on
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col overflow-hidden">
+      <div className="relative bg-white rounded-3xl w-full max-w-md max-h-[80vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
           <h2 className="text-gray-800 text-base font-semibold">Kampanya veya Kupon Seç</h2>
           <button type="button" aria-label="Kapat" onClick={onClose} className="text-gray-400 hover:text-gray-600">

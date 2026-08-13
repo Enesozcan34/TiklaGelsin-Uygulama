@@ -18,14 +18,14 @@ const CampaignCard = ({ campaign }: CampaignCardProps) => (
       className={`relative overflow-hidden rounded-2xl h-40 flex items-center justify-between px-5 bg-gradient-to-br ${campaign.gradient}`}
     >
       <div className="text-white max-w-[65%]">
-        <p className="text-xl font-extrabold leading-tight drop-shadow">{campaign.headline}</p>
+        <p className="text-xl font-extrabold leading-tight">{campaign.headline}</p>
         {campaign.subheadline && <p className="text-sm font-medium opacity-90 mt-1">{campaign.subheadline}</p>}
       </div>
       {campaign.logo && (
         <img
           src={campaign.logo}
           alt={campaign.restaurantTitle}
-          className="w-16 h-16 object-contain bg-white rounded-2xl p-2 shadow-md shrink-0"
+          className="w-16 h-16 object-contain bg-white rounded-2xl p-2 shrink-0"
         />
       )}
     </div>

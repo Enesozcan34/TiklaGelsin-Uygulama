@@ -29,7 +29,7 @@ const CampaignsPage = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="bg-white rounded-3xl shadow-sm p-6 flex flex-col gap-5">
+      <div className="bg-white rounded-3xl p-6 flex flex-col gap-5">
         <div className="flex items-center gap-3 border border-gray-200 rounded-[12px] px-5 py-3">
           <input
             type="text"

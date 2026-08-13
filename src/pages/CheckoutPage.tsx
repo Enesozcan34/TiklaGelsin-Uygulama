@@ -71,7 +71,7 @@ const LabeledDropdown = ({
     </button>
 
     {isOpen && !disabled && (
-      <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-2xl shadow-xl border border-gray-100 max-h-56 overflow-y-auto py-2">
+      <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-2xl border border-gray-100 max-h-56 overflow-y-auto py-2">
         {options.map((option) => (
           <button
             key={option.value}
@@ -212,7 +212,7 @@ const CheckoutPage = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
       <div className="flex flex-col gap-6 w-full lg:flex-1">
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-gray-800 text-lg">Teslimat Bilgileri</h2>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -231,7 +231,7 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-gray-800 text-lg">Teslimat Zamanı</h2>
           <div className="flex flex-col gap-3">
             <button
@@ -301,7 +301,7 @@ const CheckoutPage = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-gray-800 text-lg">Ödeme Yöntemi</h2>
             <button
@@ -385,7 +385,7 @@ const CheckoutPage = () => {
           />
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-gray-800 text-lg">Kampanyalar ve Kuponlar</h2>
           <div className="flex items-center justify-between gap-3 border border-gray-200 rounded-full pl-5 pr-1.5 py-1.5">
             <span className={`text-sm truncate ${isSelectedCouponApplicable ? 'text-gray-700 font-medium' : 'text-gray-400'}`}>
@@ -413,7 +413,7 @@ const CheckoutPage = () => {
           />
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-gray-800 text-lg">Sipariş Notu</h2>
           <div className="flex flex-col gap-1">
             <textarea
@@ -459,7 +459,7 @@ const CheckoutPage = () => {
       </div>
 
       <div className="flex flex-col gap-4 w-full lg:w-[380px] lg:shrink-0">
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
           <h2 className="text-gray-800 text-lg">Sipariş Özeti</h2>
 
           {restaurant && (
@@ -496,7 +496,7 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+        <div className="bg-white rounded-2xl p-5 flex flex-col gap-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Sepet Tutarı</span>
             <span className="text-gray-700">{formatPrice(cartTotal)}</span>

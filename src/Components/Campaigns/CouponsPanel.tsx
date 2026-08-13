@@ -35,7 +35,7 @@ const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = fa
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className={bare ? 'flex flex-col gap-5' : 'bg-white rounded-3xl shadow-sm p-6 flex flex-col gap-5'}>
+      <div className={bare ? 'flex flex-col gap-5' : 'bg-white rounded-3xl p-6 flex flex-col gap-5'}>
         {showSearch && (
           <div className="flex items-center gap-3 border border-gray-200 rounded-full px-5 py-3">
             <input

@@ -52,7 +52,7 @@ const CartPanel = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-8 flex flex-col items-center text-center gap-3">
+      <div className="bg-white rounded-2xl p-8 flex flex-col items-center text-center gap-3">
         <FaBasketShopping className="w-16 h-16 text-gray-200" />
         <h3 className="text-gray-800">Sepetin Boş.</h3>
         <p className="text-sm text-gray-500">Sipariş ver, istediğin yere getirelim.</p>
@@ -63,7 +63,7 @@ const CartPanel = () => {
   const cartTotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+    <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
       <h3 className="text-gray-800">Sepetim</h3>
 
       <div className="flex flex-col gap-3">
@@ -124,7 +124,7 @@ const RestaurantDetailPage = () => {
 
   if (!restaurant) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-10 flex flex-col items-center gap-4 text-center">
+      <div className="bg-white rounded-2xl p-10 flex flex-col items-center gap-4 text-center">
         <h2 className="text-lg text-gray-700">Restoran bulunamadı</h2>
         <Link to="/sana-gelsin" className="text-[#E30A17] hover:underline">
           Restoranlara geri dön
@@ -144,7 +144,7 @@ const RestaurantDetailPage = () => {
   return (
     <div className="flex flex-col gap-6 w-full">
       <div className="flex flex-col lg:flex-row gap-6 items-stretch">
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex items-start gap-4 w-full">
+        <div className="bg-white rounded-2xl p-4 flex items-start gap-4 w-full">
           <img
             src={restaurant.image}
             alt={restaurant.title}
@@ -188,7 +188,7 @@ const RestaurantDetailPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col w-full lg:w-[320px] lg:shrink-0">
+        <div className="bg-white rounded-2xl p-5 flex flex-col w-full lg:w-[320px] lg:shrink-0">
           <h3 className="text-gray-800 mb-4">Son Siparişlerim</h3>
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-3">
             <FaClockRotateLeft className="w-10 h-10 text-gray-200" />
@@ -199,7 +199,7 @@ const RestaurantDetailPage = () => {
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         <div className="flex flex-col gap-6 w-full">
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl p-6">
             <div className="flex items-center gap-3 px-4 py-3 border border-gray-100 rounded-full mb-4">
               <FaMagnifyingGlass className="w-4 h-4 text-gray-400" />
               <input

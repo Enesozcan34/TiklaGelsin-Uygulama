@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   return (
     <div className="w-full flex justify-center">
-    <div className="flex flex-col rounded-[20px] p-3 bg-white shadow-md w-full max-w-[1200px] lg:flex-row lg:gap-8 lg:p-8">
+    <div className="flex flex-col rounded-[20px] p-3 bg-white w-full max-w-[1200px] lg:flex-row lg:gap-8 lg:p-8">
       <div className="flex-1 flex flex-col justify-start gap-5 pt-6 lg:pt-10">
         <Link to="/">
           <img src={logoRed} alt="tıkla gelsin" className="h-10 sm:h-12 w-auto" />

@@ -29,7 +29,7 @@ const CartPage = () => {
   if (cartItems.length === 0) {
     return (
       <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
-        <div className="bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center text-center gap-4 py-20 px-6 w-full lg:flex-1">
+        <div className="bg-white rounded-2xl flex flex-col items-center justify-center text-center gap-4 py-20 px-6 w-full lg:flex-1">
           <FaBasketShopping className="w-16 h-16 text-gray-200" />
           <h2 className="text-gray-800 text-lg">Sepetin Boş.</h2>
           <p className="text-sm text-gray-500">
@@ -45,7 +45,7 @@ const CartPage = () => {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex items-center justify-between gap-4 w-full lg:w-[320px] lg:shrink-0">
+        <div className="bg-white rounded-2xl p-5 flex items-center justify-between gap-4 w-full lg:w-[320px] lg:shrink-0">
           <div>
             <p className="text-xs text-gray-400">Sepet Tutarı</p>
             <p className="text-gray-800 text-lg">{formatPrice(0)}</p>
@@ -64,7 +64,7 @@ const CartPage = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
-      <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-5 w-full lg:flex-1">
+      <div className="bg-white rounded-2xl p-6 flex flex-col gap-5 w-full lg:flex-1">
         <div className="flex items-center justify-between">
           <h1 className="text-gray-800 text-lg">Sepet Detayı</h1>
           <button
@@ -151,7 +151,7 @@ const CartPage = () => {
 
       <div className="flex flex-col gap-4 w-full lg:w-[320px] lg:shrink-0">
         {restaurant && (
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
+          <div className="bg-white rounded-2xl p-4 flex items-center gap-3">
             <div className="w-14 h-14 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden shrink-0 bg-white">
               <img src={restaurant.image} alt={restaurant.title} className="w-full h-full object-cover" />
             </div>
@@ -162,7 +162,7 @@ const CartPage = () => {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl p-5 flex items-center justify-between gap-4">
           <div>
             <p className="text-xs text-gray-400">Sepet Tutarı</p>
             <p className="text-gray-800 text-lg">{formatPrice(cartTotal)}</p>

@@ -1,4 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Eudoxus Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
 body{
     background-color: #ebe9e9;
 }

@@ -22,7 +22,7 @@ const CouponCard = ({ coupon, onDetail }: CouponCardProps) => {
       </button>
 
       <div
-        className={`relative flex flex-1 flex-col bg-white rounded-2xl border border-gray-200 shadow-sm ${
+        className={`relative flex flex-1 flex-col bg-white rounded-2xl border border-gray-200 ${
           isExpired ? 'opacity-60' : ''
         }`}
       >
@@ -48,7 +48,7 @@ const CouponCard = ({ coupon, onDetail }: CouponCardProps) => {
       </div>
 
       <span
-        className={`-mt-3 ml-4 self-start relative z-10 text-white text-xs font-semibold rounded-full px-4 py-1.5  shadow-sm ${
+        className={`-mt-3 ml-4 self-start relative z-10 text-white text-xs font-semibold rounded-full px-4 py-1.5 ${
           isExpired ? 'bg-gray-400' : 'bg-[#E30A17]'
         }`}
       >
