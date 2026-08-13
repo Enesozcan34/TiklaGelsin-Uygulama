@@ -7,11 +7,14 @@ import CouponDetailModal from './CouponDetailModal';
 
 interface CouponsPanelProps {
   showSearch?: boolean;
+  searchQuery?: string;
+  bare?: boolean;
 }
 
-const CouponsPanel = ({ showSearch = true }: CouponsPanelProps) => {
+const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = false }: CouponsPanelProps) => {
   const { getUserCoupons } = useStore();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [internalQuery, setInternalQuery] = useState('');
+  const searchQuery = externalQuery ?? internalQuery;
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [detailCode, setDetailCode] = useState<string | null>(null);
 
@@ -32,13 +35,13 @@ const CouponsPanel = ({ showSearch = true }: CouponsPanelProps) => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="bg-white rounded-3xl shadow-sm p-6 flex flex-col gap-5">
+      <div className={bare ? 'flex flex-col gap-5' : 'bg-white rounded-3xl shadow-sm p-6 flex flex-col gap-5'}>
         {showSearch && (
           <div className="flex items-center gap-3 border border-gray-200 rounded-full px-5 py-3">
             <input
               type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={internalQuery}
+              onChange={(e) => setInternalQuery(e.target.value)}
               placeholder="Kupon Ara"
               className="flex-1 min-w-0 outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
             />
@@ -56,11 +59,7 @@ const CouponsPanel = ({ showSearch = true }: CouponsPanelProps) => {
             </svg>
           </div>
         )}
-
-        <h2 className="text-sm font-semibold text-[#E30A17] border-b-2 border-[#E30A17] inline-block pb-2 self-start">
-          Kuponlarım
-        </h2>
-
+        
         {filteredCoupons.length === 0 ? (
           <div className="flex flex-col items-center gap-3 text-center py-16">
             <FaTicket className="w-12 h-12 text-gray-200" />

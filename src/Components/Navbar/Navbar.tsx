@@ -51,8 +51,8 @@ const Navbar = () => {
       {/* Kırmızı Üst Şerit */}
       <div
         className={`bg-[#E30A17] text-white flex justify-between items-center w-[90%] max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 relative z-10 shadow-lg ${
-          isLoginPage || showBackHeader ? 'rounded-b-[16px] overflow-hidden' : ''
-        }`}
+          isLoginPage || showBackHeader ? 'rounded-b-[16px]' : ''
+        } ${(isLoginPage || showBackHeader) && !isAddressOpen ? 'overflow-hidden' : ''}`}
       >
         {showBackHeader ? (
           <button

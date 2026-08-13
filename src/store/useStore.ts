@@ -182,6 +182,7 @@ export const ALL_COUPONS: CouponDetail[] = [
 export const getCouponDetail = (code: string): CouponDetail | undefined =>
   ALL_COUPONS.find((coupon) => coupon.code.toLocaleLowerCase('tr-TR') === code.toLocaleLowerCase('tr-TR'));
 
+// Kişi bazlı tutulan kuponlar (kullanıcı adına göre sahip olunan kupon kodları)
 const defaultCouponsByUser: Record<string, string[]> = {
   Enes: ['WkPqz', 'mNBvt', 'XyLoR'],
   Burak: ['WkPqz', 'qAzWs', 'TgHjK', 'bNmQw', 'LpOiU'],
@@ -273,6 +274,7 @@ interface WalletState {
   chargeWallet: (amount: number) => boolean;
 }
 
+// Kişi bazlı tutulan kuponlar için store state'i
 interface CouponState {
   couponsByUser: Record<string, string[]>;
   getUserCoupons: () => string[];
@@ -512,6 +514,7 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
         return true;
       },
 
+      // Kişi bazlı tutulan kuponlar
       couponsByUser: defaultCouponsByUser,
 
       getUserCoupons: () => {
