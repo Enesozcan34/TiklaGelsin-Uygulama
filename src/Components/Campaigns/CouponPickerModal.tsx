@@ -11,7 +11,7 @@ interface CouponPickerModalProps {
 }
 
 const CouponPickerModal = ({ selectedCode, restaurantId, cartItems, onSelect, onClose }: CouponPickerModalProps) => {
-  const { getUserCoupons } = useStore();
+  const { getUserCoupons, getCouponUsesRemaining } = useStore();
   const ownedCoupons: CouponDetail[] = getUserCoupons()
     .map((code) => ALL_COUPONS.find((coupon) => coupon.code === code))
     .filter((coupon): coupon is CouponDetail => Boolean(coupon))
@@ -37,8 +37,9 @@ const CouponPickerModal = ({ selectedCode, restaurantId, cartItems, onSelect, on
             </p>
           ) : (
             ownedCoupons.map((coupon) => {
-              const unavailableReason = getCouponUnavailabilityReason(coupon, cartItems);
-              const discountAmount = calculateCouponDiscount(coupon, cartItems);
+              const usesRemaining = getCouponUsesRemaining(coupon.code);
+              const unavailableReason = getCouponUnavailabilityReason(coupon, cartItems, usesRemaining);
+              const discountAmount = calculateCouponDiscount(coupon, cartItems, usesRemaining);
               const isUsable = !unavailableReason;
 
               return (
@@ -54,20 +55,22 @@ const CouponPickerModal = ({ selectedCode, restaurantId, cartItems, onSelect, on
                     !isUsable
                       ? 'border-gray-100 bg-gray-50 cursor-not-allowed opacity-60'
                       : selectedCode === coupon.code
-                        ? 'border-[#E30A17] bg-red-50'
+                        ? 'border-[#E91D34] bg-red-50'
                         : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <span className="flex items-start justify-between gap-3">
                     <span className="block text-sm font-semibold text-gray-800">{coupon.title}</span>
                     {isUsable && (
-                      <span className="shrink-0 text-sm font-semibold text-[#E30A17]">
+                      <span className="shrink-0 text-sm font-semibold text-[#E91D34]">
                         -{formatCouponPrice(discountAmount)}
                       </span>
                     )}
                   </span>
-                  <span className="block text-xs text-gray-400 mt-0.5">{coupon.restaurantTitle}</span>
-                  {unavailableReason && <span className="block text-xs text-[#E30A17] mt-1">{unavailableReason}</span>}
+                  <span className="block text-xs text-gray-400 mt-0.5">
+                    {coupon.restaurantTitle} • Kalan Kullanım: {usesRemaining} adet
+                  </span>
+                  {unavailableReason && <span className="block text-xs text-[#E91D34] mt-1">{unavailableReason}</span>}
                 </button>
               );
             })

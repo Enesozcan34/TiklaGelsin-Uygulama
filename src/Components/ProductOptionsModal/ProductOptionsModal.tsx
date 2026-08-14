@@ -14,10 +14,17 @@ interface ProductOptionsModalProps {
   product: Product;
   restaurantId: string;
   restaurantTitle: string;
+  initialQuantity?: number;
   onClose: () => void;
 }
 
-const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }: ProductOptionsModalProps) => {
+const ProductOptionsModal = ({
+  product,
+  restaurantId,
+  restaurantTitle,
+  initialQuantity,
+  onClose,
+}: ProductOptionsModalProps) => {
   const { cartItems, addToCart, clearCart } = useStore();
   const choiceGroups = product.choices ?? [];
   const [showRestaurantConflict, setShowRestaurantConflict] = useState(false);
@@ -33,7 +40,7 @@ const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }
     return initial;
   });
   const [expandedGroups, setExpandedGroups] = useState<Set<number>>(() => new Set(choiceGroups.length > 0 ? [0] : []));
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(initialQuantity ?? 1);
 
   const toggleExpand = (index: number) => {
     setExpandedGroups((prev) => {
@@ -168,7 +175,7 @@ const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }
                               onChange={() =>
                                 singleSelect ? selectSingle(groupIndex, choice.name) : toggleMultiple(groupIndex, choice.name)
                               }
-                              className="accent-[#E30A17] w-4 h-4"
+                              className="accent-[#E91D34] w-4 h-4"
                             />
                             <span className="text-sm text-gray-700">
                               {choice.name}
@@ -199,7 +206,7 @@ const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }
                 type="button"
                 aria-label="Azalt"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E30A17] hover:text-[#E30A17] transition-colors"
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E91D34] hover:text-[#E91D34] transition-colors"
               >
                 <FaMinus className="w-3 h-3" />
               </button>
@@ -208,7 +215,7 @@ const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }
                 type="button"
                 aria-label="Artır"
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E30A17] hover:text-[#E30A17] transition-colors"
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E91D34] hover:text-[#E91D34] transition-colors"
               >
                 <FaPlus className="w-3 h-3" />
               </button>
@@ -216,7 +223,7 @@ const ProductOptionsModal = ({ product, restaurantId, restaurantTitle, onClose }
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+              className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
             >
               Sepete Ekle
             </button>

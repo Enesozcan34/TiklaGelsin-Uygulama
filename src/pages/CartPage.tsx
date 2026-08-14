@@ -39,7 +39,7 @@ const CartPage = () => {
           </p>
           <Link
             to="/sana-gelsin"
-            className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+            className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
           >
             Ürün Ekle
           </Link>
@@ -70,7 +70,7 @@ const CartPage = () => {
           <button
             type="button"
             onClick={() => clearCart()}
-            className="text-[#E30A17] text-sm hover:underline"
+            className="text-[#E91D34] text-sm hover:underline"
           >
             Sepeti Boşalt
           </button>
@@ -103,32 +103,32 @@ const CartPage = () => {
                       <button
                         type="button"
                         onClick={() => toggleExpanded(item.id)}
-                        className="flex items-center gap-1 text-[#E30A17] text-xs mt-0.5 self-start"
+                        className="flex items-center gap-1 text-[#E91D34] text-xs mt-0.5 self-start"
                       >
                         Tümünü Gör
                         <FaChevronDown className={`w-2.5 h-2.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
                     </div>
                   )}
-                  <p className="text-[#E30A17] text-sm mt-1">{formatPrice(item.unitPrice * item.quantity)}</p>
+                  <p className="text-[#E91D34] text-sm mt-1">{formatPrice(item.unitPrice * item.quantity)}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
                     aria-label="Azalt"
                     onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E30A17] text-[#E30A17] hover:bg-red-50 transition-colors"
+                    className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E91D34] text-[#E91D34] hover:bg-red-50 transition-colors"
                   >
                     <FaMinus className="w-2.5 h-2.5" />
                   </button>
-                  <span className="w-7 h-7 flex items-center justify-center rounded-full bg-[#E30A17] text-white text-sm">
+                  <span className="w-7 h-7 flex items-center justify-center rounded-full bg-[#E91D34] text-white text-sm">
                     {item.quantity}
                   </span>
                   <button
                     type="button"
                     aria-label="Artır"
                     onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E30A17] text-[#E30A17] hover:bg-red-50 transition-colors"
+                    className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E91D34] text-[#E91D34] hover:bg-red-50 transition-colors"
                   >
                     <FaPlus className="w-2.5 h-2.5" />
                   </button>
@@ -141,7 +141,7 @@ const CartPage = () => {
         {restaurant && (
           <Link
             to={`/restaurant/${restaurant.id}`}
-            className="border border-[#E30A17] text-[#E30A17] text-sm rounded-full py-3 text-center hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
+            className="border border-[#E91D34] text-[#E91D34] text-sm rounded-full py-3 text-center hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
           >
             <FaPlus className="w-3 h-3" />
             Yeni Ürün Ekle
@@ -170,7 +170,7 @@ const CartPage = () => {
           <button
             type="button"
             onClick={() => navigate('/odeme')}
-            className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+            className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
           >
             Devam Et
           </button>

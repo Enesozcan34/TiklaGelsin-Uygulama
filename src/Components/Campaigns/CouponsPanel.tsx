@@ -3,7 +3,6 @@ import { FaTicket } from 'react-icons/fa6';
 import useStore, { ALL_COUPONS, type CouponDetail } from '../../store/useStore';
 import CouponCard from './CouponCard';
 import AddCouponModal from './AddCouponModal';
-import CouponDetailModal from './CouponDetailModal';
 
 interface CouponsPanelProps {
   showSearch?: boolean;
@@ -16,7 +15,6 @@ const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = fa
   const [internalQuery, setInternalQuery] = useState('');
   const searchQuery = externalQuery ?? internalQuery;
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [detailCode, setDetailCode] = useState<string | null>(null);
 
   const ownedCoupons: CouponDetail[] = getUserCoupons()
     .map((code) => ALL_COUPONS.find((coupon) => coupon.code === code))
@@ -30,8 +28,6 @@ const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = fa
           coupon.restaurantTitle.toLocaleLowerCase('tr-TR').includes(normalizedQuery),
       )
     : ownedCoupons;
-
-  const detailCoupon = detailCode ? (ALL_COUPONS.find((coupon) => coupon.code === detailCode) ?? null) : null;
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -69,7 +65,7 @@ const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = fa
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredCoupons.map((coupon) => (
-              <CouponCard key={coupon.code} coupon={coupon} onDetail={() => setDetailCode(coupon.code)} />
+              <CouponCard key={coupon.code} coupon={coupon} />
             ))}
           </div>
         )}
@@ -79,14 +75,13 @@ const CouponsPanel = ({ showSearch = true, searchQuery: externalQuery, bare = fa
         <button
           type="button"
           onClick={() => setIsAddOpen(true)}
-          className="bg-[#E30A17] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+          className="bg-[#E91D34] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
         >
           Kupon Ekle
         </button>
       </div>
 
       {isAddOpen && <AddCouponModal onClose={() => setIsAddOpen(false)} onAdded={() => setIsAddOpen(false)} />}
-      {detailCoupon && <CouponDetailModal coupon={detailCoupon} onClose={() => setDetailCode(null)} />}
     </div>
   );
 };

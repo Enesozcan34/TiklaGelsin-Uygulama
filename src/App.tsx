@@ -9,6 +9,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import ProfilePage from './pages/ProfilePage';
 import TiklapayWalletPage from './pages/TiklapayWalletPage';
 import CampaignsPage from './pages/CampaignsPage';
+import CampaignDetailPage from './pages/CampaignDetailPage';
+import CouponDetailPage from './pages/CouponDetailPage';
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
           <Route path="/profilim" element={<ProfilePage />} />
           <Route path="/tiklapaycuzdanim" element={<TiklapayWalletPage />} />
           <Route path="/kampanyalar" element={<CampaignsPage />} />
+          <Route path="/kampanyalar/:id" element={<CampaignDetailPage />} />
+          <Route path="/kuponlar/:code" element={<CouponDetailPage />} />
           <Route path="/tiklagelsin-web" element={<MainPage />} />
         </Route>
 

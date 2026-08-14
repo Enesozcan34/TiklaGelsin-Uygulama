@@ -61,7 +61,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
         </div>
         <div className="flex flex-col gap-3 pl-1">
           <span className="text-sm text-gray-400">Havale/EFT ile</span>
-          <span className="text-sm text-[#E30A17] font-semibold">Kredi/Banka Kartı ile</span>
+          <span className="text-sm text-[#E91D34] font-semibold">Kredi/Banka Kartı ile</span>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
             <button
               type="button"
               onClick={() => navigate('/profilim', { state: { tab: 'cards' } })}
-              className="bg-[#E30A17] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#c80914] transition-colors shrink-0"
+              className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors shrink-0"
             >
               Değiştir
             </button>
@@ -110,7 +110,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
                 onClick={() => handlePresetClick(preset)}
                 className={`flex-1 rounded-full border py-3.5 text-sm transition-colors ${
                   isSelected
-                    ? 'bg-[#E30A17] border-[#E30A17] text-white'
+                    ? 'bg-[#E91D34] border-[#E91D34] text-white'
                     : 'border-gray-200 text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -131,7 +131,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
               setAmount(event.target.value.replace(/[^\d]/g, ''));
               setFeedback(null);
             }}
-            className="w-full border border-gray-200 rounded-full px-5 py-3.5 pr-11 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full px-5 py-3.5 pr-11 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors"
           />
           {amount.length > 0 && (
             <button
@@ -146,7 +146,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
         </div>
 
         {feedback && (
-          <p className={`text-xs ${feedback.type === 'success' ? 'text-green-600' : 'text-[#E30A17]'}`}>
+          <p className={`text-xs ${feedback.type === 'success' ? 'text-green-600' : 'text-[#E91D34]'}`}>
             {feedback.message}
           </p>
         )}
@@ -155,7 +155,7 @@ const TopUpView = ({ onClose }: { onClose: () => void }) => {
           type="button"
           disabled={!isAmountValid}
           onClick={handleSubmit}
-          className="bg-[#E30A17] text-white text-sm rounded-full py-3.5 hover:bg-[#c80914] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+          className="bg-[#E91D34] text-white text-sm rounded-full py-3.5 hover:bg-[#CA192D] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           Para Yükle
         </button>
@@ -194,11 +194,11 @@ const TiklapayWalletPage = () => {
             onClick={() => navigate('/profilim', { state: { tab: 'user' } })}
             className="flex items-center justify-between gap-3 bg-red-50 rounded-2xl px-5 py-4 text-left hover:bg-red-100 transition-colors"
           >
-            <span className="flex items-center gap-2 text-[#E30A17] text-sm">
+            <span className="flex items-center gap-2 text-[#E91D34] text-sm">
               <FaCircleExclamation className="w-4 h-4 shrink-0" />
               Limitini artırmak için hesabını doğrula
             </span>
-            <FaChevronRight className="text-[#E30A17] w-3.5 h-3.5 shrink-0" />
+            <FaChevronRight className="text-[#E91D34] w-3.5 h-3.5 shrink-0" />
           </button>
 
           <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
@@ -211,13 +211,13 @@ const TiklapayWalletPage = () => {
               <button
                 type="button"
                 onClick={handleYukleClick}
-                className="flex items-center justify-center gap-2 bg-[#E30A17] text-white text-sm rounded-full py-3.5 hover:bg-[#c80914] transition-colors"
+                className="flex items-center justify-center gap-2 bg-[#E91D34] text-white text-sm rounded-full py-3.5 hover:bg-[#CA192D] transition-colors"
               >
                 <FaPlus className="w-3.5 h-3.5" /> Yükle
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 border border-[#E30A17] text-[#E30A17] text-sm rounded-full py-3.5 hover:bg-red-50 transition-colors"
+                className="flex items-center justify-center gap-2 border border-[#E91D34] text-[#E91D34] text-sm rounded-full py-3.5 hover:bg-red-50 transition-colors"
               >
                 <FaPaperPlane className="w-3.5 h-3.5" /> Gönder / İste
               </button>
@@ -227,7 +227,7 @@ const TiklapayWalletPage = () => {
           <div className="bg-white rounded-2xl p-5 flex flex-col gap-4">
             <button type="button" className="flex items-center justify-between gap-3 text-left">
               <span className="flex items-center gap-2 text-gray-800 text-base">
-                <FaStar className="text-[#E30A17] w-4 h-4" /> Tıkla Param
+                <FaStar className="text-[#E91D34] w-4 h-4" /> Tıkla Param
               </span>
               <FaChevronRight className="text-gray-400 w-3.5 h-3.5 shrink-0" />
             </button>
@@ -235,12 +235,12 @@ const TiklapayWalletPage = () => {
 
             <div className="border border-red-100 bg-red-50 rounded-2xl p-4 flex flex-col gap-3">
               <p className="flex items-center gap-2 text-xs text-gray-600">
-                <FaCircleExclamation className="text-[#E30A17] w-3.5 h-3.5 shrink-0" />
+                <FaCircleExclamation className="text-[#E91D34] w-3.5 h-3.5 shrink-0" />
                 Cüzdan kullanıcılarına özel %25'e varan indirimden faydalan.
               </p>
               <button
                 type="button"
-                className="bg-[#E30A17] text-white text-sm rounded-full py-3 hover:bg-[#c80914] transition-colors"
+                className="bg-[#E91D34] text-white text-sm rounded-full py-3 hover:bg-[#CA192D] transition-colors"
               >
                 Tıkla Para Satın Al
               </button>

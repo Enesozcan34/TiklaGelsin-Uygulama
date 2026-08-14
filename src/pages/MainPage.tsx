@@ -59,7 +59,7 @@ const MainPage = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg">
             <div className="flex flex-1 items-center gap-2 border border-gray-200 rounded-full px-5 py-3.5">
-              <FaLocationDot className="w-4 h-4 text-[#E30A17] shrink-0" />
+              <FaLocationDot className="w-4 h-4 text-[#E91D34] shrink-0" />
               <input
                 type="text"
                 placeholder="Adresini Gir"
@@ -68,7 +68,7 @@ const MainPage = () => {
             </div>
             <button
               type="button"
-              className="bg-[#E30A17] text-white font-semibold rounded-full px-8 py-3.5 whitespace-nowrap hover:bg-[#c80914] transition-colors"
+              className="bg-[#E91D34] text-white font-semibold rounded-full px-8 py-3.5 whitespace-nowrap hover:bg-[#CA192D] transition-colors"
             >
               Restoranları Göster!
             </button>
@@ -76,7 +76,7 @@ const MainPage = () => {
         </div>
 
         {/* Kampanya paneli */}
-        <div className="relative flex-1 aspect-[625/440] bg-[#E30A17] overflow-hidden rounded-b-3xl lg:rounded-b-none lg:rounded-r-3xl">
+        <div className="relative flex-1 aspect-[625/440] bg-[#E91D34] overflow-hidden rounded-b-3xl lg:rounded-b-none lg:rounded-r-3xl">
           <img
             src={campaignBanner}
             alt="İlk Gel Al siparişinde ₺100 indirim"
@@ -100,7 +100,7 @@ const MainPage = () => {
       </section>
 
       {/* Uygulamayı İndir */}
-      <section className="bg-[#E30A17] rounded-3xl overflow-hidden">
+      <section className="bg-[#E91D34] rounded-3xl overflow-hidden">
         <div className="flex flex-col md:flex-row items-center gap-8 px-6 sm:px-10 pt-0 pb-0">
           <div className="flex flex-col gap-4 flex-1 text-center md:text-left items-center md:items-start">
             <h2 className="text-3xl sm:text-4xl text-white -mt-2 text-center">Tıkla Gelsin'i İndir!</h2>
@@ -136,7 +136,7 @@ const MainPage = () => {
           </p>
           <Link
             to="/basvuru-formu"
-            className="self-start bg-[#E30A17] text-white font-semibold rounded-full px-8 py-3.5 hover:bg-[#c80914] transition-colors"
+            className="self-start bg-[#E91D34] text-white font-semibold rounded-full px-8 py-3.5 hover:bg-[#CA192D] transition-colors"
           >
             Başvuru Formu
           </Link>

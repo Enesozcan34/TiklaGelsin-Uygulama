@@ -49,7 +49,7 @@ const EmptyState = ({ onReset }: { onReset: () => void }) => (
     <button
       type="button"
       onClick={onReset}
-      className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+      className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
     >
       Filtreyi Sıfırla
     </button>
@@ -100,7 +100,7 @@ const RestaurantCard = ({
           type="button"
           aria-label="Favorilere ekle"
           onClick={(e) => e.stopPropagation()}
-          className="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-500 hover:text-[#E30A17] rounded-full p-2 transition-colors"
+          className="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-500 hover:text-[#E91D34] rounded-full p-2 transition-colors"
         >
           <FaRegHeart className="w-3.5 h-3.5" />
         </button>
@@ -117,7 +117,7 @@ const RestaurantCard = ({
           </span>
         </div>
         {matchingProducts.length > 0 && (
-          <p className="text-xs text-[#E30A17] truncate">
+          <p className="text-xs text-[#E91D34] truncate">
             Eşleşen ürünler: {matchingProducts.map((product) => product.name).join(', ')}
           </p>
         )}
@@ -176,7 +176,7 @@ const RestaurantsPage = () => {
                         {formatOrderDate(order.createdAt)} • {order.items.length} ürün
                       </p>
                     </div>
-                    <span className="text-sm text-[#E30A17] shrink-0">{formatPrice(order.totalAmount)}</span>
+                    <span className="text-sm text-[#E91D34] shrink-0">{formatPrice(order.totalAmount)}</span>
                   </div>
                 ))
               )}
@@ -205,7 +205,7 @@ const RestaurantsPage = () => {
                     onChange={(e) => setOnlyFreeDelivery(e.target.checked)}
                     className="peer sr-only"
                   />
-                  <span className="w-10 h-6 bg-gray-200 rounded-full peer-checked:bg-[#E30A17] transition-colors" />
+                  <span className="w-10 h-6 bg-gray-200 rounded-full peer-checked:bg-[#E91D34] transition-colors" />
                   <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4" />
                 </span>
               </label>
