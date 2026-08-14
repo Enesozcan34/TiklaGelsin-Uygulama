@@ -74,6 +74,8 @@ export interface CouponDetail {
   description: string;
   validUntil: string;
   discount: CouponDiscount;
+  // Kuponun toplam kullanım hakkı (kalan adet, kullanıcı bazlı ayrıca takip edilir)
+  totalUses: number;
 }
 
 export const ALL_COUPONS: CouponDetail[] = [
@@ -86,6 +88,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: "Popeyes Chicken Sandwich Menü'nden 2 adet alana ikincisi ücretsiz!",
     validUntil: '2026-08-16',
     discount: { kind: 'secondItemDiscount', percent: 100, targetProductName: 'Popeyes Chicken Sandwich Menü' },
+    totalUses: 10,
   },
   {
     code: 'mNBvt',
@@ -96,6 +99,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Whopper Menü siparişlerinde geçerli indirim fırsatı.',
     validUntil: '2026-09-01',
     discount: { kind: 'percentage', percent: 20, targetProductName: 'Whopper Menü' },
+    totalUses: 5,
   },
   {
     code: 'XyLoR',
@@ -106,6 +110,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: "Amasya Et Ürünleri'nde 150 TL üzeri siparişlerde geçerlidir.",
     validUntil: '2026-08-25',
     discount: { kind: 'fixedAmount', amount: 30, minSpend: 150 },
+    totalUses: 8,
   },
   {
     code: 'qAzWs',
@@ -116,6 +121,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: "Serpme Kahvaltı Tabağı (2 Kişilik) siparişine sıcak içecek hediye.",
     validUntil: '2026-08-20',
     discount: { kind: 'fixedAmount', amount: 25, targetProductName: 'Serpme Kahvaltı Tabağı (2 Kişilik)' },
+    totalUses: 6,
   },
   {
     code: 'TgHjK',
@@ -126,6 +132,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Seçili menülerde ikinci ürün yarı fiyatına.',
     validUntil: '2026-09-10',
     discount: { kind: 'secondItemDiscount', percent: 50 },
+    totalUses: 10,
   },
   {
     code: 'bNmQw',
@@ -136,6 +143,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Big King Menü siparişlerinde patates büyütme ücretsiz.',
     validUntil: '2026-08-30',
     discount: { kind: 'fixedAmount', amount: 15, targetProductName: 'Big King Menü' },
+    totalUses: 7,
   },
   {
     code: 'LpOiU',
@@ -146,6 +154,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Seçili ürünlerde 2 al 1 öde kampanyası.',
     validUntil: '2026-09-05',
     discount: { kind: 'secondItemDiscount', percent: 100 },
+    totalUses: 5,
   },
   {
     code: 'eRtYu',
@@ -156,6 +165,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Serpme Kahvaltı Tabağı (2 Kişilik) siparişlerinde geçerli indirim.',
     validUntil: '2026-08-22',
     discount: { kind: 'percentage', percent: 15, targetProductName: 'Serpme Kahvaltı Tabağı (2 Kişilik)' },
+    totalUses: 6,
   },
   {
     code: 'ZxCvB',
@@ -166,6 +176,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'İlk Popeyes siparişinde 50 TL indirim fırsatı.',
     validUntil: '2026-09-15',
     discount: { kind: 'fixedAmount', amount: 50 },
+    totalUses: 3,
   },
   {
     code: 'jKlMn',
@@ -176,6 +187,7 @@ export const ALL_COUPONS: CouponDetail[] = [
     description: 'Tüm menü siparişlerinde ekstra peynir ücretsiz.',
     validUntil: '2026-08-18',
     discount: { kind: 'fixedAmount', amount: 10 },
+    totalUses: 8,
   },
 ];
 
@@ -187,6 +199,19 @@ const defaultCouponsByUser: Record<string, string[]> = {
   Enes: ['WkPqz', 'mNBvt', 'XyLoR'],
   Burak: ['WkPqz', 'qAzWs', 'TgHjK', 'bNmQw', 'LpOiU'],
 };
+
+// Aynı kupon kodu birden fazla kullanıcıya tanımlı olabildiği için kalan kullanım
+// adedi kullanıcı bazlı tutulur, kuponlar arasında paylaşılmaz.
+const buildDefaultCouponUses = (codes: string[]): Record<string, number> =>
+  codes.reduce<Record<string, number>>((acc, code) => {
+    const coupon = getCouponDetail(code);
+    if (coupon) acc[coupon.code] = coupon.totalUses;
+    return acc;
+  }, {});
+
+const defaultCouponUsesByUser: Record<string, Record<string, number>> = Object.fromEntries(
+  Object.entries(defaultCouponsByUser).map(([userName, codes]) => [userName, buildDefaultCouponUses(codes)]),
+);
 
 export interface CartItemOption {
   groupName: string;
@@ -277,8 +302,15 @@ interface WalletState {
 // Kişi bazlı tutulan kuponlar için store state'i
 interface CouponState {
   couponsByUser: Record<string, string[]>;
+  couponUsesRemainingByUser: Record<string, Record<string, number>>;
   getUserCoupons: () => string[];
+  getCouponUsesRemaining: (code: string) => number;
   addCoupon: (code: string) => { success: boolean; message: string };
+  useCouponUnit: (code: string) => boolean;
+  // Kupon detay sayfasındaki "Kuponu Uygula" akışından restoran/sepet üzerinden
+  // ödeme sayfasına taşınan, henüz seçili kupon olarak uygulanmamış kupon kodu.
+  pendingCouponCode: string | null;
+  setPendingCouponCode: (code: string | null) => void;
 }
 
 const useStore = create<AuthState & AddressState & ProfileState & CartState & PaymentState & OrderState & WalletState & CouponState>()(
@@ -516,11 +548,21 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
 
       // Kişi bazlı tutulan kuponlar
       couponsByUser: defaultCouponsByUser,
+      couponUsesRemainingByUser: defaultCouponUsesByUser,
 
       getUserCoupons: () => {
         const state = get();
         if (!state.userName) return [];
         return state.couponsByUser[state.userName] ?? [];
+      },
+
+      getCouponUsesRemaining: (code) => {
+        const state = get();
+        const couponDetail = getCouponDetail(code);
+        if (!couponDetail) return 0;
+        if (!state.userName) return couponDetail.totalUses;
+        const remaining = state.couponUsesRemainingByUser[state.userName]?.[couponDetail.code];
+        return remaining ?? couponDetail.totalUses;
       },
 
       addCoupon: (code) => {
@@ -535,8 +577,33 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
         }
         set({
           couponsByUser: { ...state.couponsByUser, [userName]: [...owned, couponDetail.code] },
+          couponUsesRemainingByUser: {
+            ...state.couponUsesRemainingByUser,
+            [userName]: { ...state.couponUsesRemainingByUser[userName], [couponDetail.code]: couponDetail.totalUses },
+          },
         });
         return { success: true, message: 'Kupon başarıyla eklendi.' };
+      },
+
+      pendingCouponCode: null,
+      setPendingCouponCode: (code) => set({ pendingCouponCode: code }),
+
+      // Kupon bir siparişte uygulanıp sipariş tamamlandığında kalan kullanım adedini 1 azaltır.
+      useCouponUnit: (code) => {
+        const state = get();
+        if (!state.userName) return false;
+        const userName = state.userName;
+        const couponDetail = getCouponDetail(code);
+        if (!couponDetail) return false;
+        const remaining = state.couponUsesRemainingByUser[userName]?.[couponDetail.code] ?? couponDetail.totalUses;
+        if (remaining <= 0) return false;
+        set({
+          couponUsesRemainingByUser: {
+            ...state.couponUsesRemainingByUser,
+            [userName]: { ...state.couponUsesRemainingByUser[userName], [couponDetail.code]: remaining - 1 },
+          },
+        });
+        return true;
       },
     }),
     {
@@ -552,6 +619,7 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
         profilesByUser: state.profilesByUser,
         walletBalanceByUser: state.walletBalanceByUser,
         couponsByUser: state.couponsByUser,
+        couponUsesRemainingByUser: state.couponUsesRemainingByUser,
       }),
     },
   ),

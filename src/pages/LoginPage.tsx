@@ -48,7 +48,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="E-posta Adresi"
-              className="border border-gray-300 rounded-full px-6 py-4 outline-none focus:border-[#E30A17] transition-colors"
+              className="border border-gray-300 rounded-full px-6 py-4 outline-none focus:border-[#E91D34] transition-colors"
             />
 
             <input
@@ -56,11 +56,11 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Şifre"
-              className="border border-gray-300 rounded-full px-6 py-4 outline-none focus:border-[#E30A17] transition-colors"
+              className="border border-gray-300 rounded-full px-6 py-4 outline-none focus:border-[#E91D34] transition-colors"
             />
 
             {errorMessage && (
-              <p className="text-[#E30A17] text-sm font-semibold px-2">{errorMessage}</p>
+              <p className="text-[#E91D34] text-sm font-semibold px-2">{errorMessage}</p>
             )}
 
             <button
@@ -68,7 +68,7 @@ const LoginPage = () => {
               disabled={!canSubmit}
               className={`rounded-full py-4 font-bold transition-colors ${
                 canSubmit
-                  ? 'bg-[#E30A17] text-white hover:bg-[#c80914]'
+                  ? 'bg-[#E91D34] text-white hover:bg-[#CA192D]'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               }`}
             >

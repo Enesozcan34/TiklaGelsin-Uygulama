@@ -115,7 +115,7 @@ const UserInfoPanel = () => {
             type="text"
             value={draft.firstName}
             onChange={(event) => setDraft((prev) => ({ ...prev, firstName: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors"
           />
         </div>
         <div className="relative flex-1">
@@ -124,7 +124,7 @@ const UserInfoPanel = () => {
             type="text"
             value={draft.lastName}
             onChange={(event) => setDraft((prev) => ({ ...prev, lastName: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors"
           />
         </div>
       </div>
@@ -136,7 +136,7 @@ const UserInfoPanel = () => {
             type="email"
             value={draft.email}
             onChange={(event) => setDraft((prev) => ({ ...prev, email: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full pl-5 pr-11 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full pl-5 pr-11 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors"
           />
           <span className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-green-500 text-white rounded-full p-1 flex items-center justify-center">
             <FaCheck className="w-2.5 h-2.5" />
@@ -162,7 +162,7 @@ const UserInfoPanel = () => {
             type="date"
             value={draft.birthDate}
             onChange={(event) => setDraft((prev) => ({ ...prev, birthDate: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors"
           />
         </div>
         <div className="relative flex-1">
@@ -170,7 +170,7 @@ const UserInfoPanel = () => {
           <select
             value={draft.gender}
             onChange={(event) => setDraft((prev) => ({ ...prev, gender: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors appearance-none bg-white"
+            className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors appearance-none bg-white"
           >
             {GENDER_OPTIONS.map((option) => (
               <option key={option} value={option}>
@@ -185,7 +185,7 @@ const UserInfoPanel = () => {
         <select
           value={draft.team}
           onChange={(event) => setDraft((prev) => ({ ...prev, team: event.target.value }))}
-          className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E30A17] transition-colors appearance-none bg-white"
+          className="w-full border border-gray-200 rounded-full pl-5 pr-5 pt-4 pb-2.5 text-sm text-gray-700 outline-none focus:border-[#E91D34] transition-colors appearance-none bg-white"
         >
           <option value="">Takım</option>
           {TEAM_OPTIONS.filter(Boolean).map((option) => (
@@ -200,7 +200,7 @@ const UserInfoPanel = () => {
         Yukarıda yer verilen cinsiyet, doğum tarihi ve tutulan takım bilgilerini doldurarak, Tıkla Gelsin'in sizi daha iyi
         tanıyabilmesi için sunulan hizmetlerin size uygun şekilde özelleştirilmesi ile ilgili bilgilerinizin işlenmesine
         açık rıza vermiş olursunuz. Aydınlatma metnini okumak için{' '}
-        <span className="text-[#E30A17] font-semibold">tıklayın</span>. Açık rızanızı dilediğiniz zaman profil
+        <span className="text-[#E91D34] font-semibold">tıklayın</span>. Açık rızanızı dilediğiniz zaman profil
         bilgilerim sayfasından değiştirebilirsiniz.
       </p>
 
@@ -209,7 +209,7 @@ const UserInfoPanel = () => {
         <button
           type="button"
           onClick={handleSave}
-          className="bg-[#E30A17] text-white text-sm font-semibold rounded-full px-8 py-3 hover:bg-[#c80914] transition-colors"
+          className="bg-[#E91D34] text-white text-sm font-semibold rounded-full px-8 py-3 hover:bg-[#CA192D] transition-colors"
         >
           Kaydet
         </button>
@@ -257,7 +257,7 @@ const AddressFormModal = ({
               type="button"
               onClick={() => setForm((prev) => ({ ...prev, icon: 'home' }))}
               className={`flex-1 flex items-center justify-center gap-2 rounded-full border py-2.5 text-sm transition-colors ${
-                form.icon === 'home' ? 'border-[#E30A17] bg-red-50 text-[#E30A17]' : 'border-gray-200 text-gray-500'
+                form.icon === 'home' ? 'border-[#E91D34] bg-red-50 text-[#E91D34]' : 'border-gray-200 text-gray-500'
               }`}
             >
               <FaHouse className="w-3.5 h-3.5" /> Ev
@@ -266,7 +266,7 @@ const AddressFormModal = ({
               type="button"
               onClick={() => setForm((prev) => ({ ...prev, icon: 'work' }))}
               className={`flex-1 flex items-center justify-center gap-2 rounded-full border py-2.5 text-sm transition-colors ${
-                form.icon === 'work' ? 'border-[#E30A17] bg-red-50 text-[#E30A17]' : 'border-gray-200 text-gray-500'
+                form.icon === 'work' ? 'border-[#E91D34] bg-red-50 text-[#E91D34]' : 'border-gray-200 text-gray-500'
               }`}
             >
               <FaBriefcase className="w-3.5 h-3.5" /> İş / Diğer
@@ -278,21 +278,21 @@ const AddressFormModal = ({
             placeholder="Adres Başlığı (Ev, İş, Anne Evi...)"
             value={form.label}
             onChange={(event) => setForm((prev) => ({ ...prev, label: event.target.value }))}
-            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors"
           />
 
           <textarea
             placeholder="Açık Adres"
             value={form.fullAddress}
             onChange={(event) => setForm((prev) => ({ ...prev, fullAddress: event.target.value }))}
-            className="w-full border border-gray-200 rounded-2xl px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors resize-none min-h-[90px]"
+            className="w-full border border-gray-200 rounded-2xl px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors resize-none min-h-[90px]"
           />
 
           <button
             type="button"
             disabled={!isValid}
             onClick={() => onSubmit(form)}
-            className="bg-[#E30A17] text-white text-sm rounded-full py-3.5 hover:bg-[#c80914] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+            className="bg-[#E91D34] text-white text-sm rounded-full py-3.5 hover:bg-[#CA192D] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
           >
             Kaydet
           </button>
@@ -329,7 +329,7 @@ const AddressesPanel = () => {
           type="button"
           onClick={() => setSubTab('home-delivery')}
           className={`pb-3 text-sm font-semibold border-b-2 -mb-px transition-colors flex items-center gap-2 ${
-            subTab === 'home-delivery' ? 'border-[#E30A17] text-[#E30A17]' : 'border-transparent text-gray-400'
+            subTab === 'home-delivery' ? 'border-[#E91D34] text-[#E91D34]' : 'border-transparent text-gray-400'
           }`}
         >
           <FaHouse className="w-3.5 h-3.5" /> Adresime Gelsin
@@ -338,7 +338,7 @@ const AddressesPanel = () => {
           type="button"
           onClick={() => setSubTab('outdoor')}
           className={`pb-3 text-sm font-semibold border-b-2 -mb-px transition-colors flex items-center gap-2 ${
-            subTab === 'outdoor' ? 'border-[#E30A17] text-[#E30A17]' : 'border-transparent text-gray-400'
+            subTab === 'outdoor' ? 'border-[#E91D34] text-[#E91D34]' : 'border-transparent text-gray-400'
           }`}
         >
           <FaLocationDot className="w-3.5 h-3.5" /> Dışarıya Gelsin
@@ -355,7 +355,7 @@ const AddressesPanel = () => {
                 <div
                   key={address.id}
                   className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 transition-colors ${
-                    isSelected ? 'border-[#E30A17]' : 'border-gray-100'
+                    isSelected ? 'border-[#E91D34]' : 'border-gray-100'
                   }`}
                 >
                   <button
@@ -375,14 +375,14 @@ const AddressesPanel = () => {
                   </button>
                   <div className="flex items-center gap-2 shrink-0">
                     {isSelected && (
-                      <span className="bg-red-50 text-[#E30A17] text-xs font-semibold rounded-full px-3 py-1.5 whitespace-nowrap">
+                      <span className="bg-red-50 text-[#E91D34] text-xs font-semibold rounded-full px-3 py-1.5 whitespace-nowrap">
                         Seçili Adres
                       </span>
                     )}
                     <button
                       type="button"
                       onClick={() => setModalMode({ editId: address.id })}
-                      className="bg-[#E30A17] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#c80914] transition-colors whitespace-nowrap"
+                      className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors whitespace-nowrap"
                     >
                       Düzenle
                     </button>
@@ -391,7 +391,7 @@ const AddressesPanel = () => {
                       aria-label="Adresi sil"
                       disabled={addresses.length <= 1}
                       onClick={() => removeAddress(address.id)}
-                      className="text-gray-300 hover:text-[#E30A17] disabled:opacity-40 disabled:cursor-not-allowed transition-colors p-2"
+                      className="text-gray-300 hover:text-[#E91D34] disabled:opacity-40 disabled:cursor-not-allowed transition-colors p-2"
                     >
                       <FaTrash className="w-3.5 h-3.5" />
                     </button>
@@ -404,7 +404,7 @@ const AddressesPanel = () => {
           <button
             type="button"
             onClick={() => setModalMode('add')}
-            className="self-start bg-[#E30A17] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+            className="self-start bg-[#E91D34] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
           >
             Adres Ekle
           </button>
@@ -547,7 +547,7 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
             placeholder="Kart Üzerindeki Adın Soyadın"
             value={cardHolderName}
             onChange={(event) => setCardHolderName(event.target.value)}
-            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors"
           />
           <input
             type="text"
@@ -555,9 +555,9 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
             placeholder={editingCard ? `**** **** **** ${editingCard.last4}` : 'Kart Numarası'}
             value={cardNumber}
             onChange={(event) => setCardNumber(formatCardNumber(event.target.value))}
-            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors"
           />
-          <div className="flex items-center border border-gray-200 rounded-full overflow-hidden focus-within:border-[#E30A17] transition-colors">
+          <div className="flex items-center border border-gray-200 rounded-full overflow-hidden focus-within:border-[#E91D34] transition-colors">
             <input
               type="text"
               inputMode="numeric"
@@ -584,7 +584,7 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
             placeholder="Sanal Kart Limiti (TL)"
             value={cardLimit}
             onChange={(event) => setCardLimit(event.target.value.replace(/[^\d]/g, ''))}
-            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors"
+            className="w-full border border-gray-200 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors"
           />
 
           <label className="flex items-start gap-2.5 text-xs text-gray-500 leading-relaxed cursor-pointer">
@@ -592,10 +592,10 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
               type="checkbox"
               checked={acceptedNotice}
               onChange={(event) => setAcceptedNotice(event.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded border-gray-300 accent-[#E30A17] shrink-0"
+              className="mt-0.5 w-4 h-4 rounded border-gray-300 accent-[#E91D34] shrink-0"
             />
             <span>
-              Kartımı <span className="text-[#E30A17] font-semibold">Aydınlatma Metni</span> kapsamında Tıklapay
+              Kartımı <span className="text-[#E91D34] font-semibold">Aydınlatma Metni</span> kapsamında Tıklapay
               cüzdanıma kaydet.
             </span>
           </label>
@@ -604,7 +604,7 @@ const CardFormModal = ({ mode, onClose }: { mode: 'add' | { editCard: SavedCard 
             type="button"
             disabled={!isValid}
             onClick={handleSubmit}
-            className="bg-[#E30A17] text-white text-sm rounded-full py-3.5 hover:bg-[#c80914] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+            className="bg-[#E91D34] text-white text-sm rounded-full py-3.5 hover:bg-[#CA192D] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
           >
             {editingCard ? 'Kartımı Güncelle' : 'Kartımı Ekle'}
           </button>
@@ -636,7 +636,7 @@ const CardsPanel = () => {
           <button
             type="button"
             onClick={() => setModalMode('add')}
-            className="bg-[#E30A17] text-white text-sm font-semibold rounded-full px-8 py-3.5 hover:bg-[#c80914] transition-colors"
+            className="bg-[#E91D34] text-white text-sm font-semibold rounded-full px-8 py-3.5 hover:bg-[#CA192D] transition-colors"
           >
             Yeni Kart Ekle
           </button>
@@ -650,7 +650,7 @@ const CardsPanel = () => {
                 <div
                   key={card.id}
                   className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 transition-colors ${
-                    isSelected ? 'border-[#E30A17]' : 'border-gray-100'
+                    isSelected ? 'border-[#E91D34]' : 'border-gray-100'
                   }`}
                 >
                   <button
@@ -669,14 +669,14 @@ const CardsPanel = () => {
                   </button>
                   <div className="flex items-center gap-2 shrink-0">
                     {isSelected && (
-                      <span className="bg-red-50 text-[#E30A17] text-xs font-semibold rounded-full px-3 py-1.5 whitespace-nowrap">
+                      <span className="bg-red-50 text-[#E91D34] text-xs font-semibold rounded-full px-3 py-1.5 whitespace-nowrap">
                         Seçili Kart
                       </span>
                     )}
                     <button
                       type="button"
                       onClick={() => setModalMode({ editCard: card })}
-                      className="bg-[#E30A17] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#c80914] transition-colors whitespace-nowrap"
+                      className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors whitespace-nowrap"
                     >
                       Düzenle
                     </button>
@@ -684,7 +684,7 @@ const CardsPanel = () => {
                       type="button"
                       aria-label="Kartı sil"
                       onClick={() => removeSavedCard(card.id)}
-                      className="text-gray-300 hover:text-[#E30A17] transition-colors p-2"
+                      className="text-gray-300 hover:text-[#E91D34] transition-colors p-2"
                     >
                       <FaTrash className="w-3.5 h-3.5" />
                     </button>
@@ -697,7 +697,7 @@ const CardsPanel = () => {
           <button
             type="button"
             onClick={() => setModalMode('add')}
-            className="self-start bg-[#E30A17] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+            className="self-start bg-[#E91D34] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
           >
             Kart Ekle
           </button>
@@ -754,7 +754,7 @@ const ProfilePage = () => {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="bg-[#E30A17] text-white text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center">
+              <span className="bg-[#E91D34] text-white text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center">
                 P
               </span>
               <span className="text-gray-800 text-sm font-semibold">Tıklapay Cüzdanım</span>
@@ -762,12 +762,12 @@ const ProfilePage = () => {
             <FaChevronRight className="text-gray-400 w-3 h-3" />
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatBalance(walletBalance)}</p>
-          <span className="bg-[#E30A17] text-white text-xs font-semibold rounded-full px-3 py-1 self-start">
+          <span className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-3 py-1 self-start">
             Harcadıkça kazan!
           </span>
           <div className="bg-white rounded-xl p-3 flex items-center justify-between">
             <span className="flex items-center gap-2 text-sm text-gray-700">
-              <FaStar className="text-[#E30A17] w-3.5 h-3.5" /> Tıkla Param
+              <FaStar className="text-[#E91D34] w-3.5 h-3.5" /> Tıkla Param
             </span>
             <span className="text-sm font-semibold text-gray-800">1.891,00 TP</span>
           </div>
@@ -783,7 +783,7 @@ const ProfilePage = () => {
                 type="button"
                 onClick={() => setActiveTab(item.id)}
                 className={`flex items-center justify-between gap-2 rounded-xl px-4 py-3 text-sm transition-colors ${
-                  isActive ? 'bg-red-50 text-[#E30A17] font-semibold' : 'text-gray-600 hover:bg-gray-50'
+                  isActive ? 'bg-red-50 text-[#E91D34] font-semibold' : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 <span className="flex items-center gap-3">
@@ -801,7 +801,7 @@ const ProfilePage = () => {
             type="button"
             onClick={() => setActiveTab('help')}
             className={`mt-2 flex items-center justify-center gap-2 border rounded-full py-3 text-sm font-semibold transition-colors ${
-              activeTab === 'help' ? 'border-[#E30A17] bg-red-50 text-[#E30A17]' : 'border-[#E30A17] text-[#E30A17] hover:bg-red-50'
+              activeTab === 'help' ? 'border-[#E91D34] bg-red-50 text-[#E91D34]' : 'border-[#E91D34] text-[#E91D34] hover:bg-red-50'
             }`}
           >
             <FaHeadset className="w-4 h-4" /> Yardım Merkezi
@@ -810,7 +810,7 @@ const ProfilePage = () => {
 
         <button
           type="button"
-          className="bg-[#E30A17] text-white text-sm font-semibold rounded-2xl py-4 hover:bg-[#c80914] transition-colors"
+          className="bg-[#E91D34] text-white text-sm font-semibold rounded-2xl py-4 hover:bg-[#CA192D] transition-colors"
         >
           Arkadaşını Davet Et, Tıkla Para Kazan!
         </button>
@@ -818,7 +818,7 @@ const ProfilePage = () => {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center justify-center gap-2 text-[#E30A17] text-sm font-semibold py-2 hover:underline"
+          className="flex items-center justify-center gap-2 text-[#E91D34] text-sm font-semibold py-2 hover:underline"
         >
           <FaRightFromBracket className="w-4 h-4" /> Çıkış Yap
         </button>

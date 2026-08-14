@@ -24,11 +24,11 @@ const Footer = () => {
 
             <div className="flex flex-col gap-3 min-w-[150px]">
               <h3 className=" text-gray-900 text-lg mb-1">Site Haritası</h3>
-              <Link to="/" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Anasayfa</Link>
-              <Link to="/kampanyalar" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Kampanyalar ve Duyurular</Link>
-              <Link to="/profilim" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Profilim</Link>
-              <Link to="/blog" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Blog</Link>
-              <button type="button" className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#E30A17] text-left">
+              <Link to="/" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Anasayfa</Link>
+              <Link to="/kampanyalar" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Kampanyalar ve Duyurular</Link>
+              <Link to="/profilim" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Profilim</Link>
+              <Link to="/blog" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Blog</Link>
+              <button type="button" className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#E91D34] text-left">
                 Markalar
                 <ChevronDown />
               </button>
@@ -36,17 +36,17 @@ const Footer = () => {
 
             <div className="flex flex-col gap-3 min-w-[230px]">
               <h3 className=" text-gray-900 text-lg mb-1">Bilgilendirme</h3>
-              <Link to="/islem-rehberi" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">İşlem Rehberi</Link>
-              <button type="button" className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#E30A17] text-left">
+              <Link to="/islem-rehberi" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">İşlem Rehberi</Link>
+              <button type="button" className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#E91D34] text-left">
                 Restoran Kurumsal Sayfalar
                 <ChevronDown />
               </button>
-              <Link to="/ticari-elektronik-ileti" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Ticari Elektronik İleti Aydınlatma Metni</Link>
-              <Link to="/aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">KVKK Aydınlatma Metni</Link>
-              <Link to="/uyelik-aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Tıkla Gelsin Üyelik Aydınlatma Metni</Link>
-              <Link to="/cerez-aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Çerez Aydınlatma Metni</Link>
-              <Link to="/bilgi-toplumu-hizmetleri" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">Bilgi Toplumu Hizmetleri</Link>
-              <Link to="/iletisim" className="text-sm text-gray-600 hover:underline hover:text-[#E30A17]">İletişim</Link>
+              <Link to="/ticari-elektronik-ileti" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Ticari Elektronik İleti Aydınlatma Metni</Link>
+              <Link to="/aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">KVKK Aydınlatma Metni</Link>
+              <Link to="/uyelik-aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Tıkla Gelsin Üyelik Aydınlatma Metni</Link>
+              <Link to="/cerez-aydinlatma" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Çerez Aydınlatma Metni</Link>
+              <Link to="/bilgi-toplumu-hizmetleri" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">Bilgi Toplumu Hizmetleri</Link>
+              <Link to="/iletisim" className="text-sm text-gray-600 hover:underline hover:text-[#E91D34]">İletişim</Link>
             </div>
 
             <div className="flex flex-col gap-3 min-w-[180px]">
@@ -61,19 +61,19 @@ const Footer = () => {
           </div>
 
           <div className="flex gap-3 items-start">
-  <div aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-[#E30A17] flex justify-center items-center text-white text-sm">
+  <div aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
     <FaWhatsapp size={18} />
   </div>
-  <div aria-label="Instagram" className="w-9 h-9 rounded-full bg-[#E30A17] flex justify-center items-center text-white text-sm">
+  <div aria-label="Instagram" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
     <FaInstagram size={18} />
   </div>
-  <div aria-label="Facebook" className="w-9 h-9 rounded-full bg-[#E30A17] flex justify-center items-center text-white text-sm">
+  <div aria-label="Facebook" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
     <FaFacebookF size={18} />
   </div>
-  <div aria-label="X" className="w-9 h-9 rounded-full bg-[#E30A17] flex justify-center items-center text-white text-sm">
+  <div aria-label="X" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
     <FaXTwitter size={18} />
   </div>
-  <div aria-label="TikTok" className="w-9 h-9 rounded-full bg-[#E30A17] flex justify-center items-center text-white text-sm">
+  <div aria-label="TikTok" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
     <FaTiktok size={18} />
   </div>
 </div>

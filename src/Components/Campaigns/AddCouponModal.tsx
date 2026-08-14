@@ -50,17 +50,17 @@ const AddCouponModal = ({ onClose, onAdded }: AddCouponModalProps) => {
           }}
           maxLength={5}
           placeholder="Kupon Kodu"
-          className="border border-gray-200 rounded-full px-5 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors text-center"
+          className="border border-gray-200 rounded-full px-5 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors text-center"
         />
 
-        {error && <p className="text-xs text-[#E30A17] text-center -mt-2">{error}</p>}
+        {error && <p className="text-xs text-[#E91D34] text-center -mt-2">{error}</p>}
 
         <button
           type="button"
           disabled={!isValidLength}
           onClick={handleSubmit}
           className={`w-full rounded-full py-3 text-sm font-semibold transition-colors ${
-            isValidLength ? 'bg-[#E30A17] text-white hover:bg-[#c80914]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            isValidLength ? 'bg-[#E91D34] text-white hover:bg-[#CA192D]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
         >
           Kupon Ekle
@@ -69,7 +69,7 @@ const AddCouponModal = ({ onClose, onAdded }: AddCouponModalProps) => {
         <button
           type="button"
           onClick={onClose}
-          className="w-full border border-[#E30A17] text-[#E30A17] rounded-full py-3 text-sm font-semibold hover:bg-red-50 transition-colors"
+          className="w-full border border-[#E91D34] text-[#E91D34] rounded-full py-3 text-sm font-semibold hover:bg-red-50 transition-colors"
         >
           Vazgeç
         </button>

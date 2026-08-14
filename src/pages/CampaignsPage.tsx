@@ -59,14 +59,14 @@ const CampaignsPage = () => {
               type="button"
               onClick={() => setActiveTab(tab.id)}
               className={`pb-3 text-sm font-semibold transition-colors ${
-                activeTab === tab.id ? 'text-[#E30A17]' : 'text-gray-400 hover:text-gray-600'
+                activeTab === tab.id ? 'text-[#E91D34]' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               {tab.label}
             </button>
           ))}
           <span
-            className={`absolute -bottom-px h-0.5 w-1/2 bg-[#E30A17] transition-all duration-300 ${
+            className={`absolute -bottom-px h-0.5 w-1/2 bg-[#E91D34] transition-all duration-300 ${
               activeTab === 'kampanyalar' ? 'left-0' : 'left-1/2'
             }`}
           />

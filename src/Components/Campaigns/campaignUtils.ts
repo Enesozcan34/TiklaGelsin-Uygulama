@@ -1,9 +1,7 @@
-import type { CartItem, CouponDetail } from '../../store/useStore';
+import type { CartItem } from '../../store/useStore';
+import type { CampaignItem } from './campaignsData';
 
 const roundToCents = (value: number): number => Math.round(value * 100) / 100;
-
-export const formatCouponPrice = (price: number): string =>
-  `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
 
 const getMatchingUnitPrices = (cartItems: CartItem[], targetProductName?: string): number[] => {
   const relevantItems = targetProductName
@@ -16,27 +14,20 @@ const getMatchingUnitPrices = (cartItems: CartItem[], targetProductName?: string
   return unitPrices;
 };
 
-export const getCouponUnavailabilityReason = (
-  coupon: CouponDetail,
-  cartItems: CartItem[],
-  usesRemaining?: number,
-): string | null => {
-  if (usesRemaining !== undefined && usesRemaining <= 0) {
-    return 'Bu kuponun kullanım hakkı doldu.';
-  }
-
-  const { discount } = coupon;
+export const getCampaignUnavailabilityReason = (campaign: CampaignItem, cartItems: CartItem[]): string | null => {
+  const { discount } = campaign;
+  if (!discount) return 'Bu kampanya bir indirim tanımı içermiyor.';
 
   if (discount.kind === 'fixedAmount' && discount.minSpend) {
     const cartTotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
     if (cartTotal < discount.minSpend) {
-      return `Sepet tutarın en az ${formatCouponPrice(discount.minSpend)} olmalı.`;
+      return `Sepet tutarın en az ${discount.minSpend.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL olmalı.`;
     }
   }
 
   if (discount.kind === 'percentage' || discount.kind === 'fixedAmount') {
     if (discount.targetProductName && getMatchingUnitPrices(cartItems, discount.targetProductName).length === 0) {
-      return `Bu kupon yalnızca ${discount.targetProductName} için geçerli.`;
+      return `Bu kampanya yalnızca ${discount.targetProductName} için geçerli.`;
     }
     return null;
   }
@@ -44,20 +35,21 @@ export const getCouponUnavailabilityReason = (
   // secondItemDiscount
   const matchingUnits = getMatchingUnitPrices(cartItems, discount.targetProductName);
   if (discount.targetProductName && matchingUnits.length === 0) {
-    return `Bu kupon yalnızca ${discount.targetProductName} için geçerli.`;
+    return `Bu kampanya yalnızca ${discount.targetProductName} için geçerli.`;
   }
   if (matchingUnits.length < 2) {
     return discount.targetProductName
-      ? `Bu kuponu kullanmak için sepetinde en az 2 adet ${discount.targetProductName} olmalı.`
+      ? `Bu kampanyadan faydalanmak için sepetinde en az 2 adet ${discount.targetProductName} olmalı.`
       : 'Sepetinde en az 2 ürün olmalı.';
   }
   return null;
 };
 
-export const calculateCouponDiscount = (coupon: CouponDetail, cartItems: CartItem[], usesRemaining?: number): number => {
-  if (getCouponUnavailabilityReason(coupon, cartItems, usesRemaining)) return 0;
+export const calculateCampaignDiscount = (campaign: CampaignItem, cartItems: CartItem[]): number => {
+  if (getCampaignUnavailabilityReason(campaign, cartItems)) return 0;
 
-  const { discount } = coupon;
+  const { discount } = campaign;
+  if (!discount) return 0;
 
   if (discount.kind === 'percentage') {
     const baseAmount = discount.targetProductName
@@ -74,22 +66,4 @@ export const calculateCouponDiscount = (coupon: CouponDetail, cartItems: CartIte
   const unitPrices = getMatchingUnitPrices(cartItems, discount.targetProductName).sort((a, b) => b - a);
   const secondUnitPrice = unitPrices[1] ?? 0;
   return roundToCents((secondUnitPrice * discount.percent) / 100);
-};
-
-export const formatCouponDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
-
-export const formatCouponDateShort = (iso: string): string => {
-  const date = new Date(iso);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day}.${month}.${date.getFullYear()}`;
-};
-
-export const getDaysRemaining = (iso: string): number => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const target = new Date(iso);
-  target.setHours(0, 0, 0, 0);
-  return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 };

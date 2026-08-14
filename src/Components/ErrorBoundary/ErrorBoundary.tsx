@@ -33,7 +33,7 @@ class ErrorBoundary extends Component<Props, State> {
           <button
             type="button"
             onClick={this.handleReload}
-            className="bg-[#E30A17] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#c80914] transition-colors"
+            className="bg-[#E91D34] text-white text-sm font-semibold rounded-full px-6 py-3 hover:bg-[#CA192D] transition-colors"
           >
             Sayfayı Yenile
           </button>

@@ -13,7 +13,7 @@ const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () =>
     aria-checked={checked}
     onClick={onToggle}
     className={`w-11 h-6 shrink-0 rounded-full p-0.5 flex items-center transition-colors ${
-      checked ? 'bg-[#E30A17] justify-end' : 'bg-gray-200 justify-start'
+      checked ? 'bg-[#E91D34] justify-end' : 'bg-gray-200 justify-start'
     }`}
   >
     <span className="w-5 h-5 rounded-full bg-white" />
@@ -66,7 +66,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
           <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
-                <span className="w-9 h-9 rounded-lg bg-[#E30A17] flex items-center justify-center shrink-0 p-1.5">
+                <span className="w-9 h-9 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
                   <span
                     className="w-full h-full bg-white"
                     style={{
@@ -89,7 +89,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
               <button
                 type="button"
                 onClick={goToWalletPage}
-                className="bg-[#E30A17] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#c80914] transition-colors whitespace-nowrap shrink-0"
+                className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors whitespace-nowrap shrink-0"
               >
                 Para Yükle
               </button>
@@ -99,7 +99,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
               <ToggleSwitch checked={paymentMethod === 'wallet'} onToggle={onSelectWallet} />
             </div>
             {paymentMethod === 'wallet' && walletBalance < totalAmount && (
-              <p className="text-xs text-[#E30A17]">
+              <p className="text-xs text-[#E91D34]">
                 Cüzdan bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatBalance(walletBalance)}.
               </p>
             )}
@@ -133,7 +133,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
                         type="button"
                         onClick={() => onSelectCard(card.id)}
                         className={`flex items-center justify-between gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors ${
-                          isSelected ? 'border-[#E30A17] bg-red-50' : 'border-gray-100 hover:border-gray-200'
+                          isSelected ? 'border-[#E91D34] bg-red-50' : 'border-gray-100 hover:border-gray-200'
                         }`}
                       >
                         <div className="min-w-0">
@@ -141,7 +141,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
                           <p className="text-xs text-gray-400">**** {card.last4} · {card.expiry}</p>
                         </div>
                         {isSelected && (
-                          <span className="bg-[#E30A17] text-white text-[10px] font-semibold rounded-full px-2.5 py-1 whitespace-nowrap shrink-0">
+                          <span className="bg-[#E91D34] text-white text-[10px] font-semibold rounded-full px-2.5 py-1 whitespace-nowrap shrink-0">
                             Seçili
                           </span>
                         )}
@@ -152,7 +152,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
                 <button
                   type="button"
                   onClick={goToAddCard}
-                  className="self-start flex items-center gap-2 text-[#E30A17] text-sm font-semibold hover:underline"
+                  className="self-start flex items-center gap-2 text-[#E91D34] text-sm font-semibold hover:underline"
                 >
                   <FaPlus className="w-3 h-3" /> Kart Ekle
                 </button>

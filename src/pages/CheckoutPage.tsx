@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse } from 'react-icons/fa6';
 import useStore, { ALL_COUPONS } from '../store/useStore';
@@ -6,6 +6,8 @@ import { getRestaurantById } from '../data/restaurants';
 import PaymentMethodModal from '../Components/PaymentMethodModal/PaymentMethodModal';
 import CouponPickerModal from '../Components/Campaigns/CouponPickerModal';
 import { calculateCouponDiscount, getCouponUnavailabilityReason } from '../Components/Campaigns/couponUtils';
+import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
+import { calculateCampaignDiscount, getCampaignUnavailabilityReason } from '../Components/Campaigns/campaignUtils';
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
@@ -101,7 +103,7 @@ const CheckboxOption = ({
   <button type="button" onClick={onToggle} className="flex items-start gap-3 text-left">
     <span
       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-        checked ? 'bg-[#E30A17] border-[#E30A17]' : 'border-gray-300'
+        checked ? 'bg-[#E91D34] border-[#E91D34]' : 'border-gray-300'
       }`}
     >
       {checked && <FaCheck className="w-2.5 h-2.5 text-white" />}
@@ -145,7 +147,19 @@ const CheckoutPage = () => {
     chargeCard,
     chargeWallet,
     selectSavedCard,
+    getCouponUsesRemaining,
+    useCouponUnit,
+    pendingCouponCode,
+    setPendingCouponCode,
   } = useStore();
+
+  // Kupon detay sayfasındaki "Kuponu Uygula" akışıyla gelinmişse kuponu otomatik seçili getir.
+  useEffect(() => {
+    if (pendingCouponCode) {
+      setSelectedCouponCode(pendingCouponCode);
+      setPendingCouponCode(null);
+    }
+  }, [pendingCouponCode, setPendingCouponCode]);
   const savedCards = userName ? savedCardsByUser[userName] ?? [] : [];
   const selectedCard = userName
     ? savedCards.find((card) => card.id === selectedCardIdByUser[userName])
@@ -155,16 +169,23 @@ const CheckoutPage = () => {
   const restaurant = cartItems.length > 0 ? getRestaurantById(cartItems[0].restaurantId) : undefined;
   const branchName = restaurant?.locations.find((location) => location.addressId === selectedAddressId)?.branchName;
   const selectedCoupon = selectedCouponCode ? ALL_COUPONS.find((coupon) => coupon.code === selectedCouponCode) : undefined;
+  const selectedCouponUsesRemaining = selectedCoupon ? getCouponUsesRemaining(selectedCoupon.code) : 0;
   const isSelectedCouponApplicable = Boolean(
     selectedCoupon &&
       restaurant &&
       selectedCoupon.restaurantId === restaurant.id &&
-      !getCouponUnavailabilityReason(selectedCoupon, cartItems),
+      !getCouponUnavailabilityReason(selectedCoupon, cartItems, selectedCouponUsesRemaining),
   );
   const discountAmount =
-    isSelectedCouponApplicable && selectedCoupon ? calculateCouponDiscount(selectedCoupon, cartItems) : 0;
+    isSelectedCouponApplicable && selectedCoupon
+      ? calculateCouponDiscount(selectedCoupon, cartItems, selectedCouponUsesRemaining)
+      : 0;
+  const autoCampaign = restaurant
+    ? CAMPAIGNS.find((campaign) => campaign.restaurantId === restaurant.id && campaign.discount && !getCampaignUnavailabilityReason(campaign, cartItems))
+    : undefined;
+  const campaignDiscountAmount = autoCampaign ? calculateCampaignDiscount(autoCampaign, cartItems) : 0;
   const cartTotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  const discountedCartTotal = Math.max(0, cartTotal - discountAmount);
+  const discountedCartTotal = Math.max(0, cartTotal - discountAmount - campaignDiscountAmount);
   const totalAmount = discountedCartTotal + (restaurant?.serviceFee ?? 0);
   const timeOptions: DropdownOption[] = restaurant
     ? generateTimeSlots(restaurant.openingHour, restaurant.closingHour).map((slot) => ({ value: slot, label: slot }))
@@ -199,6 +220,9 @@ const CheckoutPage = () => {
       return;
     }
     setPaymentError('');
+    if (isSelectedCouponApplicable && selectedCoupon) {
+      useCouponUnit(selectedCoupon.code);
+    }
     placeOrder({
       restaurantId: restaurant.id,
       restaurantTitle: restaurant.title,
@@ -224,7 +248,7 @@ const CheckoutPage = () => {
             </div>
             <button
               type="button"
-              className="bg-[#E30A17] text-white text-sm rounded-full px-5 py-2.5 shrink-0 hover:bg-[#c80914] transition-colors"
+              className="bg-[#E91D34] text-white text-sm rounded-full px-5 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
               Değiştir
             </button>
@@ -241,10 +265,10 @@ const CheckoutPage = () => {
             >
               <span
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                  deliveryTiming === 'now' ? 'border-[#E30A17]' : 'border-gray-300'
+                  deliveryTiming === 'now' ? 'border-[#E91D34]' : 'border-gray-300'
                 }`}
               >
-                {deliveryTiming === 'now' && <span className="w-2.5 h-2.5 rounded-full bg-[#E30A17]" />}
+                {deliveryTiming === 'now' && <span className="w-2.5 h-2.5 rounded-full bg-[#E91D34]" />}
               </span>
               <span className={`text-sm ${deliveryTiming === 'now' ? 'text-gray-800' : 'text-gray-500'}`}>
                 Şimdi Gelsin
@@ -257,10 +281,10 @@ const CheckoutPage = () => {
             >
               <span
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                  deliveryTiming === 'later' ? 'border-[#E30A17]' : 'border-gray-300'
+                  deliveryTiming === 'later' ? 'border-[#E91D34]' : 'border-gray-300'
                 }`}
               >
-                {deliveryTiming === 'later' && <span className="w-2.5 h-2.5 rounded-full bg-[#E30A17]" />}
+                {deliveryTiming === 'later' && <span className="w-2.5 h-2.5 rounded-full bg-[#E91D34]" />}
               </span>
               <span className={`text-sm ${deliveryTiming === 'later' ? 'text-gray-800' : 'text-gray-500'}`}>
                 İleri Tarihli Gelsin
@@ -307,7 +331,7 @@ const CheckoutPage = () => {
             <button
               type="button"
               onClick={() => setShowPaymentModal(true)}
-              className="flex items-center gap-2 text-[#E30A17] text-sm hover:underline"
+              className="flex items-center gap-2 text-[#E91D34] text-sm hover:underline"
             >
               Seç / Değiştir
               <FaArrowRight className="w-3 h-3" />
@@ -316,7 +340,7 @@ const CheckoutPage = () => {
           <div className="flex items-center justify-between gap-4 border border-gray-100 rounded-2xl px-4 py-3">
             <div className="flex items-center gap-3">
               {paymentMethod === 'wallet' ? (
-                <span className="w-8 h-8 rounded-lg bg-[#E30A17] flex items-center justify-center shrink-0 p-1.5">
+                <span className="w-8 h-8 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
                   <span
                     className="w-full h-full bg-white"
                     style={{
@@ -358,13 +382,13 @@ const CheckoutPage = () => {
             <button
               type="button"
               onClick={() => setShowPaymentModal(true)}
-              className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#c80914] transition-colors"
+              className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
               {paymentMethod === 'wallet' || selectedCard ? 'Değiştir' : 'Ekle'}
             </button>
           </div>
           {!hasSufficientBalance && (
-            <p className="text-xs text-[#E30A17]">
+            <p className="text-xs text-[#E91D34]">
               {paymentMethod === 'wallet'
                 ? `Cüzdan bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatPrice(walletBalance)}.`
                 : selectedCard
@@ -372,7 +396,7 @@ const CheckoutPage = () => {
                   : 'Ödeme yöntemi seçmelisin.'}
             </p>
           )}
-          {paymentError && <p className="text-xs text-[#E30A17]">{paymentError}</p>}
+          {paymentError && <p className="text-xs text-[#E91D34]">{paymentError}</p>}
         </div>
 
         {showPaymentModal && (
@@ -390,13 +414,13 @@ const CheckoutPage = () => {
           <div className="flex items-center justify-between gap-3 border border-gray-200 rounded-full pl-5 pr-1.5 py-1.5">
             <span className={`text-sm truncate ${isSelectedCouponApplicable ? 'text-gray-700 font-medium' : 'text-gray-400'}`}>
               {isSelectedCouponApplicable && selectedCoupon
-                ? `${selectedCoupon.title} (-${formatPrice(discountAmount)})`
+                ? `${selectedCoupon.title} (-${formatPrice(discountAmount)}) • Kalan: ${selectedCouponUsesRemaining} adet`
                 : 'Kampanya veya kupon seç'}
             </span>
             <button
               type="button"
               onClick={() => setShowCouponPicker(true)}
-              className="bg-[#E30A17] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#c80914] transition-colors"
+              className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
               {isSelectedCouponApplicable ? 'Değiştir' : 'Seç'}
             </button>
@@ -419,7 +443,7 @@ const CheckoutPage = () => {
             <textarea
               placeholder="Sipariş Notu"
               maxLength={250}
-              className="border border-gray-200 rounded-xl px-4 py-3 min-h-[110px] text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E30A17] transition-colors resize-none"
+              className="border border-gray-200 rounded-xl px-4 py-3 min-h-[110px] text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-[#E91D34] transition-colors resize-none"
             />
             <span className="text-xs text-gray-400 text-right">0/250</span>
           </div>
@@ -452,7 +476,7 @@ const CheckoutPage = () => {
           type="button"
           disabled={!canPlaceOrder}
           onClick={handlePlaceOrder}
-          className="bg-[#E30A17] text-white text-sm rounded-full py-4 hover:bg-[#c80914] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-200"
+          className="bg-[#E91D34] text-white text-sm rounded-full py-4 hover:bg-[#CA192D] transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-200"
         >
           Siparişi Oluştur
         </button>
@@ -486,11 +510,11 @@ const CheckoutPage = () => {
                       </p>
                     )}
                   </div>
-                  <span className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E30A17] text-[#E30A17] text-sm shrink-0">
+                  <span className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E91D34] text-[#E91D34] text-sm shrink-0">
                     {item.quantity}
                   </span>
                 </div>
-                <p className="text-[#E30A17] text-sm mt-2">{formatPrice(item.unitPrice * item.quantity)}</p>
+                <p className="text-[#E91D34] text-sm mt-2">{formatPrice(item.unitPrice * item.quantity)}</p>
               </div>
             ))}
           </div>
@@ -501,15 +525,21 @@ const CheckoutPage = () => {
             <span className="text-gray-500">Sepet Tutarı</span>
             <span className="text-gray-700">{formatPrice(cartTotal)}</span>
           </div>
+          {campaignDiscountAmount > 0 && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Kampanya İndirimi</span>
+              <span className="text-[#E91D34]">-{formatPrice(campaignDiscountAmount)}</span>
+            </div>
+          )}
           {discountAmount > 0 && (
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Kupon İndirimi</span>
-              <span className="text-[#E30A17]">-{formatPrice(discountAmount)}</span>
+              <span className="text-[#E91D34]">-{formatPrice(discountAmount)}</span>
             </div>
           )}
           <div className="flex items-center justify-between">
             <span className="text-gray-800">Toplam Tutar</span>
-            <span className="text-[#E30A17] text-lg">{formatPrice(totalAmount)}</span>
+            <span className="text-[#E91D34] text-lg">{formatPrice(totalAmount)}</span>
           </div>
         </div>
       </div>

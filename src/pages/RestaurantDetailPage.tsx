@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import {
   FaBasketShopping,
@@ -17,6 +17,7 @@ import { getMatchingProducts, getRestaurantById, type Product } from '../data/re
 import { cuisines } from '../data/cuisines';
 import ProductOptionsModal from '../Components/ProductOptionsModal/ProductOptionsModal';
 import useStore from '../store/useStore';
+import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
 
 const MENU_TABS = ['Popüler Ürünler', 'Tıkla Gelsin Özel Menüler', '1-2 Kişilik Fırsatlar', '3-4 Kişilik Fırsatlar'];
 
@@ -34,12 +35,12 @@ const ProductCard = ({ product, onSelect }: { product: Product; onSelect: (produ
     <div className="flex-1 min-w-0">
       <p className="text-gray-800 text-sm">{product.name}</p>
       <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
-      <p className="text-[#E30A17] text-sm mt-1">{formatPrice(product.price)}</p>
+      <p className="text-[#E91D34] text-sm mt-1">{formatPrice(product.price)}</p>
     </div>
     <button
       type="button"
       onClick={() => onSelect(product)}
-      className="flex items-center gap-1 bg-[#E30A17] text-white text-xs rounded-full px-3 py-2 shrink-0 hover:bg-[#c80914] transition-colors"
+      className="flex items-center gap-1 bg-[#E91D34] text-white text-xs rounded-full px-3 py-2 shrink-0 hover:bg-[#CA192D] transition-colors"
     >
       <FaCirclePlus className="w-3.5 h-3.5" />
       Ekle
@@ -80,7 +81,7 @@ const CartPanel = () => {
                 type="button"
                 aria-label="Azalt"
                 onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
-                className="w-6 h-6 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E30A17] hover:text-[#E30A17] transition-colors"
+                className="w-6 h-6 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E91D34] hover:text-[#E91D34] transition-colors"
               >
                 <FaMinus className="w-2.5 h-2.5" />
               </button>
@@ -89,7 +90,7 @@ const CartPanel = () => {
                 type="button"
                 aria-label="Artır"
                 onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
-                className="w-6 h-6 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E30A17] hover:text-[#E30A17] transition-colors"
+                className="w-6 h-6 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:border-[#E91D34] hover:text-[#E91D34] transition-colors"
               >
                 <FaPlus className="w-2.5 h-2.5" />
               </button>
@@ -105,7 +106,7 @@ const CartPanel = () => {
 
       <Link
         to="/sepetim"
-        className="bg-[#E30A17] text-white text-sm rounded-full py-3 text-center hover:bg-[#c80914] transition-colors"
+        className="bg-[#E91D34] text-white text-sm rounded-full py-3 text-center hover:bg-[#CA192D] transition-colors"
       >
         Sepete Git
       </Link>
@@ -120,13 +121,27 @@ const RestaurantDetailPage = () => {
   const [productQuery, setProductQuery] = useState(() => searchParams.get('q') ?? '');
   const [categoryFilter, setCategoryFilter] = useState(() => searchParams.get('category'));
   const [activeTab, setActiveTab] = useState(MENU_TABS[0]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
+    const productParam = searchParams.get('product');
+    return productParam ? restaurant?.products.find((product) => product.name === productParam) ?? null : null;
+  });
+  const campaignParam = searchParams.get('campaign');
+  const linkedCampaign = campaignParam ? CAMPAIGNS.find((campaign) => campaign.id === campaignParam) : undefined;
+  const campaignInitialQuantity = linkedCampaign?.discount?.kind === 'secondItemDiscount' ? 2 : undefined;
+  const { setPendingCouponCode } = useStore();
+  const couponParam = searchParams.get('coupon');
+
+  // Kupon detay sayfasındaki "Kuponu Uygula" akışıyla gelinmişse, kuponu ödeme sayfasında
+  // otomatik seçili gelmesi için store'a taşı.
+  useEffect(() => {
+    if (couponParam) setPendingCouponCode(couponParam);
+  }, [couponParam, setPendingCouponCode]);
 
   if (!restaurant) {
     return (
       <div className="bg-white rounded-2xl p-10 flex flex-col items-center gap-4 text-center">
         <h2 className="text-lg text-gray-700">Restoran bulunamadı</h2>
-        <Link to="/sana-gelsin" className="text-[#E30A17] hover:underline">
+        <Link to="/sana-gelsin" className="text-[#E91D34] hover:underline">
           Restoranlara geri dön
         </Link>
       </div>
@@ -165,7 +180,7 @@ const RestaurantDetailPage = () => {
               <button
                 type="button"
                 aria-label="Favorilere ekle"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-[#E30A17] rounded-full p-2 transition-colors"
+                className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-[#E91D34] rounded-full p-2 transition-colors"
               >
                 <FaRegHeart className="w-3.5 h-3.5" />
               </button>
@@ -213,13 +228,13 @@ const RestaurantDetailPage = () => {
 
             {categoryLabel && (
               <div className="flex items-center gap-2 mb-4">
-                <span className="inline-flex items-center gap-2 bg-red-50 text-[#E30A17] text-xs rounded-full px-3 py-1.5">
+                <span className="inline-flex items-center gap-2 bg-red-50 text-[#E91D34] text-xs rounded-full px-3 py-1.5">
                   {categoryLabel}
                   <button
                     type="button"
                     aria-label="Kategori filtresini kaldır"
                     onClick={() => setCategoryFilter(null)}
-                    className="hover:text-[#c80914]"
+                    className="hover:text-[#CA192D]"
                   >
                     ✕
                   </button>
@@ -235,7 +250,7 @@ const RestaurantDetailPage = () => {
                   onClick={() => setActiveTab(tab)}
                   className={`shrink-0 pb-1 text-sm border-b-2 transition-colors whitespace-nowrap ${
                     activeTab === tab
-                      ? 'text-[#E30A17] border-[#E30A17]'
+                      ? 'text-[#E91D34] border-[#E91D34]'
                       : 'text-gray-500 border-transparent hover:text-gray-700'
                   }`}
                 >
@@ -270,6 +285,7 @@ const RestaurantDetailPage = () => {
           product={selectedProduct}
           restaurantId={restaurant.id}
           restaurantTitle={restaurant.title}
+          initialQuantity={campaignInitialQuantity}
           onClose={() => setSelectedProduct(null)}
         />
       )}

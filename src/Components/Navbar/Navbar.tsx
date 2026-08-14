@@ -23,7 +23,18 @@ const Navbar = () => {
   const isProfilePage = pathname === '/profilim';
   const isWalletPage = pathname === '/tiklapaycuzdanim';
   const isCampaignsPage = pathname === '/kampanyalar';
-  const showBackHeader = isRestaurantDetailPage || isCartPage || isCheckoutPage || isProfilePage || isCampaignsPage;
+  const isCampaignDetailPage = pathname.startsWith('/kampanyalar/');
+  const isCouponDetailPage = pathname.startsWith('/kuponlar/');
+  const showBackHeader =
+    isRestaurantDetailPage ||
+    isCartPage ||
+    isCheckoutPage ||
+    isProfilePage ||
+    isCampaignsPage ||
+    isCampaignDetailPage ||
+    isCouponDetailPage;
+  const showCenteredLogo = isCartPage || isCheckoutPage || isCampaignsPage || isCampaignDetailPage || isCouponDetailPage;
+  const hideNavActions = isCampaignsPage || isCampaignDetailPage || isCouponDetailPage;
   const showAddressSearchBar = isRestaurantsPage || isRestaurantDetailPage || isProfilePage;
   const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0];
 
@@ -50,7 +61,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50">
       {/* Kırmızı Üst Şerit */}
       <div
-        className={`bg-[#E30A17] text-white flex justify-between items-center w-[90%] max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 relative z-10 ${
+        className={`bg-[#E91D34] text-white flex justify-between items-center w-[90%] max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 relative z-10 ${
           isLoginPage || showBackHeader ? 'rounded-b-[16px]' : ''
         } ${(isLoginPage || showBackHeader) && !isAddressOpen ? 'overflow-hidden' : ''}`}
       >
@@ -69,7 +80,7 @@ const Navbar = () => {
           <Link to="/tiklapaycuzdanim" className="flex items-center gap-2 shrink-0">
             <span className="bg-white rounded-lg w-8 h-8 flex items-center justify-center p-1.5 shrink-0">
               <span
-                className="w-full h-full bg-[#E30A17]"
+                className="w-full h-full bg-[#E91D34]"
                 style={{
                   WebkitMaskImage: `url(${walletLogo})`,
                   maskImage: `url(${walletLogo})`,
@@ -90,7 +101,7 @@ const Navbar = () => {
           </Link>
         )}
 
-        {(isCartPage || isCheckoutPage) && (
+        {showCenteredLogo && (
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
             <img src={logoWhite} alt="tıkla gelsin" className="h-9 sm:h-10 lg:h-12 w-auto" />
           </Link>
@@ -104,7 +115,7 @@ const Navbar = () => {
               onClick={toggleAddressDrawer}
               className="flex items-center gap-2 pr-3 font-semibold shrink-0 max-w-[220px]"
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0 text-[#e61e3b]">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0 text-[#E91D34]">
                 {selectedAddress.icon === 'home' ? (
                   <path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z" />
                 ) : (
@@ -112,7 +123,7 @@ const Navbar = () => {
                 )}
               </svg>
               <span className="truncate">
-                <span className="text-sm font-bold text-[#e61e3b]">{selectedAddress.label}</span>{' '}
+                <span className="text-sm font-bold text-[#E91D34]">{selectedAddress.label}</span>{' '}
                 <span className="text-xs font-normal text-gray-500">{selectedAddress.fullAddress}</span>
               </span>
               <svg
@@ -134,7 +145,7 @@ const Navbar = () => {
                 <div className="absolute top-full left-0 mt-3 w-96 max-w-[92vw] bg-white rounded-3xl border border-gray-100 z-50 p-5 text-gray-700">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-gray-900 text-base">Adres Seç</h3>
-                    <button type="button" className="text-[#e61e3b] text-sm font-medium hover:underline">
+                    <button type="button" className="text-[#E91D34] text-sm font-medium hover:underline">
                       Hepsini Gör
                     </button>
                   </div>
@@ -148,13 +159,13 @@ const Navbar = () => {
                           type="button"
                           onClick={() => setPendingAddressId(address.id)}
                           className={`w-full flex items-center gap-2.5 rounded-2xl border px-4 py-2.5 text-left transition-colors ${
-                            isPending ? 'border-[#e61e3b] bg-red-50' : 'border-gray-200 bg-white hover:border-gray-300'
+                            isPending ? 'border-[#E91D34] bg-red-50' : 'border-gray-200 bg-white hover:border-gray-300'
                           }`}
                         >
                           <svg
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            className={`w-4 h-4 shrink-0 ${isPending ? 'text-[#e61e3b]' : 'text-gray-400'}`}
+                            className={`w-4 h-4 shrink-0 ${isPending ? 'text-[#E91D34]' : 'text-gray-400'}`}
                           >
                             {address.icon === 'home' ? (
                               <path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z" />
@@ -163,7 +174,7 @@ const Navbar = () => {
                             )}
                           </svg>
                           <span className="flex-1 min-w-0">
-                            <span className={`block font-semibold text-sm leading-tight ${isPending ? 'text-[#e61e3b]' : 'text-gray-800'}`}>
+                            <span className={`block font-semibold text-sm leading-tight ${isPending ? 'text-[#E91D34]' : 'text-gray-800'}`}>
                               {address.label}
                             </span>
                             <span className="block truncate text-xs font-normal leading-tight text-gray-400">{address.fullAddress}</span>
@@ -175,7 +186,7 @@ const Navbar = () => {
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className={`w-4 h-4 shrink-0 ${isPending ? 'text-[#e61e3b]' : 'text-gray-300'}`}
+                            className={`w-4 h-4 shrink-0 ${isPending ? 'text-[#E91D34]' : 'text-gray-300'}`}
                           >
                             <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                           </svg>
@@ -187,7 +198,7 @@ const Navbar = () => {
                   <button
                     type="button"
                     onClick={confirmAddress}
-                    className="w-full bg-[#e61e3b] text-white text-sm font-semibold rounded-full py-2.5 mb-2.5 hover:bg-[#c81830] transition-colors"
+                    className="w-full bg-[#E91D34] text-white text-sm font-semibold rounded-full py-2.5 mb-2.5 hover:bg-[#CA192D] transition-colors"
                   >
                     Seçili Adresi Onayla
                   </button>
@@ -198,7 +209,7 @@ const Navbar = () => {
                       setIsAddressOpen(false);
                       navigate('/profilim', { state: { tab: 'addresses' } });
                     }}
-                    className="w-full border border-[#e61e3b] text-[#e61e3b] text-sm font-semibold rounded-full py-2.5 hover:bg-red-50 transition-colors"
+                    className="w-full border border-[#E91D34] text-[#E91D34] text-sm font-semibold rounded-full py-2.5 hover:bg-red-50 transition-colors"
                   >
                     Yeni Adres Ekle
                   </button>
@@ -225,7 +236,7 @@ const Navbar = () => {
           </div>
         )}
 
-        {!isLoginPage && !isCartPage && !isCheckoutPage && isAuthenticated && (
+        {!isLoginPage && !isCartPage && !isCheckoutPage && !hideNavActions && isAuthenticated && (
           <div className="hidden lg:flex items-center gap-6 text-sm">
             <Link to="/kampanyalar" className="relative flex items-center gap-2 hover:underline">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
@@ -248,7 +259,7 @@ const Navbar = () => {
                 <button type="button" className="flex items-center gap-2 hover:underline">
                   <FaBell className="w-4 h-4" />
                   Bildirimler
-                  <span className="relative -top-2 -ml-1.5 bg-[#E30A17] text-white text-[10px] w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
+                  <span className="relative -top-2 -ml-1.5 bg-[#E91D34] text-white text-[10px] w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
                     7
                   </span>
                 </button>
@@ -262,7 +273,7 @@ const Navbar = () => {
                 onClick={() => navigate('/profilim')}
                 className="flex items-center gap-2 pr-2"
               >
-                <span className="bg-white text-[#e61e3b] rounded-full p-1.5 flex items-center justify-center">
+                <span className="bg-white text-[#E91D34] rounded-full p-1.5 flex items-center justify-center">
                   <FaRegCircleUser className="w-4 h-4" />
                 </span>
                 {userName}
@@ -273,7 +284,7 @@ const Navbar = () => {
                   type="button"
                   aria-label="Sepetim"
                   onClick={() => navigate('/sepetim')}
-                  className={`bg-white text-[#e61e3b] rounded-full flex items-center gap-2 ${
+                  className={`bg-white text-[#E91D34] rounded-full flex items-center gap-2 ${
                     cartItems.length > 0 ? 'pl-3 pr-4 py-3' : 'p-3 justify-center'
                   }`}
                 >
@@ -285,7 +296,7 @@ const Navbar = () => {
           </div>
         )}
 
-        {!isLoginPage && !isCartPage && !isCheckoutPage && !isAuthenticated && (
+        {!isLoginPage && !isCartPage && !isCheckoutPage && !hideNavActions && !isAuthenticated && (
           <div className="hidden lg:flex items-center gap-6 text-sm">
             <Link to="/kampanyalar" className="flex items-center gap-2 font-semibold hover:underline">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
@@ -298,7 +309,7 @@ const Navbar = () => {
               to="/login"
               className="flex items-center gap-2 bg-white/15 hover:bg-white/25 pl-2 pr-6 py-2 rounded-full font-bold transition-colors"
             >
-              <span className="bg-white text-[#e61e3b] rounded-full p-1.5 flex items-center justify-center">
+              <span className="bg-white text-[#E91D34] rounded-full p-1.5 flex items-center justify-center">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                   <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 001 1h14a1 1 0 001-1v-1c0-2.761-3.582-5-8-5z" />
                 </svg>
@@ -330,7 +341,7 @@ const Navbar = () => {
           <Link
             to="/sana-gelsin"
             className={`text-[14px] sm:text-[15px] lg:text-[17px] hover:underline whitespace-nowrap ${
-              pathname === '/sana-gelsin' ? 'text-[#E30A17]' : 'text-gray-500'
+              pathname === '/sana-gelsin' ? 'text-[#E91D34]' : 'text-gray-500'
             }`}
           >
             Sana Gelsin
@@ -338,7 +349,7 @@ const Navbar = () => {
           <Link
             to="/gel-al"
             className={`text-[14px] sm:text-[15px] lg:text-[17px] hover:underline whitespace-nowrap ${
-              pathname === '/gel-al' ? 'text-[#E30A17]' : 'text-gray-500'
+              pathname === '/gel-al' ? 'text-[#E91D34]' : 'text-gray-500'
             }`}
           >
             Gel Al
@@ -346,7 +357,7 @@ const Navbar = () => {
           <Link
             to="/tiklapaycuzdanim"
             className={`text-[14px] sm:text-[15px] lg:text-[17px] hover:underline whitespace-nowrap ${
-              isWalletPage ? 'text-[#E30A17]' : 'text-gray-500'
+              isWalletPage ? 'text-[#E91D34]' : 'text-gray-500'
             }`}
           >
             Tıklapay Cüzdanım
@@ -380,13 +391,13 @@ const Navbar = () => {
           <Link
             to="/kampanyalar"
             onClick={() => setIsMenuOpen(false)}
-            className="relative mt-8 flex items-center justify-center gap-2 border border-[#e61e3b] text-[#e61e3b] font-semibold rounded-full py-3"
+            className="relative mt-8 flex items-center justify-center gap-2 border border-[#E91D34] text-[#E91D34] font-semibold rounded-full py-3"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
               <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
             </svg>
             Kampanyalar
-            <span className="absolute -top-2 -right-2 bg-[#e61e3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-[#E91D34] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
               0
             </span>
           </Link>
@@ -402,9 +413,9 @@ const Navbar = () => {
                   setIsMenuOpen(false);
                   navigate('/profilim');
                 }}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#e61e3b] text-white font-bold rounded-full py-3"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#E91D34] text-white font-bold rounded-full py-3"
               >
-                <span className="bg-white text-[#e61e3b] rounded-full p-1.5 flex items-center justify-center">
+                <span className="bg-white text-[#E91D34] rounded-full p-1.5 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                     <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 001 1h14a1 1 0 001-1v-1c0-2.761-3.582-5-8-5z" />
                   </svg>
@@ -418,7 +429,7 @@ const Navbar = () => {
                   setIsMenuOpen(false);
                   navigate('/sepetim');
                 }}
-                className={`bg-[#e61e3b] text-white rounded-full flex items-center gap-2 ${
+                className={`bg-[#E91D34] text-white rounded-full flex items-center gap-2 ${
                   cartItems.length > 0 ? 'pl-3.5 pr-4 py-3.5' : 'p-3.5 justify-center'
                 }`}
               >
@@ -430,9 +441,9 @@ const Navbar = () => {
             <Link
               to="/login"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center justify-center gap-2 bg-[#e61e3b] text-white font-bold rounded-full py-3 w-full"
+              className="flex items-center justify-center gap-2 bg-[#E91D34] text-white font-bold rounded-full py-3 w-full"
             >
-              <span className="bg-white text-[#e61e3b] rounded-full p-1.5 flex items-center justify-center">
+              <span className="bg-white text-[#E91D34] rounded-full p-1.5 flex items-center justify-center">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                   <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 001 1h14a1 1 0 001-1v-1c0-2.761-3.582-5-8-5z" />
                 </svg>
