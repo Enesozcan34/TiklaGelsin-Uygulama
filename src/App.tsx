@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout/Layout';
 import LoginPage from './pages/LoginPage';
 import RestaurantsPage from './pages/RestaurantsPage';
+import GelAlPage from './pages/GelAlPage';
 import RestaurantDetailPage from './pages/RestaurantDetailPage';
 import MainPage from './pages/MainPage';
 import CartPage from './pages/CartPage';
@@ -21,7 +22,7 @@ const App = () => {
 
           <Route path="/" element={<MainPage />} />
           <Route path="/sana-gelsin" element={<RestaurantsPage />} />
-          <Route path="/gel-al" element={<RestaurantsPage />} />
+          <Route path="/gel-al" element={<GelAlPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />

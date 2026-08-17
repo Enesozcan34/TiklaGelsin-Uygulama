@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoRed from '../../assets/tikla-gelsin-logo-red.png';
 import playStoreBadge from '../../assets/play-store-tr.png';
 import appStoreBadge from '../../assets/app-store-tr.png';
@@ -13,6 +13,9 @@ const ChevronDown = () => (
 );
 
 const Footer = () => {
+  const { pathname } = useLocation();
+  const socialIconColor = pathname === '/gel-al' ? '#08ADEF' : '#E91D34';
+
   return (
     <footer className="bg-white w-[90%] max-w-[1200px] mx-auto pt-12 pb-6 rounded-t-[16px] mt-auto">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -60,21 +63,21 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex gap-3 items-start">
-  <div aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
-    <FaWhatsapp size={18} />
+          <div className="flex gap-3 items-start" style={{ color: socialIconColor }}>
+  <div aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-current flex justify-center items-center text-sm">
+    <FaWhatsapp size={18} className="text-white" />
   </div>
-  <div aria-label="Instagram" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
-    <FaInstagram size={18} />
+  <div aria-label="Instagram" className="w-9 h-9 rounded-full bg-current flex justify-center items-center text-sm">
+    <FaInstagram size={18} className="text-white" />
   </div>
-  <div aria-label="Facebook" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
-    <FaFacebookF size={18} />
+  <div aria-label="Facebook" className="w-9 h-9 rounded-full bg-current flex justify-center items-center text-sm">
+    <FaFacebookF size={18} className="text-white" />
   </div>
-  <div aria-label="X" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
-    <FaXTwitter size={18} />
+  <div aria-label="X" className="w-9 h-9 rounded-full bg-current flex justify-center items-center text-sm">
+    <FaXTwitter size={18} className="text-white" />
   </div>
-  <div aria-label="TikTok" className="w-9 h-9 rounded-full bg-[#E91D34] flex justify-center items-center text-white text-sm">
-    <FaTiktok size={18} />
+  <div aria-label="TikTok" className="w-9 h-9 rounded-full bg-current flex justify-center items-center text-sm">
+    <FaTiktok size={18} className="text-white" />
   </div>
 </div>
         </div>
