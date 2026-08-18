@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaBagShopping, FaBell, FaCreditCard, FaRegCircleUser } from 'react-icons/fa6';
+import { FaBell, FaCreditCard, FaRegCircleUser } from 'react-icons/fa6';
+import { TbShoppingBag, TbStar } from 'react-icons/tb';
 import useStore from '../../store/useStore';
 import logoWhite from '../../assets/tikla-gelsin-logo-white.png';
 import logoRed from '../../assets/tikla-gelsin-logo-red.png';
@@ -245,11 +246,12 @@ const Navbar = () => {
 
         {!isLoginPage && !isCartPage && !isCheckoutPage && !hideNavActions && isAuthenticated && (
           <div className="hidden lg:flex items-center gap-6 text-sm">
-            <Link to="/kampanyalar" className="relative flex items-center gap-2 hover:underline">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
-                <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
-              </svg>
+            <Link to="/kampanyalar" className="relative flex items-center gap-2 font-semibold hover:underline">
+              <TbStar className="w-5 h-5" />
               Kampanyalar
+              <span className="absolute -top-3.5 -right-4 bg-white text-[var(--accent,#E91D34)] text-[10px] font-bold min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center">
+                64
+              </span>
             </Link>
 
             {isWalletPage && (
@@ -273,12 +275,12 @@ const Navbar = () => {
               </>
             )}
 
-            <div className="flex items-center gap-2 bg-white/15 hover:bg-white/25 pl-2 pr-2 py-2 rounded-full transition-colors">
+            <div className="flex items-center gap-1">
               <button
                 type="button"
                 aria-label="Profilim"
                 onClick={() => navigate('/profilim')}
-                className="flex items-center gap-2 pr-2"
+                className="flex items-center gap-2 bg-white/15 hover:bg-white/25 pl-2 pr-4 py-2 rounded-full transition-colors"
               >
                 <span className="bg-white text-[var(--accent,#E91D34)] rounded-full p-1.5 flex items-center justify-center">
                   <FaRegCircleUser className="w-4 h-4" />
@@ -295,7 +297,7 @@ const Navbar = () => {
                     cartItems.length > 0 ? 'pl-3 pr-4 py-3' : 'p-3 justify-center'
                   }`}
                 >
-                  <FaBagShopping className="w-4 h-4" />
+                  <TbShoppingBag className="w-4 h-4" />
                   {cartItems.length > 0 && <span className="font-semibold whitespace-nowrap">{formattedCartTotal}</span>}
                 </button>
               )}
@@ -306,9 +308,7 @@ const Navbar = () => {
         {!isLoginPage && !isCartPage && !isCheckoutPage && !hideNavActions && !isAuthenticated && (
           <div className="hidden lg:flex items-center gap-6 text-sm">
             <Link to="/kampanyalar" className="flex items-center gap-2 font-semibold hover:underline">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
-                <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
-              </svg>
+              <TbStar className="w-5 h-5" />
               Kampanyalar
             </Link>
 
@@ -414,9 +414,7 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(false)}
             className="relative mt-8 flex items-center justify-center gap-2 border border-[var(--accent,#E91D34)] text-[var(--accent,#E91D34)] font-semibold rounded-full py-3"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
-            </svg>
+            <TbStar className="w-5 h-5" />
             Kampanyalar
             <span className="absolute -top-2 -right-2 bg-[var(--accent,#E91D34)] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
               0
@@ -454,7 +452,7 @@ const Navbar = () => {
                   cartItems.length > 0 ? 'pl-3.5 pr-4 py-3.5' : 'p-3.5 justify-center'
                 }`}
               >
-                <FaBagShopping className="w-4 h-4" />
+                <TbShoppingBag className="w-4 h-4" />
                 {cartItems.length > 0 && <span className="font-bold whitespace-nowrap">{formattedCartTotal}</span>}
               </button>
             </div>
