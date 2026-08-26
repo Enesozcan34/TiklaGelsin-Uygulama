@@ -25,6 +25,7 @@ import {
 import useStore, { type Address, type SavedCard, type UserProfile } from '../store/useStore';
 import { getRestaurantById } from '../data/restaurants';
 import CouponsPanel from '../Components/Campaigns/CouponsPanel';
+import walletLogo from '../assets/Wallet2.png';
 
 const formatCardNumber = (value: string): string =>
   value
@@ -754,8 +755,20 @@ const ProfilePage = () => {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="bg-[#E91D34] text-white text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center">
-                P
+              <span className="bg-[#E91D34] w-6 h-6 rounded-md flex items-center justify-center shrink-0 p-1">
+                <span
+                  className="w-full h-full bg-white"
+                  style={{
+                    WebkitMaskImage: `url(${walletLogo})`,
+                    maskImage: `url(${walletLogo})`,
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center',
+                  }}
+                />
               </span>
               <span className="text-gray-800 text-sm font-semibold">Tıklapay Cüzdanım</span>
             </div>
