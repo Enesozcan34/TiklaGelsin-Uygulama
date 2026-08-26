@@ -7,3 +7,26 @@
 body{
     background-color: #ebe9e9;
 }
+
+.styled-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 9999px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 9999px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #b0b6bf;
+}

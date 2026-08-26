@@ -1,10 +1,73 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaChevronDown, FaCreditCard, FaPlus, FaXmark } from 'react-icons/fa6';
+import type { IconType } from 'react-icons';
+import { FaChevronDown, FaCreditCard, FaMoneyBillWave, FaPlus, FaXmark } from 'react-icons/fa6';
 import useStore from '../../store/useStore';
 import walletLogo from '../../assets/Wallet2.png';
 
 const formatBalance = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+
+type FoodCardId = 'pluxee' | 'setcard' | 'multinet';
+
+interface FoodCardOption {
+  id: FoodCardId;
+  name: string;
+  actionLabel: string;
+  initial: string;
+  color: string;
+}
+
+const FOOD_CARD_OPTIONS: FoodCardOption[] = [
+  { id: 'pluxee', name: 'Pluxee (Sodexo) Online', actionLabel: 'Öde', initial: 'P', color: '#7C3AED' },
+  { id: 'setcard', name: 'Setcard Online', actionLabel: 'Kart Ekle', initial: 'S', color: '#00A9A5' },
+  { id: 'multinet', name: 'Multinet Card Online', actionLabel: 'Kart Ekle', initial: 'M', color: '#22A559' },
+];
+
+type MobilePaymentId = 'vodafone' | 'turkcell';
+
+interface MobilePaymentOption {
+  id: MobilePaymentId;
+  name: string;
+  initial: string;
+  color: string;
+}
+
+const MOBILE_PAYMENT_OPTIONS: MobilePaymentOption[] = [
+  { id: 'vodafone', name: 'Vodafone Pay ile Faturana Yansıt', initial: 'V', color: '#E60000' },
+  { id: 'turkcell', name: 'Turkcell Faturana Yansıt', initial: 'T', color: '#FFC20E' },
+];
+
+type CashOnDeliveryId = 'cash' | 'creditCard';
+
+interface CashOnDeliveryOption {
+  id: CashOnDeliveryId;
+  name: string;
+  icon: IconType;
+}
+
+const CASH_ON_DELIVERY_OPTIONS: CashOnDeliveryOption[] = [
+  { id: 'cash', name: 'Nakit', icon: FaMoneyBillWave },
+  { id: 'creditCard', name: 'Kredi Kartı', icon: FaCreditCard },
+];
+
+const AccordionHeader = ({
+  label,
+  isOpen,
+  onToggle,
+}: {
+  label: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors"
+  >
+    <span className="text-gray-800 text-sm">{label}</span>
+    <FaChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+  </button>
+);
 
 const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () => void }) => (
   <button
@@ -22,19 +85,36 @@ const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () =>
 
 interface PaymentMethodModalProps {
   totalAmount: number;
-  paymentMethod: 'wallet' | 'card';
+  paymentMethod: 'wallet' | 'card' | 'pluxee' | 'setcard' | 'multinet' | MobilePaymentId | CashOnDeliveryId;
   onClose: () => void;
   onSelectWallet: () => void;
   onSelectCard: (cardId: string) => void;
+  onSelectPluxee: () => void;
+  onSelectFoodCard: (cardId: 'setcard' | 'multinet') => void;
+  onSelectMobilePayment: (id: MobilePaymentId) => void;
+  onSelectCashOnDelivery: (id: CashOnDeliveryId) => void;
 }
 
-const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWallet, onSelectCard }: PaymentMethodModalProps) => {
+const PaymentMethodModal = ({
+  totalAmount,
+  paymentMethod,
+  onClose,
+  onSelectWallet,
+  onSelectCard,
+  onSelectPluxee,
+  onSelectFoodCard,
+  onSelectMobilePayment,
+  onSelectCashOnDelivery,
+}: PaymentMethodModalProps) => {
   const navigate = useNavigate();
   const { userName, walletBalanceByUser, savedCardsByUser, selectedCardIdByUser } = useStore();
   const walletBalance = userName ? walletBalanceByUser[userName] ?? 0 : 0;
   const savedCards = userName ? savedCardsByUser[userName] ?? [] : [];
   const selectedCardId = userName ? selectedCardIdByUser[userName] : undefined;
   const [isCardSectionOpen, setIsCardSectionOpen] = useState(paymentMethod === 'card');
+  const [isFoodCardSectionOpen, setIsFoodCardSectionOpen] = useState(false);
+  const [isMobilPaymentSectionOpen, setIsMobilPaymentSectionOpen] = useState(false);
+  const [isCashOnDeliverySectionOpen, setIsCashOnDeliverySectionOpen] = useState(false);
 
   const goToWalletPage = () => {
     onClose();
@@ -49,7 +129,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="relative bg-white rounded-2xl w-full max-w-sm h-[600px] max-h-[90vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 shrink-0">
           <h2 className="text-gray-800 text-lg">Ödeme Yöntemi</h2>
           <button
@@ -62,8 +142,8 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
           </button>
         </div>
 
-        <div className="overflow-y-auto flex-1 px-5 py-4 flex flex-col gap-4">
-          <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3">
+        <div className="styled-scrollbar overflow-y-auto flex-1 px-5 py-4 flex flex-col gap-4">
+          <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <span className="w-9 h-9 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
@@ -105,7 +185,7 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
             )}
           </div>
 
-          <div className="border border-gray-100 rounded-2xl overflow-hidden">
+          <div className="border border-gray-100 rounded-2xl overflow-hidden shrink-0">
             <button
               type="button"
               onClick={() => setIsCardSectionOpen((prev) => !prev)}
@@ -156,6 +236,128 @@ const PaymentMethodModal = ({ totalAmount, paymentMethod, onClose, onSelectWalle
                 >
                   <FaPlus className="w-3 h-3" /> Kart Ekle
                 </button>
+              </div>
+            )}
+          </div>
+
+          <div className="border border-gray-100 rounded-2xl overflow-hidden shrink-0">
+            <AccordionHeader
+              label="Yemek Kartı Online"
+              isOpen={isFoodCardSectionOpen}
+              onToggle={() => setIsFoodCardSectionOpen((prev) => !prev)}
+            />
+
+            {isFoodCardSectionOpen && (
+              <div className="flex flex-col gap-2.5 px-5 pb-4">
+                {FOOD_CARD_OPTIONS.map((option) => {
+                  const isSelected = paymentMethod === option.id;
+                  const handleClick = option.id === 'pluxee' ? onSelectPluxee : () => onSelectFoodCard(option.id as 'setcard' | 'multinet');
+                  return (
+                    <div
+                      key={option.id}
+                      className={`flex items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-colors ${
+                        isSelected ? 'border-[#E91D34] bg-red-50' : 'border-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                          style={{ backgroundColor: option.color }}
+                        >
+                          {option.initial}
+                        </span>
+                        <p className="text-xs text-gray-800 leading-snug">{option.name}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleClick}
+                        className="border border-[#E91D34] text-[#E91D34] text-xs font-semibold rounded-full px-4 py-1.5 whitespace-nowrap shrink-0 hover:bg-red-50 transition-colors"
+                      >
+                        {isSelected ? 'Seçili' : option.actionLabel}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="border border-gray-100 rounded-2xl overflow-hidden shrink-0">
+            <AccordionHeader
+              label="Mobil Ödeme"
+              isOpen={isMobilPaymentSectionOpen}
+              onToggle={() => setIsMobilPaymentSectionOpen((prev) => !prev)}
+            />
+
+            {isMobilPaymentSectionOpen && (
+              <div className="flex flex-col gap-2.5 px-5 pb-4">
+                {MOBILE_PAYMENT_OPTIONS.map((option) => {
+                  const isSelected = paymentMethod === option.id;
+                  return (
+                    <div
+                      key={option.id}
+                      className={`flex items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-colors ${
+                        isSelected ? 'border-[#E91D34] bg-red-50' : 'border-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                          style={{ backgroundColor: option.color }}
+                        >
+                          {option.initial}
+                        </span>
+                        <p className="text-xs text-gray-800 leading-snug">{option.name}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onSelectMobilePayment(option.id)}
+                        className="border border-[#E91D34] text-[#E91D34] text-xs font-semibold rounded-full px-4 py-1.5 whitespace-nowrap shrink-0 hover:bg-red-50 transition-colors"
+                      >
+                        {isSelected ? 'Seçili' : 'Öde'}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="border border-gray-100 rounded-2xl overflow-hidden shrink-0">
+            <AccordionHeader
+              label="Kapıda Ödeme"
+              isOpen={isCashOnDeliverySectionOpen}
+              onToggle={() => setIsCashOnDeliverySectionOpen((prev) => !prev)}
+            />
+
+            {isCashOnDeliverySectionOpen && (
+              <div className="flex flex-col gap-2.5 px-5 pb-4">
+                {CASH_ON_DELIVERY_OPTIONS.map((option) => {
+                  const isSelected = paymentMethod === option.id;
+                  const Icon = option.icon;
+                  return (
+                    <div
+                      key={option.id}
+                      className={`flex items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-colors ${
+                        isSelected ? 'border-[#E91D34] bg-red-50' : 'border-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="w-8 h-8 rounded-full border border-[#E91D34] flex items-center justify-center shrink-0 text-[#E91D34]">
+                          <Icon className="w-3.5 h-3.5" />
+                        </span>
+                        <p className="text-xs text-gray-800 leading-snug">{option.name}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onSelectCashOnDelivery(option.id)}
+                        className="border border-[#E91D34] text-[#E91D34] text-xs font-semibold rounded-full px-4 py-1.5 whitespace-nowrap shrink-0 hover:bg-red-50 transition-colors"
+                      >
+                        {isSelected ? 'Seçili' : 'Seç'}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse } from 'react-icons/fa6';
-import useStore, { ALL_COUPONS } from '../store/useStore';
+import type { IconType } from 'react-icons';
+import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse, FaMoneyBillWave } from 'react-icons/fa6';
+import useStore, { ALL_COUPONS, PLUXEE_VERIFICATION_CODE_BY_USER } from '../store/useStore';
 import { getRestaurantById } from '../data/restaurants';
 import PaymentMethodModal from '../Components/PaymentMethodModal/PaymentMethodModal';
+import PluxeeVerifyModal from '../Components/PluxeeVerifyModal/PluxeeVerifyModal';
+import FoodCardVerifyModal from '../Components/FoodCardVerifyModal/FoodCardVerifyModal';
+import MobilePaymentVerifyModal from '../Components/MobilePaymentVerifyModal/MobilePaymentVerifyModal';
+import OrderConfirmationModal from '../Components/OrderConfirmationModal/OrderConfirmationModal';
 import CouponPickerModal from '../Components/Campaigns/CouponPickerModal';
 import { calculateCouponDiscount, getCouponUnavailabilityReason } from '../Components/Campaigns/couponUtils';
 import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
@@ -11,7 +16,77 @@ import { calculateCampaignDiscount, getCampaignUnavailabilityReason } from '../C
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+const maskFoodCardNumber = (digits: string): string => `${digits.slice(0, 4)}${'*'.repeat(digits.length - 6)}${digits.slice(-2)}`;
+const maskPhoneNumber = (digits: string): string => `${digits.slice(0, 3)} *** ** ${digits.slice(-2)}`;
 
+type FoodCardId = 'setcard' | 'multinet';
+type MobilePaymentId = 'vodafone' | 'turkcell';
+type CashOnDeliveryId = 'cash' | 'creditCard';
+type PaymentMethod = 'wallet' | 'card' | 'pluxee' | FoodCardId | MobilePaymentId | CashOnDeliveryId;
+
+interface MobilePaymentConfig {
+  title: string;
+  heading: string;
+  description: string;
+  displayName: string;
+  initial: string;
+  color: string;
+}
+
+const MOBILE_PAYMENT_CONFIG: Record<MobilePaymentId, MobilePaymentConfig> = {
+  vodafone: {
+    title: 'Vodafone Pay ile Faturana Yansıt',
+    heading: 'Vodafone Pay telefon numaranı gir',
+    description:
+      'Bu servis sadece Vodafone Pay abonelerine açıktır. Vodafone Pay hattına ait bir cep telefon numarası girin.',
+    displayName: 'Vodafone Pay ile Faturana Yansıt',
+    initial: 'V',
+    color: '#E60000',
+  },
+  turkcell: {
+    title: 'Turkcell Faturana Yansıt',
+    heading: 'Turkcell telefon numaranı gir',
+    description: 'Bu servis sadece Turkcell abonelerine açıktır. Turkcell hattına ait bir cep telefon numarası girin.',
+    displayName: 'Turkcell Faturana Yansıt',
+    initial: 'T',
+    color: '#FFC20E',
+  },
+};
+
+interface FoodCardConfig {
+  brandName: string;
+  displayName: string;
+  logoLabel: string;
+  logoColor: string;
+  initial: string;
+}
+
+const FOOD_CARD_CONFIG: Record<FoodCardId, FoodCardConfig> = {
+  setcard: {
+    brandName: 'Setcard',
+    displayName: 'Setcard Online',
+    logoLabel: 'SETCARD',
+    logoColor: '#00A9A5',
+    initial: 'S',
+  },
+  multinet: {
+    brandName: 'Multinet Card',
+    displayName: 'Multinet Card Online',
+    logoLabel: 'MULTINET',
+    logoColor: '#22A559',
+    initial: 'M',
+  },
+};
+
+interface CashOnDeliveryConfig {
+  displayName: string;
+  icon: IconType;
+}
+
+const CASH_ON_DELIVERY_CONFIG: Record<CashOnDeliveryId, CashOnDeliveryConfig> = {
+  cash: { displayName: 'Kapıda Ödeme (Nakit)', icon: FaMoneyBillWave },
+  creditCard: { displayName: 'Kapıda Ödeme (Kredi Kartı)', icon: FaCreditCard },
+};
 type DeliveryTiming = 'now' | 'later';
 type DeliveryDate = '' | 'today' | 'tomorrow';
 type DropdownField = 'date' | 'time' | null;
@@ -130,8 +205,14 @@ const CheckoutPage = () => {
   const [noCutlery, setNoCutlery] = useState(true);
   const navigate = useNavigate();
   const [paymentError, setPaymentError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'card'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showPluxeeVerifyModal, setShowPluxeeVerifyModal] = useState(false);
+  const [showOrderConfirmModal, setShowOrderConfirmModal] = useState(false);
+  const [verifyingFoodCard, setVerifyingFoodCard] = useState<FoodCardId | null>(null);
+  const [foodCardNumber, setFoodCardNumber] = useState('');
+  const [verifyingMobilePayment, setVerifyingMobilePayment] = useState<MobilePaymentId | null>(null);
+  const [mobilePaymentPhone, setMobilePaymentPhone] = useState('');
   const [showCouponPicker, setShowCouponPicker] = useState(false);
   const [selectedCouponCode, setSelectedCouponCode] = useState<string | null>(null);
   const {
@@ -142,6 +223,7 @@ const CheckoutPage = () => {
     savedCardsByUser,
     selectedCardIdByUser,
     walletBalanceByUser,
+    profilesByUser,
     placeOrder,
     clearCart,
     chargeCard,
@@ -165,6 +247,14 @@ const CheckoutPage = () => {
     ? savedCards.find((card) => card.id === selectedCardIdByUser[userName])
     : undefined;
   const walletBalance = userName ? walletBalanceByUser[userName] ?? 0 : 0;
+  const userPhone = userName ? profilesByUser[userName]?.phone ?? '' : '';
+  const expectedPluxeeCode = userName ? PLUXEE_VERIFICATION_CODE_BY_USER[userName] ?? '' : '';
+  const selectedFoodCardConfig =
+    paymentMethod === 'setcard' || paymentMethod === 'multinet' ? FOOD_CARD_CONFIG[paymentMethod] : undefined;
+  const selectedMobilePaymentConfig =
+    paymentMethod === 'vodafone' || paymentMethod === 'turkcell' ? MOBILE_PAYMENT_CONFIG[paymentMethod] : undefined;
+  const selectedCashOnDeliveryConfig =
+    paymentMethod === 'cash' || paymentMethod === 'creditCard' ? CASH_ON_DELIVERY_CONFIG[paymentMethod] : undefined;
   const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0];
   const restaurant = cartItems.length > 0 ? getRestaurantById(cartItems[0].restaurantId) : undefined;
   const branchName = restaurant?.locations.find((location) => location.addressId === selectedAddressId)?.branchName;
@@ -194,7 +284,15 @@ const CheckoutPage = () => {
   const hasSufficientBalance =
     paymentMethod === 'wallet'
       ? walletBalance >= totalAmount
-      : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
+      : paymentMethod === 'pluxee' ||
+          paymentMethod === 'setcard' ||
+          paymentMethod === 'multinet' ||
+          paymentMethod === 'vodafone' ||
+          paymentMethod === 'turkcell' ||
+          paymentMethod === 'cash' ||
+          paymentMethod === 'creditCard'
+        ? true
+        : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
   const canPlaceOrder = cartItems.length > 0 && hasSufficientBalance && hasValidDeliveryTime;
 
   const handleSelectWallet = () => {
@@ -207,10 +305,67 @@ const CheckoutPage = () => {
     setShowPaymentModal(false);
   };
 
-  const handlePlaceOrder = () => {
-    if (!canPlaceOrder || !restaurant) return;
+  const handleSelectPluxee = () => {
+    setPaymentMethod('pluxee');
+    setShowPaymentModal(false);
+  };
+
+  const handleSelectFoodCard = (cardId: FoodCardId) => {
+    setShowPaymentModal(false);
+    setVerifyingFoodCard(cardId);
+  };
+
+  const handleFoodCardVerified = (cardNumber: string) => {
+    if (!verifyingFoodCard) return;
+    setPaymentMethod(verifyingFoodCard);
+    setFoodCardNumber(cardNumber);
+    setVerifyingFoodCard(null);
+  };
+
+  const handleFoodCardBack = () => {
+    setVerifyingFoodCard(null);
+    setShowPaymentModal(true);
+  };
+
+  const handleSelectMobilePayment = (id: MobilePaymentId) => {
+    setShowPaymentModal(false);
+    setVerifyingMobilePayment(id);
+  };
+
+  const handleMobilePaymentVerified = (phone: string) => {
+    if (!verifyingMobilePayment) return;
+    setPaymentMethod(verifyingMobilePayment);
+    setMobilePaymentPhone(phone);
+    setVerifyingMobilePayment(null);
+  };
+
+  const handleMobilePaymentBack = () => {
+    setVerifyingMobilePayment(null);
+    setShowPaymentModal(true);
+  };
+
+  const handleSelectCashOnDelivery = (id: CashOnDeliveryId) => {
+    setPaymentMethod(id);
+    setShowPaymentModal(false);
+  };
+
+  const completeOrder = () => {
+    setShowOrderConfirmModal(false);
+    if (!restaurant) return;
     const charged =
-      paymentMethod === 'wallet' ? chargeWallet(totalAmount) : selectedCard ? chargeCard(selectedCard.id, totalAmount) : false;
+      paymentMethod === 'wallet'
+        ? chargeWallet(totalAmount)
+        : paymentMethod === 'pluxee' ||
+            paymentMethod === 'setcard' ||
+            paymentMethod === 'multinet' ||
+            paymentMethod === 'vodafone' ||
+            paymentMethod === 'turkcell' ||
+            paymentMethod === 'cash' ||
+            paymentMethod === 'creditCard'
+          ? true
+          : selectedCard
+            ? chargeCard(selectedCard.id, totalAmount)
+            : false;
     if (!charged) {
       setPaymentError(
         paymentMethod === 'wallet'
@@ -231,6 +386,26 @@ const CheckoutPage = () => {
     });
     clearCart();
     navigate('/sana-gelsin');
+  };
+
+  const handlePlaceOrder = () => {
+    if (!canPlaceOrder || !restaurant) return;
+    if (paymentMethod === 'pluxee') {
+      setShowPluxeeVerifyModal(true);
+      return;
+    }
+    setShowOrderConfirmModal(true);
+  };
+
+  const handlePluxeeVerified = () => {
+    setShowPluxeeVerifyModal(false);
+    setShowOrderConfirmModal(true);
+  };
+
+  const handleEditOrder = () => {
+    setShowOrderConfirmModal(false);
+    if (!restaurant || cartItems.length === 0) return;
+    navigate(`/restaurant/${restaurant.id}?product=${encodeURIComponent(cartItems[0].productName)}`);
   };
 
   return (
@@ -355,6 +530,28 @@ const CheckoutPage = () => {
                     }}
                   />
                 </span>
+              ) : paymentMethod === 'pluxee' ? (
+                <span className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center shrink-0 text-white text-xs font-semibold">
+                  P
+                </span>
+              ) : selectedFoodCardConfig ? (
+                <span
+                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                  style={{ backgroundColor: selectedFoodCardConfig.logoColor }}
+                >
+                  {selectedFoodCardConfig.initial}
+                </span>
+              ) : selectedMobilePaymentConfig ? (
+                <span
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                  style={{ backgroundColor: selectedMobilePaymentConfig.color }}
+                >
+                  {selectedMobilePaymentConfig.initial}
+                </span>
+              ) : selectedCashOnDeliveryConfig ? (
+                <span className="w-8 h-8 rounded-full border border-[#E91D34] flex items-center justify-center shrink-0 text-[#E91D34]">
+                  <selectedCashOnDeliveryConfig.icon className="w-3.5 h-3.5" />
+                </span>
               ) : (
                 <FaCreditCard className="w-4 h-4 text-gray-700 shrink-0" />
               )}
@@ -364,6 +561,20 @@ const CheckoutPage = () => {
                     <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
                     <p className="text-xs text-gray-400">Kalan bakiye: {formatPrice(walletBalance)}</p>
                   </>
+                ) : paymentMethod === 'pluxee' ? (
+                  <span className="text-sm text-gray-800">Pluxee (Sodexo) Online</span>
+                ) : selectedFoodCardConfig ? (
+                  <>
+                    <span className="text-sm text-gray-800">{selectedFoodCardConfig.displayName}</span>
+                    <p className="text-xs text-gray-400">{maskFoodCardNumber(foodCardNumber)}</p>
+                  </>
+                ) : selectedMobilePaymentConfig ? (
+                  <>
+                    <span className="text-sm text-gray-800">{selectedMobilePaymentConfig.displayName}</span>
+                    <p className="text-xs text-gray-400">{maskPhoneNumber(mobilePaymentPhone)}</p>
+                  </>
+                ) : selectedCashOnDeliveryConfig ? (
+                  <span className="text-sm text-gray-800">{selectedCashOnDeliveryConfig.displayName}</span>
                 ) : (
                   <>
                     <span className="text-sm text-gray-800">Kredi / Banka Kartı Online</span>
@@ -384,7 +595,14 @@ const CheckoutPage = () => {
               onClick={() => setShowPaymentModal(true)}
               className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
-              {paymentMethod === 'wallet' || selectedCard ? 'Değiştir' : 'Ekle'}
+              {paymentMethod === 'wallet' ||
+              paymentMethod === 'pluxee' ||
+              selectedFoodCardConfig ||
+              selectedMobilePaymentConfig ||
+              selectedCashOnDeliveryConfig ||
+              selectedCard
+                ? 'Değiştir'
+                : 'Ekle'}
             </button>
           </div>
           {!hasSufficientBalance && (
@@ -406,6 +624,54 @@ const CheckoutPage = () => {
             onClose={() => setShowPaymentModal(false)}
             onSelectWallet={handleSelectWallet}
             onSelectCard={handleSelectCard}
+            onSelectPluxee={handleSelectPluxee}
+            onSelectFoodCard={handleSelectFoodCard}
+            onSelectMobilePayment={handleSelectMobilePayment}
+            onSelectCashOnDelivery={handleSelectCashOnDelivery}
+          />
+        )}
+
+        {showPluxeeVerifyModal && (
+          <PluxeeVerifyModal
+            phone={userPhone}
+            expectedCode={expectedPluxeeCode}
+            onClose={() => setShowPluxeeVerifyModal(false)}
+            onVerified={handlePluxeeVerified}
+          />
+        )}
+
+        {verifyingFoodCard && (
+          <FoodCardVerifyModal
+            brandName={FOOD_CARD_CONFIG[verifyingFoodCard].brandName}
+            logoLabel={FOOD_CARD_CONFIG[verifyingFoodCard].logoLabel}
+            logoColor={FOOD_CARD_CONFIG[verifyingFoodCard].logoColor}
+            onBack={handleFoodCardBack}
+            onClose={() => setVerifyingFoodCard(null)}
+            onVerified={handleFoodCardVerified}
+          />
+        )}
+
+        {verifyingMobilePayment && (
+          <MobilePaymentVerifyModal
+            title={MOBILE_PAYMENT_CONFIG[verifyingMobilePayment].title}
+            heading={MOBILE_PAYMENT_CONFIG[verifyingMobilePayment].heading}
+            description={MOBILE_PAYMENT_CONFIG[verifyingMobilePayment].description}
+            phone={userPhone}
+            onBack={handleMobilePaymentBack}
+            onClose={() => setVerifyingMobilePayment(null)}
+            onVerified={handleMobilePaymentVerified}
+          />
+        )}
+
+        {showOrderConfirmModal && restaurant && (
+          <OrderConfirmationModal
+            address={selectedAddress}
+            restaurant={restaurant}
+            branchName={branchName}
+            cartItems={cartItems}
+            totalAmount={totalAmount}
+            onComplete={completeOrder}
+            onEdit={handleEditOrder}
           />
         )}
 

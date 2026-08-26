@@ -60,6 +60,12 @@ const defaultProfilesByUser: Record<string, UserProfile> = {
   },
 };
 
+// Demo amacıyla kullanıcı bazlı sabit Pluxee mobil ödeme kodu (gerçek bir SMS/OTP akışı yok).
+export const PLUXEE_VERIFICATION_CODE_BY_USER: Record<string, string> = {
+  Enes: '123456',
+  Burak: '654321',
+};
+
 export type CouponDiscount =
   | { kind: 'percentage'; percent: number; targetProductName?: string }
   | { kind: 'fixedAmount'; amount: number; minSpend?: number; targetProductName?: string }
