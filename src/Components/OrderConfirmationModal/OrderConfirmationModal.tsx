@@ -66,7 +66,7 @@ const OrderConfirmationModal = ({
             <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex items-start gap-3">
               <FaLocationDot className="w-4 h-4 text-gray-700 shrink-0 mt-0.5" />
               <div className="min-w-0">
-                <p className="text-gray-800 text-sm">Adresim</p>
+                <p className="text-gray-800 text-sm">{address.label}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{address.fullAddress}</p>
               </div>
             </div>

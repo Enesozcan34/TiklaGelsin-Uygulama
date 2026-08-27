@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { IconType } from 'react-icons';
 import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse, FaMoneyBillWave } from 'react-icons/fa6';
-import useStore, { ALL_COUPONS, PLUXEE_VERIFICATION_CODE_BY_USER } from '../store/useStore';
+import useStore, { ALL_COUPONS, PLUXEE_VERIFICATION_CODE_BY_USER, type OrderDiscountLine } from '../store/useStore';
 import { getRestaurantById } from '../data/restaurants';
 import PaymentMethodModal from '../Components/PaymentMethodModal/PaymentMethodModal';
 import PluxeeVerifyModal from '../Components/PluxeeVerifyModal/PluxeeVerifyModal';
@@ -274,6 +274,21 @@ const CheckoutPage = () => {
     ? CAMPAIGNS.find((campaign) => campaign.restaurantId === restaurant.id && campaign.discount && !getCampaignUnavailabilityReason(campaign, cartItems))
     : undefined;
   const campaignDiscountAmount = autoCampaign ? calculateCampaignDiscount(autoCampaign, cartItems) : 0;
+  const orderDiscountLines: OrderDiscountLine[] = [
+    ...(autoCampaign && campaignDiscountAmount > 0 ? [{ label: autoCampaign.title, amount: campaignDiscountAmount }] : []),
+    ...(isSelectedCouponApplicable && selectedCoupon && discountAmount > 0
+      ? [{ label: selectedCoupon.title, amount: discountAmount }]
+      : []),
+  ];
+  const paymentMethodLabel =
+    paymentMethod === 'wallet'
+      ? 'Tıklapay Cüzdanım'
+      : paymentMethod === 'pluxee'
+        ? 'Pluxee (Sodexo) Online'
+        : (selectedFoodCardConfig?.displayName ??
+          selectedMobilePaymentConfig?.displayName ??
+          selectedCashOnDeliveryConfig?.displayName ??
+          'Kredi / Banka Kartı Online');
   const cartTotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const discountedCartTotal = Math.max(0, cartTotal - discountAmount - campaignDiscountAmount);
   const totalAmount = discountedCartTotal + (restaurant?.serviceFee ?? 0);
@@ -383,6 +398,10 @@ const CheckoutPage = () => {
       restaurantTitle: restaurant.title,
       items: cartItems,
       totalAmount,
+      address: selectedAddress,
+      paymentMethodLabel,
+      cartSubtotal: cartTotal,
+      discounts: orderDiscountLines,
     });
     clearCart();
     navigate('/sana-gelsin');

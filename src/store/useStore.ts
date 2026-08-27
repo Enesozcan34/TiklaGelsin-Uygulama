@@ -243,6 +243,11 @@ export interface SavedCard {
   balance: number;
 }
 
+export interface OrderDiscountLine {
+  label: string;
+  amount: number;
+}
+
 export interface Order {
   id: string;
   restaurantId: string;
@@ -250,6 +255,10 @@ export interface Order {
   items: CartItem[];
   totalAmount: number;
   createdAt: string;
+  address?: Address;
+  paymentMethodLabel?: string;
+  cartSubtotal?: number;
+  discounts?: OrderDiscountLine[];
 }
 
 interface AuthState {
