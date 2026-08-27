@@ -13,6 +13,7 @@ import CouponPickerModal from '../Components/Campaigns/CouponPickerModal';
 import { calculateCouponDiscount, getCouponUnavailabilityReason } from '../Components/Campaigns/couponUtils';
 import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
 import { calculateCampaignDiscount, getCampaignUnavailabilityReason } from '../Components/Campaigns/campaignUtils';
+import { buildOrderDiscountLines, getPaymentMethodLabel, type PaymentMethod } from './checkoutUtils';
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
@@ -22,7 +23,6 @@ const maskPhoneNumber = (digits: string): string => `${digits.slice(0, 3)} *** *
 type FoodCardId = 'setcard' | 'multinet';
 type MobilePaymentId = 'vodafone' | 'turkcell';
 type CashOnDeliveryId = 'cash' | 'creditCard';
-type PaymentMethod = 'wallet' | 'card' | 'pluxee' | FoodCardId | MobilePaymentId | CashOnDeliveryId;
 
 interface MobilePaymentConfig {
   title: string;
@@ -274,21 +274,19 @@ const CheckoutPage = () => {
     ? CAMPAIGNS.find((campaign) => campaign.restaurantId === restaurant.id && campaign.discount && !getCampaignUnavailabilityReason(campaign, cartItems))
     : undefined;
   const campaignDiscountAmount = autoCampaign ? calculateCampaignDiscount(autoCampaign, cartItems) : 0;
-  const orderDiscountLines: OrderDiscountLine[] = [
-    ...(autoCampaign && campaignDiscountAmount > 0 ? [{ label: autoCampaign.title, amount: campaignDiscountAmount }] : []),
-    ...(isSelectedCouponApplicable && selectedCoupon && discountAmount > 0
-      ? [{ label: selectedCoupon.title, amount: discountAmount }]
-      : []),
-  ];
-  const paymentMethodLabel =
-    paymentMethod === 'wallet'
-      ? 'Tıklapay Cüzdanım'
-      : paymentMethod === 'pluxee'
-        ? 'Pluxee (Sodexo) Online'
-        : (selectedFoodCardConfig?.displayName ??
-          selectedMobilePaymentConfig?.displayName ??
-          selectedCashOnDeliveryConfig?.displayName ??
-          'Kredi / Banka Kartı Online');
+  const orderDiscountLines: OrderDiscountLine[] = buildOrderDiscountLines({
+    autoCampaign,
+    campaignDiscountAmount,
+    isSelectedCouponApplicable,
+    selectedCoupon,
+    discountAmount,
+  });
+  const paymentMethodLabel = getPaymentMethodLabel({
+    paymentMethod,
+    selectedFoodCardConfig,
+    selectedMobilePaymentConfig,
+    selectedCashOnDeliveryConfig,
+  });
   const cartTotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const discountedCartTotal = Math.max(0, cartTotal - discountAmount - campaignDiscountAmount);
   const totalAmount = discountedCartTotal + (restaurant?.serviceFee ?? 0);
