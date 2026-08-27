@@ -16,6 +16,7 @@ import {
   FaLocationDot,
   FaRegCircleUser,
   FaRegCreditCard,
+  FaRegHeart,
   FaRightFromBracket,
   FaStar,
   FaTicket,
@@ -431,9 +432,16 @@ const AddressesPanel = () => {
 };
 
 const OrdersPanel = () => {
+  const navigate = useNavigate();
   const { userName, ordersByUser } = useStore();
-  const orders = userName ? ordersByUser[userName] ?? [] : [];
+  const orders = (userName ? ordersByUser[userName] ?? [] : []).slice(0, 5);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const handleRepeatOrder = (order: (typeof orders)[number]) => {
+    const firstItem = order.items[0];
+    if (!firstItem) return;
+    navigate(`/restaurant/${order.restaurantId}?product=${encodeURIComponent(firstItem.productName)}`);
+  };
 
   return (
     <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
@@ -466,7 +474,7 @@ const OrdersPanel = () => {
                       <p className="text-xs text-gray-400">
                         {formatPrice(order.totalAmount)} · {formatOrderDate(order.createdAt)}
                       </p>
-                      <span className="inline-flex items-center gap-1 text-xs text-green-600 font-semibold mt-1">
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold mt-1" style={{ color: '#327D17' }}>
                         <FaCircleCheck className="w-3 h-3" /> Teslim Edildi
                       </span>
                     </div>
@@ -477,15 +485,128 @@ const OrdersPanel = () => {
                 </button>
 
                 {isExpanded && (
-                  <div className="border-t border-gray-100 px-4 py-3 flex flex-col gap-2 bg-gray-50/60">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between gap-3 text-sm">
-                        <span className="text-gray-700">
-                          {item.quantity}x {item.productName}
-                        </span>
-                        <span className="text-gray-500">{formatPrice(item.unitPrice * item.quantity)}</span>
+                  <div className="border-t border-gray-100 px-4 py-4 flex flex-col gap-3 bg-white">
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                      <h3 className="text-gray-800 text-sm font-semibold">Restoran Bilgisi</h3>
+                      <div className="border border-gray-100 rounded-xl px-3.5 py-3 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          {restaurant?.image ? (
+                            <img
+                              src={restaurant.image}
+                              alt={order.restaurantTitle}
+                              className="w-10 h-10 rounded-lg object-cover shrink-0"
+                            />
+                          ) : (
+                            <span className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                              <FaBagShopping className="w-4 h-4 text-gray-400" />
+                            </span>
+                          )}
+                          <div className="min-w-0">
+                            <p className="text-sm text-gray-800 truncate">{order.restaurantTitle}</p>
+                            {restaurant && (
+                              <p className="text-xs text-gray-400">
+                                {restaurant.deliveryTime.replace(/dk$/, 'dakika')} · min {formatPrice(restaurant.minimumOrderAmount)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Favorilere ekle"
+                          className="text-gray-400 hover:text-[#E91D34] transition-colors shrink-0 p-1"
+                        >
+                          <FaRegHeart className="w-4 h-4" />
+                        </button>
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                      <h3 className="text-gray-800 text-sm font-semibold">Sipariş Detayı</h3>
+                      <div className="flex flex-col gap-2.5">
+                        {order.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="border border-gray-100 rounded-xl px-3.5 py-3 flex items-start justify-between gap-3"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm text-gray-800">{item.productName}</p>
+                              {item.options.length > 0 && (
+                                <p className="text-xs text-gray-400 mt-1">
+                                  {item.options.flatMap((group) => group.choices).join(', ')}
+                                </p>
+                              )}
+                              <p className="text-[#E91D34] text-sm mt-2">{formatPrice(item.unitPrice * item.quantity)}</p>
+                            </div>
+                            <span className="w-7 h-7 flex items-center justify-center rounded-full border border-[#E91D34] text-[#E91D34] text-xs shrink-0">
+                              {item.quantity}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-gray-800 text-sm font-semibold">Teslimat Adresi</h3>
+                        <span
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-2.5 py-1 shrink-0"
+                          style={{ backgroundColor: '#BAECA9', color: '#327D17' }}
+                        >
+                          <FaCircleCheck className="w-3 h-3" /> Teslim Edildi
+                        </span>
+                      </div>
+                      <div className="border border-gray-100 rounded-xl px-3.5 py-3 flex items-start gap-3">
+                        {order.address?.icon === 'work' ? (
+                          <FaBriefcase className="w-4 h-4 text-gray-700 shrink-0 mt-0.5" />
+                        ) : (
+                          <FaHouse className="w-4 h-4 text-gray-700 shrink-0 mt-0.5" />
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-sm text-gray-800">{order.address?.label ?? 'Adresim'}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">{order.address?.fullAddress ?? '-'}</p>
+                        </div>
+                      </div>
+                      <div className="border border-gray-100 rounded-xl px-3.5 py-3">
+                        <p className="text-xs text-gray-400">Sipariş Tarih ve Saati</p>
+                        <p className="text-sm text-gray-800 mt-0.5">{formatOrderDate(order.createdAt)}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                      <h3 className="text-gray-800 text-sm font-semibold">Ödeme Yöntemi</h3>
+                      <div className="border border-gray-100 rounded-xl px-3.5 py-3 flex items-center gap-3">
+                        <FaCreditCard className="w-4 h-4 text-gray-700 shrink-0" />
+                        <p className="text-sm text-gray-800">{order.paymentMethodLabel ?? 'Kredi / Banka Kartı Online'}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                      <h3 className="text-gray-800 text-sm font-semibold">Sipariş Özeti</h3>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-500">Sepet Tutarı</span>
+                          <span className="text-gray-700">{formatPrice(order.cartSubtotal ?? order.totalAmount)}</span>
+                        </div>
+                        {(order.discounts ?? []).map((discount, index) => (
+                          <div key={index} className="flex items-center justify-between gap-3 text-sm" style={{ color: '#327D17' }}>
+                            <span className="truncate">{discount.label}</span>
+                            <span className="shrink-0">-{formatPrice(discount.amount)}</span>
+                          </div>
+                        ))}
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-gray-800 text-sm">Toplam Tutar</span>
+                          <span className="text-[#E91D34] text-lg">{formatPrice(order.totalAmount)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRepeatOrder(order)}
+                      className="border border-[#E91D34] text-[#E91D34] text-sm font-semibold rounded-full py-3 hover:bg-red-50 transition-colors"
+                    >
+                      Siparişi Tekrarla
+                    </button>
                   </div>
                 )}
               </div>
