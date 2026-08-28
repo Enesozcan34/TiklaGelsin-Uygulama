@@ -308,10 +308,35 @@ interface OrderState {
   placeOrder: (order: Omit<Order, 'id' | 'createdAt'>) => Order | null;
 }
 
+export interface WalletTransaction {
+  id: string;
+  label: string;
+  date: string;
+  amount: number;
+  type: 'topup' | 'expense';
+}
+
 interface WalletState {
   walletBalanceByUser: Record<string, number>;
+  walletTransactionsByUser: Record<string, WalletTransaction[]>;
   topUpWallet: (amount: number) => { success: boolean; message: string };
-  chargeWallet: (amount: number) => boolean;
+  chargeWallet: (amount: number, label?: string) => boolean;
+}
+
+export interface TiklaParaTransaction {
+  id: string;
+  label: string;
+  date: string;
+  amount: number;
+  type: 'earn' | 'spend' | 'expired';
+  expiresAt?: string;
+}
+
+interface TiklaParaState {
+  tiklaParaBalanceByUser: Record<string, number>;
+  tiklaParaTransactionsByUser: Record<string, TiklaParaTransaction[]>;
+  buyTiklaPara: (tlAmount: number, tpAmount: number) => { success: boolean; message: string };
+  chargeTiklaPara: (amount: number) => boolean;
 }
 
 // Kişi bazlı tutulan kuponlar için store state'i
@@ -328,7 +353,9 @@ interface CouponState {
   setPendingCouponCode: (code: string | null) => void;
 }
 
-const useStore = create<AuthState & AddressState & ProfileState & CartState & PaymentState & OrderState & WalletState & CouponState>()(
+const useStore = create<
+  AuthState & AddressState & ProfileState & CartState & PaymentState & OrderState & WalletState & TiklaParaState & CouponState
+>()(
   persist(
     (set, get) => ({
       isAuthenticated: false,
@@ -532,6 +559,7 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
       },
 
       walletBalanceByUser: {},
+      walletTransactionsByUser: {},
 
       topUpWallet: (amount) => {
         const state = get();
@@ -547,17 +575,108 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
         const charged = get().chargeCard(card.id, amount);
         if (!charged) return { success: false, message: 'Yükleme başarısız oldu.' };
         const currentBalance = get().walletBalanceByUser[userName] ?? 0;
-        set({ walletBalanceByUser: { ...get().walletBalanceByUser, [userName]: currentBalance + amount } });
+        const newTransaction: WalletTransaction = {
+          id: crypto.randomUUID(),
+          label: 'Kredi Kartı',
+          date: new Date().toISOString(),
+          amount,
+          type: 'topup',
+        };
+        set({
+          walletBalanceByUser: { ...get().walletBalanceByUser, [userName]: currentBalance + amount },
+          walletTransactionsByUser: {
+            ...get().walletTransactionsByUser,
+            [userName]: [newTransaction, ...(get().walletTransactionsByUser[userName] ?? [])],
+          },
+        });
         return { success: true, message: 'Yükleme başarılı.' };
       },
 
-      chargeWallet: (amount) => {
+      chargeWallet: (amount, label) => {
         const state = get();
         if (!state.userName) return false;
         const userName = state.userName;
         const currentBalance = state.walletBalanceByUser[userName] ?? 0;
         if (currentBalance < amount) return false;
-        set({ walletBalanceByUser: { ...state.walletBalanceByUser, [userName]: currentBalance - amount } });
+        const newTransaction: WalletTransaction = {
+          id: crypto.randomUUID(),
+          label: label ?? 'Harcama',
+          date: new Date().toISOString(),
+          amount,
+          type: 'expense',
+        };
+        set({
+          walletBalanceByUser: { ...state.walletBalanceByUser, [userName]: currentBalance - amount },
+          walletTransactionsByUser: {
+            ...state.walletTransactionsByUser,
+            [userName]: [newTransaction, ...(state.walletTransactionsByUser[userName] ?? [])],
+          },
+        });
+        return true;
+      },
+
+      tiklaParaBalanceByUser: {},
+      tiklaParaTransactionsByUser: {},
+
+      buyTiklaPara: (tlAmount, tpAmount) => {
+        const state = get();
+        if (!state.userName) return { success: false, message: 'Satın almak için giriş yapmalısın.' };
+        const userName = state.userName;
+        const cardId = state.selectedCardIdByUser[userName];
+        const card = cardId ? (state.savedCardsByUser[userName] ?? []).find((savedCard) => savedCard.id === cardId) : undefined;
+        if (!card) return { success: false, message: 'Satın almak için önce bir kart seçmelisin.' };
+        if (card.balance < tlAmount) {
+          const remaining = card.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+          return { success: false, message: `Kartında yeterli bakiye yok. Kalan kart limiti: ${remaining} TL.` };
+        }
+        const charged = get().chargeCard(card.id, tlAmount);
+        if (!charged) return { success: false, message: 'Satın alma başarısız oldu.' };
+        const currentTp = get().tiklaParaBalanceByUser[userName] ?? 0;
+        const profile = state.profilesByUser[userName];
+        const label = profile ? `${profile.firstName} ${profile.lastName}`.trim().toUpperCase() : userName.toUpperCase();
+        const purchaseDate = new Date();
+        const expiryDate = new Date(purchaseDate);
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+        const newTransaction: TiklaParaTransaction = {
+          id: crypto.randomUUID(),
+          label,
+          date: purchaseDate.toISOString(),
+          amount: tpAmount,
+          type: 'earn',
+          expiresAt: expiryDate.toISOString(),
+        };
+        set({
+          tiklaParaBalanceByUser: { ...get().tiklaParaBalanceByUser, [userName]: currentTp + tpAmount },
+          tiklaParaTransactionsByUser: {
+            ...get().tiklaParaTransactionsByUser,
+            [userName]: [newTransaction, ...(get().tiklaParaTransactionsByUser[userName] ?? [])],
+          },
+        });
+        return { success: true, message: 'Tıkla Para satın alma başarılı.' };
+      },
+
+      chargeTiklaPara: (amount) => {
+        const state = get();
+        if (!state.userName) return false;
+        const userName = state.userName;
+        const currentTp = state.tiklaParaBalanceByUser[userName] ?? 0;
+        if (currentTp < amount) return false;
+        const profile = state.profilesByUser[userName];
+        const label = profile ? `${profile.firstName} ${profile.lastName}`.trim().toUpperCase() : userName.toUpperCase();
+        const newTransaction: TiklaParaTransaction = {
+          id: crypto.randomUUID(),
+          label,
+          date: new Date().toISOString(),
+          amount,
+          type: 'spend',
+        };
+        set({
+          tiklaParaBalanceByUser: { ...state.tiklaParaBalanceByUser, [userName]: currentTp - amount },
+          tiklaParaTransactionsByUser: {
+            ...state.tiklaParaTransactionsByUser,
+            [userName]: [newTransaction, ...(state.tiklaParaTransactionsByUser[userName] ?? [])],
+          },
+        });
         return true;
       },
 
@@ -633,6 +752,9 @@ const useStore = create<AuthState & AddressState & ProfileState & CartState & Pa
         selectedAddressId: state.selectedAddressId,
         profilesByUser: state.profilesByUser,
         walletBalanceByUser: state.walletBalanceByUser,
+        walletTransactionsByUser: state.walletTransactionsByUser,
+        tiklaParaBalanceByUser: state.tiklaParaBalanceByUser,
+        tiklaParaTransactionsByUser: state.tiklaParaTransactionsByUser,
         couponsByUser: state.couponsByUser,
         couponUsesRemainingByUser: state.couponUsesRemainingByUser,
       }),

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { IconType } from 'react-icons';
-import { FaChevronDown, FaCreditCard, FaMoneyBillWave, FaPlus, FaXmark } from 'react-icons/fa6';
+import { FaChevronDown, FaCreditCard, FaMoneyBillWave, FaPlus, FaStar, FaXmark } from 'react-icons/fa6';
 import useStore from '../../store/useStore';
 import walletLogo from '../../assets/Wallet2.png';
 
 const formatBalance = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+const formatTp = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TP`;
 
 type FoodCardId = 'pluxee' | 'setcard' | 'multinet';
 
@@ -85,9 +86,10 @@ const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () =>
 
 interface PaymentMethodModalProps {
   totalAmount: number;
-  paymentMethod: 'wallet' | 'card' | 'pluxee' | 'setcard' | 'multinet' | MobilePaymentId | CashOnDeliveryId;
+  paymentMethod: 'wallet' | 'tiklapara' | 'card' | 'pluxee' | 'setcard' | 'multinet' | MobilePaymentId | CashOnDeliveryId;
   onClose: () => void;
   onSelectWallet: () => void;
+  onSelectTiklaPara: () => void;
   onSelectCard: (cardId: string) => void;
   onSelectPluxee: () => void;
   onSelectFoodCard: (cardId: 'setcard' | 'multinet') => void;
@@ -100,6 +102,7 @@ const PaymentMethodModal = ({
   paymentMethod,
   onClose,
   onSelectWallet,
+  onSelectTiklaPara,
   onSelectCard,
   onSelectPluxee,
   onSelectFoodCard,
@@ -107,8 +110,9 @@ const PaymentMethodModal = ({
   onSelectCashOnDelivery,
 }: PaymentMethodModalProps) => {
   const navigate = useNavigate();
-  const { userName, walletBalanceByUser, savedCardsByUser, selectedCardIdByUser } = useStore();
+  const { userName, walletBalanceByUser, tiklaParaBalanceByUser, savedCardsByUser, selectedCardIdByUser } = useStore();
   const walletBalance = userName ? walletBalanceByUser[userName] ?? 0 : 0;
+  const tiklaParaBalance = userName ? tiklaParaBalanceByUser[userName] ?? 0 : 0;
   const savedCards = userName ? savedCardsByUser[userName] ?? [] : [];
   const selectedCardId = userName ? selectedCardIdByUser[userName] : undefined;
   const [isCardSectionOpen, setIsCardSectionOpen] = useState(paymentMethod === 'card');
@@ -143,6 +147,27 @@ const PaymentMethodModal = ({
         </div>
 
         <div className="styled-scrollbar overflow-y-auto flex-1 px-5 py-4 flex flex-col gap-4">
+          <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                <FaStar className="text-[#E91D34] w-4 h-4" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm text-gray-800">Tıkla Param</p>
+                <p className="text-sm font-semibold text-gray-800">{formatTp(tiklaParaBalance)}</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs text-gray-400">Bu sipariş için Tıkla Para bakiyemi kullan.</p>
+              <ToggleSwitch checked={paymentMethod === 'tiklapara'} onToggle={onSelectTiklaPara} />
+            </div>
+            {paymentMethod === 'tiklapara' && tiklaParaBalance < totalAmount && (
+              <p className="text-xs text-[#E91D34]">
+                Tıkla Para bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatTp(tiklaParaBalance)}.
+              </p>
+            )}
+          </div>
+
           <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">

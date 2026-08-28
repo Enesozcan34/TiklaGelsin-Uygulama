@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { IconType } from 'react-icons';
-import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse, FaMoneyBillWave } from 'react-icons/fa6';
+import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse, FaMoneyBillWave, FaStar } from 'react-icons/fa6';
 import useStore, { ALL_COUPONS, PLUXEE_VERIFICATION_CODE_BY_USER, type OrderDiscountLine } from '../store/useStore';
 import { getRestaurantById } from '../data/restaurants';
 import PaymentMethodModal from '../Components/PaymentMethodModal/PaymentMethodModal';
@@ -17,6 +17,7 @@ import { buildOrderDiscountLines, getPaymentMethodLabel, type PaymentMethod } fr
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+const formatTp = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TP`;
 const maskFoodCardNumber = (digits: string): string => `${digits.slice(0, 4)}${'*'.repeat(digits.length - 6)}${digits.slice(-2)}`;
 const maskPhoneNumber = (digits: string): string => `${digits.slice(0, 3)} *** ** ${digits.slice(-2)}`;
 
@@ -223,11 +224,13 @@ const CheckoutPage = () => {
     savedCardsByUser,
     selectedCardIdByUser,
     walletBalanceByUser,
+    tiklaParaBalanceByUser,
     profilesByUser,
     placeOrder,
     clearCart,
     chargeCard,
     chargeWallet,
+    chargeTiklaPara,
     selectSavedCard,
     getCouponUsesRemaining,
     useCouponUnit,
@@ -247,6 +250,7 @@ const CheckoutPage = () => {
     ? savedCards.find((card) => card.id === selectedCardIdByUser[userName])
     : undefined;
   const walletBalance = userName ? walletBalanceByUser[userName] ?? 0 : 0;
+  const tiklaParaBalance = userName ? tiklaParaBalanceByUser[userName] ?? 0 : 0;
   const userPhone = userName ? profilesByUser[userName]?.phone ?? '' : '';
   const expectedPluxeeCode = userName ? PLUXEE_VERIFICATION_CODE_BY_USER[userName] ?? '' : '';
   const selectedFoodCardConfig =
@@ -297,19 +301,25 @@ const CheckoutPage = () => {
   const hasSufficientBalance =
     paymentMethod === 'wallet'
       ? walletBalance >= totalAmount
-      : paymentMethod === 'pluxee' ||
-          paymentMethod === 'setcard' ||
-          paymentMethod === 'multinet' ||
-          paymentMethod === 'vodafone' ||
-          paymentMethod === 'turkcell' ||
-          paymentMethod === 'cash' ||
-          paymentMethod === 'creditCard'
-        ? true
-        : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
+      : paymentMethod === 'tiklapara'
+        ? tiklaParaBalance >= totalAmount
+        : paymentMethod === 'pluxee' ||
+            paymentMethod === 'setcard' ||
+            paymentMethod === 'multinet' ||
+            paymentMethod === 'vodafone' ||
+            paymentMethod === 'turkcell' ||
+            paymentMethod === 'cash' ||
+            paymentMethod === 'creditCard'
+          ? true
+          : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
   const canPlaceOrder = cartItems.length > 0 && hasSufficientBalance && hasValidDeliveryTime;
 
   const handleSelectWallet = () => {
     setPaymentMethod((prev) => (prev === 'wallet' ? 'card' : 'wallet'));
+  };
+
+  const handleSelectTiklaPara = () => {
+    setPaymentMethod((prev) => (prev === 'tiklapara' ? 'card' : 'tiklapara'));
   };
 
   const handleSelectCard = (cardId: string) => {
@@ -367,23 +377,27 @@ const CheckoutPage = () => {
     if (!restaurant) return;
     const charged =
       paymentMethod === 'wallet'
-        ? chargeWallet(totalAmount)
-        : paymentMethod === 'pluxee' ||
-            paymentMethod === 'setcard' ||
-            paymentMethod === 'multinet' ||
-            paymentMethod === 'vodafone' ||
-            paymentMethod === 'turkcell' ||
-            paymentMethod === 'cash' ||
-            paymentMethod === 'creditCard'
-          ? true
-          : selectedCard
-            ? chargeCard(selectedCard.id, totalAmount)
-            : false;
+        ? chargeWallet(totalAmount, restaurant.title)
+        : paymentMethod === 'tiklapara'
+          ? chargeTiklaPara(totalAmount)
+          : paymentMethod === 'pluxee' ||
+              paymentMethod === 'setcard' ||
+              paymentMethod === 'multinet' ||
+              paymentMethod === 'vodafone' ||
+              paymentMethod === 'turkcell' ||
+              paymentMethod === 'cash' ||
+              paymentMethod === 'creditCard'
+            ? true
+            : selectedCard
+              ? chargeCard(selectedCard.id, totalAmount)
+              : false;
     if (!charged) {
       setPaymentError(
         paymentMethod === 'wallet'
           ? 'Cüzdan bakiyen yeterli değil. Ödeme gerçekleştirilemedi.'
-          : 'Kartında yeterli bakiye yok. Ödeme gerçekleştirilemedi.',
+          : paymentMethod === 'tiklapara'
+            ? 'Tıkla Para bakiyen yeterli değil. Ödeme gerçekleştirilemedi.'
+            : 'Kartında yeterli bakiye yok. Ödeme gerçekleştirilemedi.',
       );
       return;
     }
@@ -547,6 +561,10 @@ const CheckoutPage = () => {
                     }}
                   />
                 </span>
+              ) : paymentMethod === 'tiklapara' ? (
+                <span className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                  <FaStar className="text-[#E91D34] w-4 h-4" />
+                </span>
               ) : paymentMethod === 'pluxee' ? (
                 <span className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center shrink-0 text-white text-xs font-semibold">
                   P
@@ -577,6 +595,11 @@ const CheckoutPage = () => {
                   <>
                     <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
                     <p className="text-xs text-gray-400">Kalan bakiye: {formatPrice(walletBalance)}</p>
+                  </>
+                ) : paymentMethod === 'tiklapara' ? (
+                  <>
+                    <span className="text-sm text-gray-800">Tıkla Param</span>
+                    <p className="text-xs text-gray-400">Kalan bakiye: {formatTp(tiklaParaBalance)}</p>
                   </>
                 ) : paymentMethod === 'pluxee' ? (
                   <span className="text-sm text-gray-800">Pluxee (Sodexo) Online</span>
@@ -613,6 +636,7 @@ const CheckoutPage = () => {
               className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
               {paymentMethod === 'wallet' ||
+              paymentMethod === 'tiklapara' ||
               paymentMethod === 'pluxee' ||
               selectedFoodCardConfig ||
               selectedMobilePaymentConfig ||
@@ -626,9 +650,11 @@ const CheckoutPage = () => {
             <p className="text-xs text-[#E91D34]">
               {paymentMethod === 'wallet'
                 ? `Cüzdan bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatPrice(walletBalance)}.`
-                : selectedCard
-                  ? `Kartında yeterli bakiye yok. Sipariş tutarı ${formatPrice(totalAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
-                  : 'Ödeme yöntemi seçmelisin.'}
+                : paymentMethod === 'tiklapara'
+                  ? `Tıkla Para bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatTp(tiklaParaBalance)}.`
+                  : selectedCard
+                    ? `Kartında yeterli bakiye yok. Sipariş tutarı ${formatPrice(totalAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
+                    : 'Ödeme yöntemi seçmelisin.'}
             </p>
           )}
           {paymentError && <p className="text-xs text-[#E91D34]">{paymentError}</p>}
@@ -640,6 +666,7 @@ const CheckoutPage = () => {
             paymentMethod={paymentMethod}
             onClose={() => setShowPaymentModal(false)}
             onSelectWallet={handleSelectWallet}
+            onSelectTiklaPara={handleSelectTiklaPara}
             onSelectCard={handleSelectCard}
             onSelectPluxee={handleSelectPluxee}
             onSelectFoodCard={handleSelectFoodCard}

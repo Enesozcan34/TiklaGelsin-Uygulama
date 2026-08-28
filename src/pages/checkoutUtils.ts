@@ -3,6 +3,7 @@ import type { CampaignItem } from '../Components/Campaigns/campaignsData';
 
 export type PaymentMethod =
   | 'wallet'
+  | 'tiklapara'
   | 'card'
   | 'pluxee'
   | 'setcard'
@@ -44,7 +45,9 @@ export const getPaymentMethodLabel = ({
 }): string =>
   paymentMethod === 'wallet'
     ? 'Tıklapay Cüzdanım'
-    : paymentMethod === 'pluxee'
+    : paymentMethod === 'tiklapara'
+      ? 'Tıkla Param'
+      : paymentMethod === 'pluxee'
       ? 'Pluxee (Sodexo) Online'
       : (selectedFoodCardConfig?.displayName ??
         selectedMobilePaymentConfig?.displayName ??
