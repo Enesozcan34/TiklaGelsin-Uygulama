@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import type { IconType } from 'react-icons';
 import { FaChevronDown, FaCreditCard, FaMoneyBillWave, FaPlus, FaStar, FaXmark } from 'react-icons/fa6';
 import useStore from '../../store/useStore';
+import { PaymentMethod } from '../../pages/checkoutUtils';
 import walletLogo from '../../assets/Wallet2.png';
 
 const formatBalance = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
 const formatTp = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TP`;
 
-type FoodCardId = 'pluxee' | 'setcard' | 'multinet';
+type FoodCardId = PaymentMethod.Pluxee | PaymentMethod.SetCard | PaymentMethod.Multinet;
 
 interface FoodCardOption {
   id: FoodCardId;
@@ -19,12 +20,12 @@ interface FoodCardOption {
 }
 
 const FOOD_CARD_OPTIONS: FoodCardOption[] = [
-  { id: 'pluxee', name: 'Pluxee (Sodexo) Online', actionLabel: 'Öde', initial: 'P', color: '#7C3AED' },
-  { id: 'setcard', name: 'Setcard Online', actionLabel: 'Kart Ekle', initial: 'S', color: '#00A9A5' },
-  { id: 'multinet', name: 'Multinet Card Online', actionLabel: 'Kart Ekle', initial: 'M', color: '#22A559' },
+  { id: PaymentMethod.Pluxee, name: 'Pluxee (Sodexo) Online', actionLabel: 'Öde', initial: 'P', color: '#7C3AED' },
+  { id: PaymentMethod.SetCard, name: 'Setcard Online', actionLabel: 'Kart Ekle', initial: 'S', color: '#00A9A5' },
+  { id: PaymentMethod.Multinet, name: 'Multinet Card Online', actionLabel: 'Kart Ekle', initial: 'M', color: '#22A559' },
 ];
 
-type MobilePaymentId = 'vodafone' | 'turkcell';
+type MobilePaymentId = PaymentMethod.Vodafone | PaymentMethod.Turkcell;
 
 interface MobilePaymentOption {
   id: MobilePaymentId;
@@ -34,11 +35,11 @@ interface MobilePaymentOption {
 }
 
 const MOBILE_PAYMENT_OPTIONS: MobilePaymentOption[] = [
-  { id: 'vodafone', name: 'Vodafone Pay ile Faturana Yansıt', initial: 'V', color: '#E60000' },
-  { id: 'turkcell', name: 'Turkcell Faturana Yansıt', initial: 'T', color: '#FFC20E' },
+  { id: PaymentMethod.Vodafone, name: 'Vodafone Pay ile Faturana Yansıt', initial: 'V', color: '#E60000' },
+  { id: PaymentMethod.Turkcell, name: 'Turkcell Faturana Yansıt', initial: 'T', color: '#FFC20E' },
 ];
 
-type CashOnDeliveryId = 'cash' | 'creditCard';
+type CashOnDeliveryId = PaymentMethod.Cash | PaymentMethod.CreditCard;
 
 interface CashOnDeliveryOption {
   id: CashOnDeliveryId;
@@ -47,8 +48,8 @@ interface CashOnDeliveryOption {
 }
 
 const CASH_ON_DELIVERY_OPTIONS: CashOnDeliveryOption[] = [
-  { id: 'cash', name: 'Nakit', icon: FaMoneyBillWave },
-  { id: 'creditCard', name: 'Kredi Kartı', icon: FaCreditCard },
+  { id: PaymentMethod.Cash, name: 'Nakit', icon: FaMoneyBillWave },
+  { id: PaymentMethod.CreditCard, name: 'Kredi Kartı', icon: FaCreditCard },
 ];
 
 const AccordionHeader = ({
@@ -86,13 +87,13 @@ const ToggleSwitch = ({ checked, onToggle }: { checked: boolean; onToggle: () =>
 
 interface PaymentMethodModalProps {
   totalAmount: number;
-  paymentMethod: 'wallet' | 'tiklapara' | 'card' | 'pluxee' | 'setcard' | 'multinet' | MobilePaymentId | CashOnDeliveryId;
+  paymentMethod: PaymentMethod;
   onClose: () => void;
   onSelectWallet: () => void;
   onSelectTiklaPara: () => void;
   onSelectCard: (cardId: string) => void;
   onSelectPluxee: () => void;
-  onSelectFoodCard: (cardId: 'setcard' | 'multinet') => void;
+  onSelectFoodCard: (cardId: PaymentMethod.SetCard | PaymentMethod.Multinet) => void;
   onSelectMobilePayment: (id: MobilePaymentId) => void;
   onSelectCashOnDelivery: (id: CashOnDeliveryId) => void;
 }
@@ -115,7 +116,7 @@ const PaymentMethodModal = ({
   const tiklaParaBalance = userName ? tiklaParaBalanceByUser[userName] ?? 0 : 0;
   const savedCards = userName ? savedCardsByUser[userName] ?? [] : [];
   const selectedCardId = userName ? selectedCardIdByUser[userName] : undefined;
-  const [isCardSectionOpen, setIsCardSectionOpen] = useState(paymentMethod === 'card');
+  const [isCardSectionOpen, setIsCardSectionOpen] = useState(paymentMethod === PaymentMethod.Card);
   const [isFoodCardSectionOpen, setIsFoodCardSectionOpen] = useState(false);
   const [isMobilPaymentSectionOpen, setIsMobilPaymentSectionOpen] = useState(false);
   const [isCashOnDeliverySectionOpen, setIsCashOnDeliverySectionOpen] = useState(false);
@@ -159,9 +160,9 @@ const PaymentMethodModal = ({
             </div>
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs text-gray-400">Bu sipariş için Tıkla Para bakiyemi kullan.</p>
-              <ToggleSwitch checked={paymentMethod === 'tiklapara'} onToggle={onSelectTiklaPara} />
+              <ToggleSwitch checked={paymentMethod === PaymentMethod.TiklaPara} onToggle={onSelectTiklaPara} />
             </div>
-            {paymentMethod === 'tiklapara' && tiklaParaBalance < totalAmount && (
+            {paymentMethod === PaymentMethod.TiklaPara && tiklaParaBalance < totalAmount && (
               <p className="text-xs text-[#E91D34]">
                 Tıkla Para bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatTp(tiklaParaBalance)}.
               </p>
@@ -201,9 +202,9 @@ const PaymentMethodModal = ({
             </div>
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs text-gray-400">Bu sipariş için TıklaPay bakiyemi kullan.</p>
-              <ToggleSwitch checked={paymentMethod === 'wallet'} onToggle={onSelectWallet} />
+              <ToggleSwitch checked={paymentMethod === PaymentMethod.Wallet} onToggle={onSelectWallet} />
             </div>
-            {paymentMethod === 'wallet' && walletBalance < totalAmount && (
+            {paymentMethod === PaymentMethod.Wallet && walletBalance < totalAmount && (
               <p className="text-xs text-[#E91D34]">
                 Cüzdan bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatBalance(walletBalance)}.
               </p>
@@ -231,7 +232,7 @@ const PaymentMethodModal = ({
                   <p className="text-xs text-gray-400">Henüz kayıtlı kartın yok.</p>
                 ) : (
                   savedCards.map((card) => {
-                    const isSelected = paymentMethod === 'card' && card.id === selectedCardId;
+                    const isSelected = paymentMethod === PaymentMethod.Card && card.id === selectedCardId;
                     return (
                       <button
                         key={card.id}
@@ -276,7 +277,10 @@ const PaymentMethodModal = ({
               <div className="flex flex-col gap-2.5 px-5 pb-4">
                 {FOOD_CARD_OPTIONS.map((option) => {
                   const isSelected = paymentMethod === option.id;
-                  const handleClick = option.id === 'pluxee' ? onSelectPluxee : () => onSelectFoodCard(option.id as 'setcard' | 'multinet');
+                  const handleClick =
+                    option.id === PaymentMethod.Pluxee
+                      ? onSelectPluxee
+                      : () => onSelectFoodCard(option.id as PaymentMethod.SetCard | PaymentMethod.Multinet);
                   return (
                     <div
                       key={option.id}

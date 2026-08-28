@@ -1,17 +1,18 @@
 import type { CouponDetail, OrderDiscountLine } from '../store/useStore';
 import type { CampaignItem } from '../Components/Campaigns/campaignsData';
 
-export type PaymentMethod =
-  | 'wallet'
-  | 'tiklapara'
-  | 'card'
-  | 'pluxee'
-  | 'setcard'
-  | 'multinet'
-  | 'vodafone'
-  | 'turkcell'
-  | 'cash'
-  | 'creditCard';
+export enum PaymentMethod {
+  Wallet = 'wallet',
+  TiklaPara = 'tiklapara',
+  Card = 'card',
+  Pluxee = 'pluxee',
+  SetCard = 'setcard',
+  Multinet = 'multinet',
+  Vodafone = 'vodafone',
+  Turkcell = 'turkcell',
+  Cash = 'cash',
+  CreditCard = 'creditCard',
+}
 
 export const buildOrderDiscountLines = ({
   autoCampaign,
@@ -43,11 +44,11 @@ export const getPaymentMethodLabel = ({
   selectedMobilePaymentConfig?: { displayName: string };
   selectedCashOnDeliveryConfig?: { displayName: string };
 }): string =>
-  paymentMethod === 'wallet'
+  paymentMethod === PaymentMethod.Wallet
     ? 'Tıklapay Cüzdanım'
-    : paymentMethod === 'tiklapara'
+    : paymentMethod === PaymentMethod.TiklaPara
       ? 'Tıkla Param'
-      : paymentMethod === 'pluxee'
+      : paymentMethod === PaymentMethod.Pluxee
       ? 'Pluxee (Sodexo) Online'
       : (selectedFoodCardConfig?.displayName ??
         selectedMobilePaymentConfig?.displayName ??

@@ -13,7 +13,7 @@ import CouponPickerModal from '../Components/Campaigns/CouponPickerModal';
 import { calculateCouponDiscount, getCouponUnavailabilityReason } from '../Components/Campaigns/couponUtils';
 import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
 import { calculateCampaignDiscount, getCampaignUnavailabilityReason } from '../Components/Campaigns/campaignUtils';
-import { buildOrderDiscountLines, getPaymentMethodLabel, type PaymentMethod } from './checkoutUtils';
+import { buildOrderDiscountLines, getPaymentMethodLabel, PaymentMethod } from './checkoutUtils';
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
@@ -21,9 +21,9 @@ const formatTp = (value: number): string => `${value.toLocaleString('tr-TR', { m
 const maskFoodCardNumber = (digits: string): string => `${digits.slice(0, 4)}${'*'.repeat(digits.length - 6)}${digits.slice(-2)}`;
 const maskPhoneNumber = (digits: string): string => `${digits.slice(0, 3)} *** ** ${digits.slice(-2)}`;
 
-type FoodCardId = 'setcard' | 'multinet';
-type MobilePaymentId = 'vodafone' | 'turkcell';
-type CashOnDeliveryId = 'cash' | 'creditCard';
+type FoodCardId = PaymentMethod.SetCard | PaymentMethod.Multinet;
+type MobilePaymentId = PaymentMethod.Vodafone | PaymentMethod.Turkcell;
+type CashOnDeliveryId = PaymentMethod.Cash | PaymentMethod.CreditCard;
 
 interface MobilePaymentConfig {
   title: string;
@@ -35,7 +35,7 @@ interface MobilePaymentConfig {
 }
 
 const MOBILE_PAYMENT_CONFIG: Record<MobilePaymentId, MobilePaymentConfig> = {
-  vodafone: {
+  [PaymentMethod.Vodafone]: {
     title: 'Vodafone Pay ile Faturana Yansıt',
     heading: 'Vodafone Pay telefon numaranı gir',
     description:
@@ -44,7 +44,7 @@ const MOBILE_PAYMENT_CONFIG: Record<MobilePaymentId, MobilePaymentConfig> = {
     initial: 'V',
     color: '#E60000',
   },
-  turkcell: {
+  [PaymentMethod.Turkcell]: {
     title: 'Turkcell Faturana Yansıt',
     heading: 'Turkcell telefon numaranı gir',
     description: 'Bu servis sadece Turkcell abonelerine açıktır. Turkcell hattına ait bir cep telefon numarası girin.',
@@ -63,14 +63,14 @@ interface FoodCardConfig {
 }
 
 const FOOD_CARD_CONFIG: Record<FoodCardId, FoodCardConfig> = {
-  setcard: {
+  [PaymentMethod.SetCard]: {
     brandName: 'Setcard',
     displayName: 'Setcard Online',
     logoLabel: 'SETCARD',
     logoColor: '#00A9A5',
     initial: 'S',
   },
-  multinet: {
+  [PaymentMethod.Multinet]: {
     brandName: 'Multinet Card',
     displayName: 'Multinet Card Online',
     logoLabel: 'MULTINET',
@@ -85,8 +85,8 @@ interface CashOnDeliveryConfig {
 }
 
 const CASH_ON_DELIVERY_CONFIG: Record<CashOnDeliveryId, CashOnDeliveryConfig> = {
-  cash: { displayName: 'Kapıda Ödeme (Nakit)', icon: FaMoneyBillWave },
-  creditCard: { displayName: 'Kapıda Ödeme (Kredi Kartı)', icon: FaCreditCard },
+  [PaymentMethod.Cash]: { displayName: 'Kapıda Ödeme (Nakit)', icon: FaMoneyBillWave },
+  [PaymentMethod.CreditCard]: { displayName: 'Kapıda Ödeme (Kredi Kartı)', icon: FaCreditCard },
 };
 type DeliveryTiming = 'now' | 'later';
 type DeliveryDate = '' | 'today' | 'tomorrow';
@@ -206,7 +206,7 @@ const CheckoutPage = () => {
   const [noCutlery, setNoCutlery] = useState(true);
   const navigate = useNavigate();
   const [paymentError, setPaymentError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Card);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPluxeeVerifyModal, setShowPluxeeVerifyModal] = useState(false);
   const [showOrderConfirmModal, setShowOrderConfirmModal] = useState(false);
@@ -254,11 +254,17 @@ const CheckoutPage = () => {
   const userPhone = userName ? profilesByUser[userName]?.phone ?? '' : '';
   const expectedPluxeeCode = userName ? PLUXEE_VERIFICATION_CODE_BY_USER[userName] ?? '' : '';
   const selectedFoodCardConfig =
-    paymentMethod === 'setcard' || paymentMethod === 'multinet' ? FOOD_CARD_CONFIG[paymentMethod] : undefined;
+    paymentMethod === PaymentMethod.SetCard || paymentMethod === PaymentMethod.Multinet
+      ? FOOD_CARD_CONFIG[paymentMethod]
+      : undefined;
   const selectedMobilePaymentConfig =
-    paymentMethod === 'vodafone' || paymentMethod === 'turkcell' ? MOBILE_PAYMENT_CONFIG[paymentMethod] : undefined;
+    paymentMethod === PaymentMethod.Vodafone || paymentMethod === PaymentMethod.Turkcell
+      ? MOBILE_PAYMENT_CONFIG[paymentMethod]
+      : undefined;
   const selectedCashOnDeliveryConfig =
-    paymentMethod === 'cash' || paymentMethod === 'creditCard' ? CASH_ON_DELIVERY_CONFIG[paymentMethod] : undefined;
+    paymentMethod === PaymentMethod.Cash || paymentMethod === PaymentMethod.CreditCard
+      ? CASH_ON_DELIVERY_CONFIG[paymentMethod]
+      : undefined;
   const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0];
   const restaurant = cartItems.length > 0 ? getRestaurantById(cartItems[0].restaurantId) : undefined;
   const branchName = restaurant?.locations.find((location) => location.addressId === selectedAddressId)?.branchName;
@@ -299,37 +305,37 @@ const CheckoutPage = () => {
     : [];
   const hasValidDeliveryTime = deliveryTiming === 'now' || (deliveryDate !== '' && deliveryTime !== '');
   const hasSufficientBalance =
-    paymentMethod === 'wallet'
+    paymentMethod === PaymentMethod.Wallet
       ? walletBalance >= totalAmount
-      : paymentMethod === 'tiklapara'
+      : paymentMethod === PaymentMethod.TiklaPara
         ? tiklaParaBalance >= totalAmount
-        : paymentMethod === 'pluxee' ||
-            paymentMethod === 'setcard' ||
-            paymentMethod === 'multinet' ||
-            paymentMethod === 'vodafone' ||
-            paymentMethod === 'turkcell' ||
-            paymentMethod === 'cash' ||
-            paymentMethod === 'creditCard'
+        : paymentMethod === PaymentMethod.Pluxee ||
+            paymentMethod === PaymentMethod.SetCard ||
+            paymentMethod === PaymentMethod.Multinet ||
+            paymentMethod === PaymentMethod.Vodafone ||
+            paymentMethod === PaymentMethod.Turkcell ||
+            paymentMethod === PaymentMethod.Cash ||
+            paymentMethod === PaymentMethod.CreditCard
           ? true
           : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
   const canPlaceOrder = cartItems.length > 0 && hasSufficientBalance && hasValidDeliveryTime;
 
   const handleSelectWallet = () => {
-    setPaymentMethod((prev) => (prev === 'wallet' ? 'card' : 'wallet'));
+    setPaymentMethod((prev) => (prev === PaymentMethod.Wallet ? PaymentMethod.Card : PaymentMethod.Wallet));
   };
 
   const handleSelectTiklaPara = () => {
-    setPaymentMethod((prev) => (prev === 'tiklapara' ? 'card' : 'tiklapara'));
+    setPaymentMethod((prev) => (prev === PaymentMethod.TiklaPara ? PaymentMethod.Card : PaymentMethod.TiklaPara));
   };
 
   const handleSelectCard = (cardId: string) => {
     selectSavedCard(cardId);
-    setPaymentMethod('card');
+    setPaymentMethod(PaymentMethod.Card);
     setShowPaymentModal(false);
   };
 
   const handleSelectPluxee = () => {
-    setPaymentMethod('pluxee');
+    setPaymentMethod(PaymentMethod.Pluxee);
     setShowPaymentModal(false);
   };
 
@@ -376,26 +382,26 @@ const CheckoutPage = () => {
     setShowOrderConfirmModal(false);
     if (!restaurant) return;
     const charged =
-      paymentMethod === 'wallet'
+      paymentMethod === PaymentMethod.Wallet
         ? chargeWallet(totalAmount, restaurant.title)
-        : paymentMethod === 'tiklapara'
+        : paymentMethod === PaymentMethod.TiklaPara
           ? chargeTiklaPara(totalAmount)
-          : paymentMethod === 'pluxee' ||
-              paymentMethod === 'setcard' ||
-              paymentMethod === 'multinet' ||
-              paymentMethod === 'vodafone' ||
-              paymentMethod === 'turkcell' ||
-              paymentMethod === 'cash' ||
-              paymentMethod === 'creditCard'
+          : paymentMethod === PaymentMethod.Pluxee ||
+              paymentMethod === PaymentMethod.SetCard ||
+              paymentMethod === PaymentMethod.Multinet ||
+              paymentMethod === PaymentMethod.Vodafone ||
+              paymentMethod === PaymentMethod.Turkcell ||
+              paymentMethod === PaymentMethod.Cash ||
+              paymentMethod === PaymentMethod.CreditCard
             ? true
             : selectedCard
               ? chargeCard(selectedCard.id, totalAmount)
               : false;
     if (!charged) {
       setPaymentError(
-        paymentMethod === 'wallet'
+        paymentMethod === PaymentMethod.Wallet
           ? 'Cüzdan bakiyen yeterli değil. Ödeme gerçekleştirilemedi.'
-          : paymentMethod === 'tiklapara'
+          : paymentMethod === PaymentMethod.TiklaPara
             ? 'Tıkla Para bakiyen yeterli değil. Ödeme gerçekleştirilemedi.'
             : 'Kartında yeterli bakiye yok. Ödeme gerçekleştirilemedi.',
       );
@@ -421,7 +427,7 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = () => {
     if (!canPlaceOrder || !restaurant) return;
-    if (paymentMethod === 'pluxee') {
+    if (paymentMethod === PaymentMethod.Pluxee) {
       setShowPluxeeVerifyModal(true);
       return;
     }
@@ -545,7 +551,7 @@ const CheckoutPage = () => {
           </div>
           <div className="flex items-center justify-between gap-4 border border-gray-100 rounded-2xl px-4 py-3">
             <div className="flex items-center gap-3">
-              {paymentMethod === 'wallet' ? (
+              {paymentMethod === PaymentMethod.Wallet ? (
                 <span className="w-8 h-8 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
                   <span
                     className="w-full h-full bg-white"
@@ -561,11 +567,11 @@ const CheckoutPage = () => {
                     }}
                   />
                 </span>
-              ) : paymentMethod === 'tiklapara' ? (
+              ) : paymentMethod === PaymentMethod.TiklaPara ? (
                 <span className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
                   <FaStar className="text-[#E91D34] w-4 h-4" />
                 </span>
-              ) : paymentMethod === 'pluxee' ? (
+              ) : paymentMethod === PaymentMethod.Pluxee ? (
                 <span className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center shrink-0 text-white text-xs font-semibold">
                   P
                 </span>
@@ -591,17 +597,17 @@ const CheckoutPage = () => {
                 <FaCreditCard className="w-4 h-4 text-gray-700 shrink-0" />
               )}
               <div>
-                {paymentMethod === 'wallet' ? (
+                {paymentMethod === PaymentMethod.Wallet ? (
                   <>
                     <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
                     <p className="text-xs text-gray-400">Kalan bakiye: {formatPrice(walletBalance)}</p>
                   </>
-                ) : paymentMethod === 'tiklapara' ? (
+                ) : paymentMethod === PaymentMethod.TiklaPara ? (
                   <>
                     <span className="text-sm text-gray-800">Tıkla Param</span>
                     <p className="text-xs text-gray-400">Kalan bakiye: {formatTp(tiklaParaBalance)}</p>
                   </>
-                ) : paymentMethod === 'pluxee' ? (
+                ) : paymentMethod === PaymentMethod.Pluxee ? (
                   <span className="text-sm text-gray-800">Pluxee (Sodexo) Online</span>
                 ) : selectedFoodCardConfig ? (
                   <>
@@ -635,9 +641,9 @@ const CheckoutPage = () => {
               onClick={() => setShowPaymentModal(true)}
               className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
             >
-              {paymentMethod === 'wallet' ||
-              paymentMethod === 'tiklapara' ||
-              paymentMethod === 'pluxee' ||
+              {paymentMethod === PaymentMethod.Wallet ||
+              paymentMethod === PaymentMethod.TiklaPara ||
+              paymentMethod === PaymentMethod.Pluxee ||
               selectedFoodCardConfig ||
               selectedMobilePaymentConfig ||
               selectedCashOnDeliveryConfig ||
@@ -648,9 +654,9 @@ const CheckoutPage = () => {
           </div>
           {!hasSufficientBalance && (
             <p className="text-xs text-[#E91D34]">
-              {paymentMethod === 'wallet'
+              {paymentMethod === PaymentMethod.Wallet
                 ? `Cüzdan bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatPrice(walletBalance)}.`
-                : paymentMethod === 'tiklapara'
+                : paymentMethod === PaymentMethod.TiklaPara
                   ? `Tıkla Para bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatTp(tiklaParaBalance)}.`
                   : selectedCard
                     ? `Kartında yeterli bakiye yok. Sipariş tutarı ${formatPrice(totalAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
