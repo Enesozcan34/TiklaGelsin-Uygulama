@@ -3,6 +3,7 @@
     "id": "BurgerKing",
     "title": "Burger King",
     "description": "Avcılar 3S Firuze Konakları",
+    "isSplitPaymentEnabled": true,
     "serviceFee": 0,
     "categories": ["burger", "tavuk"],
     "minimumOrderAmount": 250,

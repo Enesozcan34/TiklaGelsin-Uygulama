@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { IconType } from 'react-icons';
 import { FaArrowRight, FaCheck, FaChevronDown, FaCreditCard, FaHouse, FaMoneyBillWave, FaStar } from 'react-icons/fa6';
@@ -13,13 +13,30 @@ import CouponPickerModal from '../Components/Campaigns/CouponPickerModal';
 import { calculateCouponDiscount, getCouponUnavailabilityReason } from '../Components/Campaigns/couponUtils';
 import { CAMPAIGNS } from '../Components/Campaigns/campaignsData';
 import { calculateCampaignDiscount, getCampaignUnavailabilityReason } from '../Components/Campaigns/campaignUtils';
-import { buildOrderDiscountLines, getPaymentMethodLabel, PaymentMethod } from './checkoutUtils';
+import {
+  buildOrderDiscountLines,
+  computeSplitPaymentLegs,
+  getPaymentMethodLabel,
+  isSplitPaymentActive,
+  PaymentMethod,
+  type SplitPaymentLeg,
+} from './checkoutUtils';
 import walletLogo from '../assets/Wallet2.png';
 
 const formatPrice = (price: number): string => `${price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
 const formatTp = (value: number): string => `${value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TP`;
 const maskFoodCardNumber = (digits: string): string => `${digits.slice(0, 4)}${'*'.repeat(digits.length - 6)}${digits.slice(-2)}`;
 const maskPhoneNumber = (digits: string): string => `${digits.slice(0, 3)} *** ** ${digits.slice(-2)}`;
+
+/** Kart limiti kontrolüne ihtiyaç duymayan, seçilir seçilmez ödemeyi karşılayan yöntemler. */
+const isInstantChargeMethod = (paymentMethod: PaymentMethod): boolean =>
+  paymentMethod === PaymentMethod.Pluxee ||
+  paymentMethod === PaymentMethod.SetCard ||
+  paymentMethod === PaymentMethod.Multinet ||
+  paymentMethod === PaymentMethod.Vodafone ||
+  paymentMethod === PaymentMethod.Turkcell ||
+  paymentMethod === PaymentMethod.Cash ||
+  paymentMethod === PaymentMethod.CreditCard;
 
 type FoodCardId = PaymentMethod.SetCard | PaymentMethod.Multinet;
 type MobilePaymentId = PaymentMethod.Vodafone | PaymentMethod.Turkcell;
@@ -304,20 +321,38 @@ const CheckoutPage = () => {
     ? generateTimeSlots(restaurant.openingHour, restaurant.closingHour).map((slot) => ({ value: slot, label: slot }))
     : [];
   const hasValidDeliveryTime = deliveryTiming === 'now' || (deliveryDate !== '' && deliveryTime !== '');
-  const hasSufficientBalance =
-    paymentMethod === PaymentMethod.Wallet
+
+  // Restoran bazlı parçalı ödeme: TıklaPara -> TıklaPay -> diğer ödeme yöntemleri önceliğiyle bacaklara bölünür.
+  const isSplitPaymentEligible = Boolean(restaurant?.isSplitPaymentEnabled);
+  const splitLegs: SplitPaymentLeg[] = useMemo(
+    () =>
+      isSplitPaymentEligible
+        ? computeSplitPaymentLegs({ tiklaParaBalance, walletBalance, totalAmount })
+        : [],
+    [isSplitPaymentEligible, tiklaParaBalance, walletBalance, totalAmount],
+  );
+  const isSplitActive = isSplitPaymentEligible && isSplitPaymentActive(splitLegs);
+  const singleAutoLeg =
+    isSplitPaymentEligible && splitLegs.length === 1 && splitLegs[0].type !== 'other' ? splitLegs[0] : undefined;
+  const otherLegAmount = splitLegs.find((leg) => leg.type === 'other')?.amount ?? 0;
+
+  // Tek bacak (TıklaPara ya da TıklaPay) tüm tutarı karşılıyorsa o yöntemi otomatik seç.
+  useEffect(() => {
+    if (!singleAutoLeg) return;
+    const autoMethod = singleAutoLeg.type === 'tiklapara' ? PaymentMethod.TiklaPara : PaymentMethod.Wallet;
+    setPaymentMethod((prev) => (prev === autoMethod ? prev : autoMethod));
+  }, [singleAutoLeg]);
+
+  const isOtherMethodSufficient = (amount: number): boolean =>
+    isInstantChargeMethod(paymentMethod) ? true : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= amount;
+
+  const hasSufficientBalance = isSplitActive
+    ? otherLegAmount === 0 || isOtherMethodSufficient(otherLegAmount)
+    : paymentMethod === PaymentMethod.Wallet
       ? walletBalance >= totalAmount
       : paymentMethod === PaymentMethod.TiklaPara
         ? tiklaParaBalance >= totalAmount
-        : paymentMethod === PaymentMethod.Pluxee ||
-            paymentMethod === PaymentMethod.SetCard ||
-            paymentMethod === PaymentMethod.Multinet ||
-            paymentMethod === PaymentMethod.Vodafone ||
-            paymentMethod === PaymentMethod.Turkcell ||
-            paymentMethod === PaymentMethod.Cash ||
-            paymentMethod === PaymentMethod.CreditCard
-          ? true
-          : Boolean(selectedCard) && (selectedCard?.balance ?? 0) >= totalAmount;
+        : isOtherMethodSufficient(totalAmount);
   const canPlaceOrder = cartItems.length > 0 && hasSufficientBalance && hasValidDeliveryTime;
 
   const handleSelectWallet = () => {
@@ -381,18 +416,59 @@ const CheckoutPage = () => {
   const completeOrder = () => {
     setShowOrderConfirmModal(false);
     if (!restaurant) return;
+
+    if (isSplitActive) {
+      const tiklaParaLeg = splitLegs.find((leg) => leg.type === 'tiklapara');
+      const walletLeg = splitLegs.find((leg) => leg.type === 'wallet');
+      const otherLeg = splitLegs.find((leg) => leg.type === 'other');
+
+      if (tiklaParaLeg && !chargeTiklaPara(tiklaParaLeg.amount)) {
+        setPaymentError('Tıkla Para bakiyen yeterli değil. Ödeme gerçekleştirilemedi.');
+        return;
+      }
+      if (walletLeg && !chargeWallet(walletLeg.amount, restaurant.title)) {
+        setPaymentError('Cüzdan bakiyen yeterli değil. Ödeme gerçekleştirilemedi.');
+        return;
+      }
+      if (otherLeg) {
+        const otherCharged = isInstantChargeMethod(paymentMethod)
+          ? true
+          : selectedCard
+            ? chargeCard(selectedCard.id, otherLeg.amount)
+            : false;
+        if (!otherCharged) {
+          setPaymentError('Kartında yeterli bakiye yok. Ödeme gerçekleştirilemedi.');
+          return;
+        }
+      }
+      setPaymentError('');
+      if (isSelectedCouponApplicable && selectedCoupon) {
+        useCouponUnit(selectedCoupon.code);
+      }
+      const splitPaymentMethodLabel = splitLegs
+        .map((leg) => (leg.type === 'tiklapara' ? 'Tıkla Param' : leg.type === 'wallet' ? 'Tıklapay Cüzdanım' : paymentMethodLabel))
+        .join(' + ');
+      placeOrder({
+        restaurantId: restaurant.id,
+        restaurantTitle: restaurant.title,
+        items: cartItems,
+        totalAmount,
+        address: selectedAddress,
+        paymentMethodLabel: splitPaymentMethodLabel,
+        cartSubtotal: cartTotal,
+        discounts: orderDiscountLines,
+      });
+      clearCart();
+      navigate('/sana-gelsin');
+      return;
+    }
+
     const charged =
       paymentMethod === PaymentMethod.Wallet
         ? chargeWallet(totalAmount, restaurant.title)
         : paymentMethod === PaymentMethod.TiklaPara
           ? chargeTiklaPara(totalAmount)
-          : paymentMethod === PaymentMethod.Pluxee ||
-              paymentMethod === PaymentMethod.SetCard ||
-              paymentMethod === PaymentMethod.Multinet ||
-              paymentMethod === PaymentMethod.Vodafone ||
-              paymentMethod === PaymentMethod.Turkcell ||
-              paymentMethod === PaymentMethod.Cash ||
-              paymentMethod === PaymentMethod.CreditCard
+          : isInstantChargeMethod(paymentMethod)
             ? true
             : selectedCard
               ? chargeCard(selectedCard.id, totalAmount)
@@ -444,6 +520,61 @@ const CheckoutPage = () => {
     if (!restaurant || cartItems.length === 0) return;
     navigate(`/restaurant/${restaurant.id}?product=${encodeURIComponent(cartItems[0].productName)}`);
   };
+
+  // "Diğer ödeme yöntemleri" bacağının (kart/yemek kartı/mobil ödeme/kapıda ödeme) ikon ve
+  // detay gösterimi; hem tekli ödeme kartında hem parçalı ödemenin ilgili satırında kullanılır.
+  const renderOtherMethodIcon = () =>
+    paymentMethod === PaymentMethod.Pluxee ? (
+      <span className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center shrink-0 text-white text-xs font-semibold">
+        P
+      </span>
+    ) : selectedFoodCardConfig ? (
+      <span
+        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+        style={{ backgroundColor: selectedFoodCardConfig.logoColor }}
+      >
+        {selectedFoodCardConfig.initial}
+      </span>
+    ) : selectedMobilePaymentConfig ? (
+      <span
+        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+        style={{ backgroundColor: selectedMobilePaymentConfig.color }}
+      >
+        {selectedMobilePaymentConfig.initial}
+      </span>
+    ) : selectedCashOnDeliveryConfig ? (
+      <span className="w-8 h-8 rounded-full border border-[#E91D34] flex items-center justify-center shrink-0 text-[#E91D34]">
+        <selectedCashOnDeliveryConfig.icon className="w-3.5 h-3.5" />
+      </span>
+    ) : (
+      <FaCreditCard className="w-4 h-4 text-gray-700 shrink-0" />
+    );
+
+  const renderOtherMethodDetails = () =>
+    paymentMethod === PaymentMethod.Pluxee ? (
+      <span className="text-sm text-gray-800">Pluxee (Sodexo) Online</span>
+    ) : selectedFoodCardConfig ? (
+      <>
+        <span className="text-sm text-gray-800">{selectedFoodCardConfig.displayName}</span>
+        <p className="text-xs text-gray-400">{maskFoodCardNumber(foodCardNumber)}</p>
+      </>
+    ) : selectedMobilePaymentConfig ? (
+      <>
+        <span className="text-sm text-gray-800">{selectedMobilePaymentConfig.displayName}</span>
+        <p className="text-xs text-gray-400">{maskPhoneNumber(mobilePaymentPhone)}</p>
+      </>
+    ) : selectedCashOnDeliveryConfig ? (
+      <span className="text-sm text-gray-800">{selectedCashOnDeliveryConfig.displayName}</span>
+    ) : (
+      <>
+        <span className="text-sm text-gray-800">Kredi / Banka Kartı Online</span>
+        {selectedCard && (
+          <p className="text-xs text-gray-400">
+            {selectedCard.cardHolderName} • **** {selectedCard.last4}
+          </p>
+        )}
+      </>
+    );
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
@@ -537,139 +668,162 @@ const CheckoutPage = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-gray-800 text-lg">Ödeme Yöntemi</h2>
-            <button
-              type="button"
-              onClick={() => setShowPaymentModal(true)}
-              className="flex items-center gap-2 text-[#E91D34] text-sm hover:underline"
-            >
-              Seç / Değiştir
-              <FaArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-          <div className="flex items-center justify-between gap-4 border border-gray-100 rounded-2xl px-4 py-3">
-            <div className="flex items-center gap-3">
-              {paymentMethod === PaymentMethod.Wallet ? (
-                <span className="w-8 h-8 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
-                  <span
-                    className="w-full h-full bg-white"
-                    style={{
-                      WebkitMaskImage: `url(${walletLogo})`,
-                      maskImage: `url(${walletLogo})`,
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'center',
-                      maskPosition: 'center',
-                    }}
-                  />
-                </span>
-              ) : paymentMethod === PaymentMethod.TiklaPara ? (
-                <span className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                  <FaStar className="text-[#E91D34] w-4 h-4" />
-                </span>
-              ) : paymentMethod === PaymentMethod.Pluxee ? (
-                <span className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center shrink-0 text-white text-xs font-semibold">
-                  P
-                </span>
-              ) : selectedFoodCardConfig ? (
-                <span
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white text-xs font-semibold"
-                  style={{ backgroundColor: selectedFoodCardConfig.logoColor }}
-                >
-                  {selectedFoodCardConfig.initial}
-                </span>
-              ) : selectedMobilePaymentConfig ? (
-                <span
-                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
-                  style={{ backgroundColor: selectedMobilePaymentConfig.color }}
-                >
-                  {selectedMobilePaymentConfig.initial}
-                </span>
-              ) : selectedCashOnDeliveryConfig ? (
-                <span className="w-8 h-8 rounded-full border border-[#E91D34] flex items-center justify-center shrink-0 text-[#E91D34]">
-                  <selectedCashOnDeliveryConfig.icon className="w-3.5 h-3.5" />
-                </span>
-              ) : (
-                <FaCreditCard className="w-4 h-4 text-gray-700 shrink-0" />
-              )}
-              <div>
-                {paymentMethod === PaymentMethod.Wallet ? (
-                  <>
-                    <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
-                    <p className="text-xs text-gray-400">Kalan bakiye: {formatPrice(walletBalance)}</p>
-                  </>
-                ) : paymentMethod === PaymentMethod.TiklaPara ? (
-                  <>
-                    <span className="text-sm text-gray-800">Tıkla Param</span>
-                    <p className="text-xs text-gray-400">Kalan bakiye: {formatTp(tiklaParaBalance)}</p>
-                  </>
-                ) : paymentMethod === PaymentMethod.Pluxee ? (
-                  <span className="text-sm text-gray-800">Pluxee (Sodexo) Online</span>
-                ) : selectedFoodCardConfig ? (
-                  <>
-                    <span className="text-sm text-gray-800">{selectedFoodCardConfig.displayName}</span>
-                    <p className="text-xs text-gray-400">{maskFoodCardNumber(foodCardNumber)}</p>
-                  </>
-                ) : selectedMobilePaymentConfig ? (
-                  <>
-                    <span className="text-sm text-gray-800">{selectedMobilePaymentConfig.displayName}</span>
-                    <p className="text-xs text-gray-400">{maskPhoneNumber(mobilePaymentPhone)}</p>
-                  </>
-                ) : selectedCashOnDeliveryConfig ? (
-                  <span className="text-sm text-gray-800">{selectedCashOnDeliveryConfig.displayName}</span>
-                ) : (
-                  <>
-                    <span className="text-sm text-gray-800">Kredi / Banka Kartı Online</span>
-                    {selectedCard && (
-                      <>
-                        <p className="text-xs text-gray-400">
-                          {selectedCard.cardHolderName} • **** {selectedCard.last4}
-                        </p>
-                        <p className="text-xs text-gray-400">Kalan kart limiti: {formatPrice(selectedCard.balance)}</p>
-                      </>
+        {isSplitActive ? (
+          <>
+            {splitLegs.map((leg, index) => (
+              <div key={leg.type} className="bg-white rounded-2xl p-6 flex flex-col gap-4">
+                <h2 className="text-gray-800 text-lg">{index + 1}. Ödeme Yöntemi</h2>
+                <div className="flex items-center justify-between gap-4 border border-gray-100 rounded-2xl px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    {leg.type === 'tiklapara' ? (
+                      <span className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                        <FaStar className="text-[#E91D34] w-4 h-4" />
+                      </span>
+                    ) : leg.type === 'wallet' ? (
+                      <span className="w-8 h-8 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
+                        <span
+                          className="w-full h-full bg-white"
+                          style={{
+                            WebkitMaskImage: `url(${walletLogo})`,
+                            maskImage: `url(${walletLogo})`,
+                            WebkitMaskSize: 'contain',
+                            maskSize: 'contain',
+                            WebkitMaskRepeat: 'no-repeat',
+                            maskRepeat: 'no-repeat',
+                            WebkitMaskPosition: 'center',
+                            maskPosition: 'center',
+                          }}
+                        />
+                      </span>
+                    ) : (
+                      renderOtherMethodIcon()
                     )}
-                  </>
+                    <div>
+                      {leg.type === 'tiklapara' ? (
+                        <span className="text-sm text-gray-800">Tıkla Param</span>
+                      ) : leg.type === 'wallet' ? (
+                        <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
+                      ) : (
+                        renderOtherMethodDetails()
+                      )}
+                      <p className="text-xs text-gray-400">
+                        Kullanılacak tutar: {leg.type === 'tiklapara' ? formatTp(leg.amount) : formatPrice(leg.amount)}
+                      </p>
+                    </div>
+                  </div>
+                  {leg.type === 'other' && (
+                    <button
+                      type="button"
+                      onClick={() => setShowPaymentModal(true)}
+                      className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
+                    >
+                      {selectedFoodCardConfig || selectedMobilePaymentConfig || selectedCashOnDeliveryConfig || selectedCard || paymentMethod === PaymentMethod.Pluxee
+                        ? 'Değiştir'
+                        : 'Seç'}
+                    </button>
+                  )}
+                </div>
+                {leg.type === 'other' && !hasSufficientBalance && (
+                  <p className="text-xs text-[#E91D34]">
+                    {selectedCard
+                      ? `Kartında yeterli bakiye yok. Kalan tutar ${formatPrice(otherLegAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
+                      : `Kalan ${formatPrice(otherLegAmount)} tutar için bir ödeme yöntemi seçmelisin.`}
+                  </p>
                 )}
+                {leg.type === 'other' && paymentError && <p className="text-xs text-[#E91D34]">{paymentError}</p>}
               </div>
+            ))}
+          </>
+        ) : (
+          <div className="bg-white rounded-2xl p-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-gray-800 text-lg">Ödeme Yöntemi</h2>
+              <button
+                type="button"
+                onClick={() => setShowPaymentModal(true)}
+                className="flex items-center gap-2 text-[#E91D34] text-sm hover:underline"
+              >
+                Seç / Değiştir
+                <FaArrowRight className="w-3 h-3" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowPaymentModal(true)}
-              className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
-            >
-              {paymentMethod === PaymentMethod.Wallet ||
-              paymentMethod === PaymentMethod.TiklaPara ||
-              paymentMethod === PaymentMethod.Pluxee ||
-              selectedFoodCardConfig ||
-              selectedMobilePaymentConfig ||
-              selectedCashOnDeliveryConfig ||
-              selectedCard
-                ? 'Değiştir'
-                : 'Ekle'}
-            </button>
+            <div className="flex items-center justify-between gap-4 border border-gray-100 rounded-2xl px-4 py-3">
+              <div className="flex items-center gap-3">
+                {paymentMethod === PaymentMethod.Wallet ? (
+                  <span className="w-8 h-8 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
+                    <span
+                      className="w-full h-full bg-white"
+                      style={{
+                        WebkitMaskImage: `url(${walletLogo})`,
+                        maskImage: `url(${walletLogo})`,
+                        WebkitMaskSize: 'contain',
+                        maskSize: 'contain',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskPosition: 'center',
+                        maskPosition: 'center',
+                      }}
+                    />
+                  </span>
+                ) : paymentMethod === PaymentMethod.TiklaPara ? (
+                  <span className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                    <FaStar className="text-[#E91D34] w-4 h-4" />
+                  </span>
+                ) : (
+                  renderOtherMethodIcon()
+                )}
+                <div>
+                  {paymentMethod === PaymentMethod.Wallet ? (
+                    <>
+                      <span className="text-sm text-gray-800">Tıklapay Cüzdanım</span>
+                      <p className="text-xs text-gray-400">Kalan bakiye: {formatPrice(walletBalance)}</p>
+                    </>
+                  ) : paymentMethod === PaymentMethod.TiklaPara ? (
+                    <>
+                      <span className="text-sm text-gray-800">Tıkla Param</span>
+                      <p className="text-xs text-gray-400">Kalan bakiye: {formatTp(tiklaParaBalance)}</p>
+                    </>
+                  ) : (
+                    renderOtherMethodDetails()
+                  )}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPaymentModal(true)}
+                className="bg-[#E91D34] text-white text-sm rounded-full px-6 py-2.5 shrink-0 hover:bg-[#CA192D] transition-colors"
+              >
+                {paymentMethod === PaymentMethod.Wallet ||
+                paymentMethod === PaymentMethod.TiklaPara ||
+                paymentMethod === PaymentMethod.Pluxee ||
+                selectedFoodCardConfig ||
+                selectedMobilePaymentConfig ||
+                selectedCashOnDeliveryConfig ||
+                selectedCard
+                  ? 'Değiştir'
+                  : 'Ekle'}
+              </button>
+            </div>
+            {!hasSufficientBalance && (
+              <p className="text-xs text-[#E91D34]">
+                {paymentMethod === PaymentMethod.Wallet
+                  ? `Cüzdan bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatPrice(walletBalance)}.`
+                  : paymentMethod === PaymentMethod.TiklaPara
+                    ? `Tıkla Para bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatTp(tiklaParaBalance)}.`
+                    : selectedCard
+                      ? `Kartında yeterli bakiye yok. Sipariş tutarı ${formatPrice(totalAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
+                      : 'Ödeme yöntemi seçmelisin.'}
+              </p>
+            )}
+            {paymentError && <p className="text-xs text-[#E91D34]">{paymentError}</p>}
           </div>
-          {!hasSufficientBalance && (
-            <p className="text-xs text-[#E91D34]">
-              {paymentMethod === PaymentMethod.Wallet
-                ? `Cüzdan bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatPrice(walletBalance)}.`
-                : paymentMethod === PaymentMethod.TiklaPara
-                  ? `Tıkla Para bakiyen yeterli değil. Sipariş tutarı ${formatPrice(totalAmount)}, bakiyen ${formatTp(tiklaParaBalance)}.`
-                  : selectedCard
-                    ? `Kartında yeterli bakiye yok. Sipariş tutarı ${formatPrice(totalAmount)}, kalan kart limiti ${formatPrice(selectedCard.balance)}.`
-                    : 'Ödeme yöntemi seçmelisin.'}
-            </p>
-          )}
-          {paymentError && <p className="text-xs text-[#E91D34]">{paymentError}</p>}
-        </div>
+        )}
 
         {showPaymentModal && (
           <PaymentMethodModal
-            totalAmount={totalAmount}
+            totalAmount={isSplitActive ? otherLegAmount : totalAmount}
             paymentMethod={paymentMethod}
+            hideWalletOptions={isSplitActive}
             onClose={() => setShowPaymentModal(false)}
             onSelectWallet={handleSelectWallet}
             onSelectTiklaPara={handleSelectTiklaPara}
