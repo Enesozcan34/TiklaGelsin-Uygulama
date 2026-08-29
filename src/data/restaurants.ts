@@ -40,6 +40,7 @@ export interface Restaurant {
   url: string;
   locations: RestaurantLocation[];
   products: Product[];
+  isSplitPaymentEnabled?: boolean;
 }
 
 export const restaurants = restaurantsData as Record<string, Restaurant>;

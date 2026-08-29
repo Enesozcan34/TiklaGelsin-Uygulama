@@ -96,6 +96,8 @@ interface PaymentMethodModalProps {
   onSelectFoodCard: (cardId: PaymentMethod.SetCard | PaymentMethod.Multinet) => void;
   onSelectMobilePayment: (id: MobilePaymentId) => void;
   onSelectCashOnDelivery: (id: CashOnDeliveryId) => void;
+  /** Parçalı ödemede TıklaPara/TıklaPay bacakları otomatik atandığından bu bölümleri gizler. */
+  hideWalletOptions?: boolean;
 }
 
 const PaymentMethodModal = ({
@@ -109,6 +111,7 @@ const PaymentMethodModal = ({
   onSelectFoodCard,
   onSelectMobilePayment,
   onSelectCashOnDelivery,
+  hideWalletOptions = false,
 }: PaymentMethodModalProps) => {
   const navigate = useNavigate();
   const { userName, walletBalanceByUser, tiklaParaBalanceByUser, savedCardsByUser, selectedCardIdByUser } = useStore();
@@ -148,68 +151,72 @@ const PaymentMethodModal = ({
         </div>
 
         <div className="styled-scrollbar overflow-y-auto flex-1 px-5 py-4 flex flex-col gap-4">
-          <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                <FaStar className="text-[#E91D34] w-4 h-4" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm text-gray-800">Tıkla Param</p>
-                <p className="text-sm font-semibold text-gray-800">{formatTp(tiklaParaBalance)}</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-gray-400">Bu sipariş için Tıkla Para bakiyemi kullan.</p>
-              <ToggleSwitch checked={paymentMethod === PaymentMethod.TiklaPara} onToggle={onSelectTiklaPara} />
-            </div>
-            {paymentMethod === PaymentMethod.TiklaPara && tiklaParaBalance < totalAmount && (
-              <p className="text-xs text-[#E91D34]">
-                Tıkla Para bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatTp(tiklaParaBalance)}.
-              </p>
-            )}
-          </div>
-
-          <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="w-9 h-9 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
-                  <span
-                    className="w-full h-full bg-white"
-                    style={{
-                      WebkitMaskImage: `url(${walletLogo})`,
-                      maskImage: `url(${walletLogo})`,
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'center',
-                      maskPosition: 'center',
-                    }}
-                  />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm text-gray-800">Tıklapay Cüzdanım</p>
-                  <p className="text-sm font-semibold text-gray-800">{formatBalance(walletBalance)}</p>
+          {!hideWalletOptions && (
+            <>
+              <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                    <FaStar className="text-[#E91D34] w-4 h-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm text-gray-800">Tıkla Param</p>
+                    <p className="text-sm font-semibold text-gray-800">{formatTp(tiklaParaBalance)}</p>
+                  </div>
                 </div>
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs text-gray-400">Bu sipariş için Tıkla Para bakiyemi kullan.</p>
+                  <ToggleSwitch checked={paymentMethod === PaymentMethod.TiklaPara} onToggle={onSelectTiklaPara} />
+                </div>
+                {paymentMethod === PaymentMethod.TiklaPara && tiklaParaBalance < totalAmount && (
+                  <p className="text-xs text-[#E91D34]">
+                    Tıkla Para bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatTp(tiklaParaBalance)}.
+                  </p>
+                )}
               </div>
-              <button
-                type="button"
-                onClick={goToWalletPage}
-                className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors whitespace-nowrap shrink-0"
-              >
-                Para Yükle
-              </button>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-gray-400">Bu sipariş için TıklaPay bakiyemi kullan.</p>
-              <ToggleSwitch checked={paymentMethod === PaymentMethod.Wallet} onToggle={onSelectWallet} />
-            </div>
-            {paymentMethod === PaymentMethod.Wallet && walletBalance < totalAmount && (
-              <p className="text-xs text-[#E91D34]">
-                Cüzdan bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatBalance(walletBalance)}.
-              </p>
-            )}
-          </div>
+
+              <div className="border border-gray-100 rounded-2xl px-4 py-3.5 flex flex-col gap-3 shrink-0">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="w-9 h-9 rounded-lg bg-[#E91D34] flex items-center justify-center shrink-0 p-1.5">
+                      <span
+                        className="w-full h-full bg-white"
+                        style={{
+                          WebkitMaskImage: `url(${walletLogo})`,
+                          maskImage: `url(${walletLogo})`,
+                          WebkitMaskSize: 'contain',
+                          maskSize: 'contain',
+                          WebkitMaskRepeat: 'no-repeat',
+                          maskRepeat: 'no-repeat',
+                          WebkitMaskPosition: 'center',
+                          maskPosition: 'center',
+                        }}
+                      />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm text-gray-800">Tıklapay Cüzdanım</p>
+                      <p className="text-sm font-semibold text-gray-800">{formatBalance(walletBalance)}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={goToWalletPage}
+                    className="bg-[#E91D34] text-white text-xs font-semibold rounded-full px-4 py-2 hover:bg-[#CA192D] transition-colors whitespace-nowrap shrink-0"
+                  >
+                    Para Yükle
+                  </button>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs text-gray-400">Bu sipariş için TıklaPay bakiyemi kullan.</p>
+                  <ToggleSwitch checked={paymentMethod === PaymentMethod.Wallet} onToggle={onSelectWallet} />
+                </div>
+                {paymentMethod === PaymentMethod.Wallet && walletBalance < totalAmount && (
+                  <p className="text-xs text-[#E91D34]">
+                    Cüzdan bakiyen yeterli değil. Sipariş tutarı {formatBalance(totalAmount)}, bakiyen {formatBalance(walletBalance)}.
+                  </p>
+                )}
+              </div>
+            </>
+          )}
 
           <div className="border border-gray-100 rounded-2xl overflow-hidden shrink-0">
             <button
